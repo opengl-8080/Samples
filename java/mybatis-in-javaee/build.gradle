@@ -1,0 +1,25 @@
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.mybatis:mybatis:3.3.0'
+    compile 'mysql:mysql-connector-java:5.1.38'
+    providedCompile 'fish.payara.extras:payara-micro:4.1.1.154'
+}
+
+eclipse {
+    project.name = 'mybatis-in-javaee'
+}
+
+war {
+    baseName = 'mybatis'
+}

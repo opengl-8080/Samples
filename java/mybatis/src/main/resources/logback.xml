@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+  <property name="format" value="[%-5level] %date %-15logger{15} - %m%n" />
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${format}</pattern>
+    </encoder>
+  </appender>
+  
+  <logger name="sample.mybatis" level="debug" />
+
+  <root level="info">
+    <appender-ref ref="CONSOLE" />
+  </root>
+</configuration>

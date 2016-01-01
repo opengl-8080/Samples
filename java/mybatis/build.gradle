@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.mybatis:mybatis:3.3.0'
+    compile 'mysql:mysql-connector-java:5.1.38'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    
+    // compile 'org.apache.commons:commons-lang3:3.4'
+}
+
+eclipse {
+    project.name = 'mybatis-sample'
+}
+
