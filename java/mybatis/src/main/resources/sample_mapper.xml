@@ -4,16 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sample.mybatis">
 
-  <resultMap type="sample.mybatis.Foo" id="fooResultMap">
+  <resultMap type="sample.mybatis.Base" id="baseResultMap">
     <id property="id" column="id" />
-    <collection property="barList" column="id" select="selectBar" />
+    
+    <discriminator javaType="int" column="type">
+      <case value="1" resultType="sample.mybatis.Hoge">
+        <result property="value" column="hoge_value" />
+      </case>
+      <case value="2" resultType="sample.mybatis.Fuga">
+        <result property="value" column="fuga_value" />
+      </case>
+    </discriminator>
   </resultMap>
   
-  <select id="selectFoo" resultMap="fooResultMap">
-    select * from foo_table
-  </select>
-  
-  <select id="selectBar" resultType="sample.mybatis.Bar">
-    select * from bar_table where foo_id = #{id}
+  <select id="selectBase" resultMap="baseResultMap">
+    select * from base_table
   </select>
 </mapper>

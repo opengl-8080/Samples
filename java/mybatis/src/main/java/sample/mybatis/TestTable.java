@@ -3,11 +3,12 @@ package sample.mybatis;
 public class TestTable {
     
     private int id;
-    private String string;
-    private Embedded embedded;
+    private Hoge hoge;
+    private Fuga fuga;
+    private Piyo piyo;
     
     @Override
     public String toString() {
-        return "TestTable [id=" + id + ", string=" + string + ", embedded=" + embedded + "]";
+        return "TestTable [id=" + id + ", hoge=" + hoge + ", fuga=" + fuga + ", piyo=" + piyo + "]";
     }
 }
