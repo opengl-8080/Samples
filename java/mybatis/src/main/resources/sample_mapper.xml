@@ -4,17 +4,16 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sample.mybatis">
 
-  <resultMap type="sample.mybatis.TestTable" id="testTableResultMap">
+  <resultMap type="sample.mybatis.Foo" id="fooResultMap">
     <id property="id" column="id" />
-    <result property="string" column="string" />
-    
-    <association property="embedded" javaType="sample.mybatis.Embedded">
-      <result property="number" column="number" />
-    </association>
+    <association property="bar" column="bar_id" select="selectBar" />
   </resultMap>
-
-
-  <select id="selectTest" resultMap="testTableResultMap">
-    select * from test_table
+  
+  <select id="selectFoo" resultMap="fooResultMap">
+    select * from foo_table
+  </select>
+  
+  <select id="selectBar" resultType="sample.mybatis.Bar">
+    select * from bar_table where id = #{id}
   </select>
 </mapper>

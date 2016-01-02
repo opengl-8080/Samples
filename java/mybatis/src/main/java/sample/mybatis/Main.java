@@ -14,7 +14,7 @@ public class Main {
             
             try (SqlSession session = factory.openSession()) {
                 session
-                    .selectList("sample.mybatis.selectTest")
+                    .selectList("sample.mybatis.selectFoo")
                     .forEach(System.out::println);
             }
         }
