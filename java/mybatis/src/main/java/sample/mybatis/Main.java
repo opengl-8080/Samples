@@ -13,9 +13,13 @@ public class Main {
             SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
             
             try (SqlSession session = factory.openSession()) {
-                TestTableMapper mapper = session.getMapper(TestTableMapper.class);
+                session.update("sample.mybatis.updateTest",
+                        new TestTable().id(1).number(555));
                 
-                mapper.selectByStringOrNumber("hoge", 300).forEach(System.out::println);
+                session.update("sample.mybatis.updateTest",
+                        new TestTable().id(3).string("update").number(999));
+                
+                session.commit();
             }
         }
     }

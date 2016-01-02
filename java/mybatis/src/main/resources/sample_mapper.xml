@@ -2,12 +2,18 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sample.mybatis.TestTableMapper">
+<mapper namespace="sample.mybatis">
   
-  <select id="selectByStringOrNumber" resultType="sample.mybatis.TestTable">
-    select *
-      from test_table
-     where string = #{string}
-        or number = #{number}
-  </select>
+  <update id="updateTest">
+    update test_table
+    <trim prefix="set" suffixOverrides=",">
+      <if test="string != null">
+        string = #{string},
+      </if>
+      <if test="number != null">
+        number = #{number},
+      </if>
+    </trim>
+    where id = #{id}
+  </update>
 </mapper>
