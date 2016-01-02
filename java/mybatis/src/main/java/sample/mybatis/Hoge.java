@@ -5,6 +5,6 @@ public class Hoge extends Base {
 
     @Override
     public String toString() {
-        return "Hoge [value=" + value + ", id=" + id + "]";
+        return "Hoge [value=" + value + ", id=" + id + ", commonValue=" + commonValue + "]";
     }
 }

@@ -5,6 +5,6 @@ public class Fuga extends Base {
 
     @Override
     public String toString() {
-        return "Fuga [value=" + value + ", id=" + id + "]";
+        return "Fuga [value=" + value + ", id=" + id + ", commonValue=" + commonValue + "]";
     }
 }

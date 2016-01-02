@@ -6,6 +6,7 @@
 
   <resultMap type="sample.mybatis.Base" id="baseResultMap">
     <id property="id" column="id" />
+    <result property="commonValue" column="common_value" />
     
     <discriminator javaType="int" column="type">
       <case value="1" resultType="sample.mybatis.Hoge">
