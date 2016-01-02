@@ -1,10 +1,13 @@
 package sample.mybatis;
 
+import java.util.List;
+
 public class Foo {
     private int id;
-    public Bar bar;
+    private List<Bar> barList;
     
-    public void method() {
-        System.out.println("Foo.method() is called");
+    @Override
+    public String toString() {
+        return "Foo [id=" + id + ", barList=" + barList + "]";
     }
 }

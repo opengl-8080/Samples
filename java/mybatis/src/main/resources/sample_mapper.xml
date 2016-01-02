@@ -6,17 +6,16 @@
 
   <resultMap type="sample.mybatis.Foo" id="fooResultMap">
     <id property="id" column="id" />
-    <association property="bar" column="{key1=bar_key1,key2=bar_key2}" select="selectBar" />
+    <collection property="barList" ofType="sample.mybatis.Bar">
+      <id property="id" column="bar_id" />
+    </collection>
   </resultMap>
   
   <select id="selectFoo" resultMap="fooResultMap">
-    select * from foo_table
-  </select>
-  
-  <select id="selectBar" resultType="sample.mybatis.Bar">
-    select *
-      from bar_table
-     where key1 = #{key1}
-       and key2 = #{key2}
+    select foo.id
+          ,bar.id bar_id
+      from foo_table foo
+          ,bar_table bar
+     where bar.foo_id = foo.id
   </select>
 </mapper>
