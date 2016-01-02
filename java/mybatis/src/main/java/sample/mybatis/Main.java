@@ -13,10 +13,9 @@ public class Main {
             SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
             
             try (SqlSession session = factory.openSession()) {
-                TestTable table = new TestTable(2);
+                TestTableMapper mapper = session.getMapper(TestTableMapper.class);
                 
-                session.insert("sample.mybatis.deleteTest", table);
-                session.commit();
+                mapper.selectAll().forEach(System.out::println);
             }
         }
     }
