@@ -1,8 +1,6 @@
 package sample.mybatis;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -15,12 +13,9 @@ public class Main {
             SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
             
             try (SqlSession session = factory.openSession()) {
-                Map<String, Object> param = new HashMap<>();
-                param.put("id", 10);
-                param.put("value", "hogeeee");
-                
-                Map<String, Object> result = session.selectOne("sample.mybatis.selectTest", param);
-                System.out.println(result);
+                session
+                    .selectList("sample.mybatis.selectTest")
+                    .forEach(System.out::println);
             }
         }
     }
