@@ -5,12 +5,9 @@
 <mapper namespace="sample.mybatis">
   
   <select id="selectTest" resultType="sample.mybatis.TestTable">
+    <bind name="parameter" value="'@@@' + _parameter + '@@@'"/>
     select *
       from test_table
-     where id in
-     <foreach collection="list" item="item"
-              open="(" separator="," close=")">
-       #{item}
-     </foreach>
+     where value = #{parameter}
   </select>
 </mapper>
