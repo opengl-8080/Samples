@@ -2,10 +2,9 @@ package sample.mybatis;
 
 public class Foo {
     private int id;
-    private Bar bar;
+    public Bar bar;
     
-    @Override
-    public String toString() {
-        return "Foo [id=" + id + ", bar=" + bar + "]";
+    public void method() {
+        System.out.println("Foo.method() is called");
     }
 }
