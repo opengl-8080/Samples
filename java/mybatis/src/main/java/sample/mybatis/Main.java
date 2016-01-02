@@ -15,7 +15,7 @@ public class Main {
             try (SqlSession session = factory.openSession()) {
                 TestTableMapper mapper = session.getMapper(TestTableMapper.class);
                 
-                mapper.selectAll().forEach(System.out::println);
+                mapper.selectByStringOrNumber("hoge", 300).forEach(System.out::println);
             }
         }
     }
