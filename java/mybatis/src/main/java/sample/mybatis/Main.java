@@ -13,9 +13,9 @@ public class Main {
             SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
             
             try (SqlSession session = factory.openSession()) {
-                TestTable table = new TestTable(1, "update");
+                TestTable table = new TestTable(2);
                 
-                session.insert("sample.mybatis.updateTest", table);
+                session.insert("sample.mybatis.deleteTest", table);
                 session.commit();
             }
         }

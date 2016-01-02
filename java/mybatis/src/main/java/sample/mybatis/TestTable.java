@@ -4,8 +4,7 @@ public class TestTable {
     private int id;
     private String value;
     
-    public TestTable(int id, String value) {
+    public TestTable(int id) {
         this.id = id;
-        this.value = value;
     }
 }

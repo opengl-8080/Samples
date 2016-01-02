@@ -4,9 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sample.mybatis">
   
-  <insert id="updateTest">
-    update test_table
-       set value = #{value}
-     where id = #{id}
-  </insert>
+  <delete id="deleteTest">
+    delete from test_table where id = #{id}
+  </delete>
 </mapper>
