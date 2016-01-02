@@ -4,25 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sample.mybatis">
 
-  <resultMap type="sample.mybatis.Base" id="baseResultMap">
-    <id property="id" column="id" />
-    <result property="commonValue" column="common_value" />
-    
-    <discriminator javaType="int" column="type">
-      <case value="1" resultMap="hogeResultMap" />
-      <case value="2" resultMap="fugaResultMap" />
-    </discriminator>
-  </resultMap>
-  
-  <resultMap type="sample.mybatis.Hoge" id="hogeResultMap" extends="baseResultMap">
-    <result property="value" column="hoge_value" />
-  </resultMap>
-  
-  <resultMap type="sample.mybatis.Fuga" id="fugaResultMap" extends="baseResultMap">
-    <result property="value" column="fuga_value" />
-  </resultMap>
-  
-  <select id="selectBase" resultMap="baseResultMap">
-    select * from base_table
+  <select id="selectTest" resultType="sample.mybatis.TestTable">
+    select * from test_table where id=1
   </select>
+  
 </mapper>

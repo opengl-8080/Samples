@@ -1,14 +1,19 @@
 package sample.mybatis;
 
-public class TestTable {
+import java.io.Serializable;
+
+public class TestTable implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     private int id;
-    private Hoge hoge;
-    private Fuga fuga;
-    private Piyo piyo;
+    private String value;
     
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     @Override
     public String toString() {
-        return "TestTable [id=" + id + ", hoge=" + hoge + ", fuga=" + fuga + ", piyo=" + piyo + "]";
+        return "TestTable [id=" + id + ", value=" + value + "]";
     }
 }

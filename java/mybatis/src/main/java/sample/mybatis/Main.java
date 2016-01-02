@@ -12,11 +12,22 @@ public class Main {
         try (InputStream in = Main.class.getResourceAsStream("/mybatis-config.xml")) {
             SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
             
-            try (SqlSession session = factory.openSession()) {
-                session
-                    .selectList("sample.mybatis.selectBase")
-                    .forEach(System.out::println);
+            try (SqlSession session1 = factory.openSession();
+                 SqlSession session2 = factory.openSession();) {
+                
+                TestTable testTable = selectAndPrintln("session1", session1);
+                testTable.setValue("update");
+                
+                selectAndPrintln("session1", session1);
+                
+                selectAndPrintln("session2", session2);
             }
         }
+    }
+    
+    private static TestTable selectAndPrintln(String tag, SqlSession session) {
+        TestTable result = session.selectOne("sample.mybatis.selectTest");
+        System.out.printf("<<%s>> %s%n", tag, result);
+        return result;
     }
 }
