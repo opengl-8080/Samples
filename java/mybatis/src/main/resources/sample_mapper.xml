@@ -4,16 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sample.mybatis">
   
-  <update id="updateTest">
-    update test_table
-    <trim prefix="set" suffixOverrides=",">
-      <if test="string != null">
-        string = #{string},
-      </if>
-      <if test="number != null">
-        number = #{number},
-      </if>
-    </trim>
-    where id = #{id}
-  </update>
+  <select id="selectTest" resultType="sample.mybatis.TestTable">
+    select *
+      from test_table
+     where id in
+     <foreach collection="list" item="item"
+              open="(" separator="," close=")">
+       #{item}
+     </foreach>
+  </select>
 </mapper>
