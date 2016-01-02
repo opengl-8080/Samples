@@ -9,13 +9,17 @@
     <result property="commonValue" column="common_value" />
     
     <discriminator javaType="int" column="type">
-      <case value="1" resultType="sample.mybatis.Hoge">
-        <result property="value" column="hoge_value" />
-      </case>
-      <case value="2" resultType="sample.mybatis.Fuga">
-        <result property="value" column="fuga_value" />
-      </case>
+      <case value="1" resultMap="hogeResultMap" />
+      <case value="2" resultMap="fugaResultMap" />
     </discriminator>
+  </resultMap>
+  
+  <resultMap type="sample.mybatis.Hoge" id="hogeResultMap" extends="baseResultMap">
+    <result property="value" column="hoge_value" />
+  </resultMap>
+  
+  <resultMap type="sample.mybatis.Fuga" id="fugaResultMap" extends="baseResultMap">
+    <result property="value" column="fuga_value" />
   </resultMap>
   
   <select id="selectBase" resultMap="baseResultMap">
