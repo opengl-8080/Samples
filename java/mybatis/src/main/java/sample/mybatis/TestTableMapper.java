@@ -2,12 +2,11 @@ package sample.mybatis;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
 
 public interface TestTableMapper {
     
-    List<TestTable> selectByStringOrNumber(
-        @Param("string") String string,
-        @Param("number") int number
-    );
+    @SelectProvider(type=TestTableSqlProvider.class, method="getSelectTestSql")
+    List<TestTable> selectTest();
+    
 }

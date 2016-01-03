@@ -13,7 +13,10 @@ public class Main {
             SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
             
             try (SqlSession session = factory.openSession()) {
-                session.selectList("sample.mybatis.selectTest", "abc");
+                TestTableMapper mapper = session.getMapper(TestTableMapper.class);
+                mapper.selectTest();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }
