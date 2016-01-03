@@ -5,6 +5,7 @@
 <configuration>
   <settings>
     <setting name="mapUnderscoreToCamelCase" value="true"/>
+    <setting name="defaultExecutorType" value="SIMPLE"/>
   </settings>
   
   <typeAliases>
