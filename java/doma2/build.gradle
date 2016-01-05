@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.seasar.doma:doma:2.6.0'
+    compile 'mysql:mysql-connector-java:5.1.38'
+}
+
+eclipse {
+    project.name = 'doma2-sample'
+}
