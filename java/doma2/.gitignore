@@ -4,3 +4,4 @@ bin/
 .classpath
 .gradle/
 .settings/
+/.apt_generated/
