@@ -5,3 +5,4 @@ bin/
 .gradle/
 .settings/
 /.apt_generated/
+.factorypath
