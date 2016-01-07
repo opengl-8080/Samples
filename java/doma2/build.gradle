@@ -5,6 +5,9 @@ repositories {
     mavenCentral()
 }
 
+processResources.destinationDir = compileJava.destinationDir
+compileJava.dependsOn processResources
+
 ext {
     eclipseAptPrefsFile = '.settings/org.eclipse.jdt.apt.core.prefs'
     eclipseFactoryPathFile = '.factorypath'
