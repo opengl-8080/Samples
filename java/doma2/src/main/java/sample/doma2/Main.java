@@ -12,7 +12,21 @@ public class Main {
         
         tm.required(() -> {
             List<TestTable> list = dao.selectAll();
-            System.out.println(list);
+            list.forEach(System.out::println);
+            
+            TestTable testTable = new TestTable("hahaha");
+            dao.insert(testTable);
+            System.out.println(testTable);
+            
+            testTable.setValue("fufuf");
+            dao.update(testTable);
+            
+            TestTable next = dao.selectRecently();
+            System.out.println(next);
+            
+            dao.delete(next);
+            
+            dao.selectAll().forEach(System.out::println);
         });
     }
 }
