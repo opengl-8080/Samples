@@ -16,6 +16,7 @@ ext {
 dependencies {
     compile 'org.seasar.doma:doma:2.6.0'
     compile 'mysql:mysql-connector-java:5.1.38'
+    compile files('lib/ojdbc6.jar')
 }
 
 eclipse {

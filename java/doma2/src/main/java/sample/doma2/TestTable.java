@@ -4,13 +4,15 @@ import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
+import org.seasar.doma.SequenceGenerator;
 import org.seasar.doma.jdbc.entity.NamingType;
 
 @Entity(naming=NamingType.SNAKE_LOWER_CASE)
 public class TestTable {
     
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @SequenceGenerator(sequence="test_table_seq")
     private Long id;
     private MyDomain value;
     

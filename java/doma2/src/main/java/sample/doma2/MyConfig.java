@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 import org.seasar.doma.SingletonConfig;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.dialect.Dialect;
-import org.seasar.doma.jdbc.dialect.MysqlDialect;
+import org.seasar.doma.jdbc.dialect.OracleDialect;
 import org.seasar.doma.jdbc.tx.LocalTransactionDataSource;
 import org.seasar.doma.jdbc.tx.LocalTransactionManager;
 import org.seasar.doma.jdbc.tx.TransactionManager;
@@ -20,8 +20,9 @@ public class MyConfig implements Config {
     private TransactionManager transactionManager;
     
     private MyConfig() {
-        this.ds = new LocalTransactionDataSource("jdbc:mysql://localhost/test", "test", "test");
-        this.dialect = new MysqlDialect();
+//        this.ds = new LocalTransactionDataSource("jdbc:mysql://localhost/test", "test", "test");
+        this.ds = new LocalTransactionDataSource("jdbc:oracle:thin:@localhost:1521:test", "test", "test");
+        this.dialect = new OracleDialect();
         this.transactionManager = new LocalTransactionManager(this.ds.getLocalTransaction(this.getJdbcLogger()));
     }
     

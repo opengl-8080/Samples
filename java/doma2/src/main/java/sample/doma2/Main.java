@@ -14,11 +14,11 @@ public class Main {
             List<TestTable> list = dao.selectAll();
             list.forEach(System.out::println);
             
-            TestTable testTable = new TestTable("hahaha");
+            TestTable testTable = new TestTable("hoho");
             dao.insert(testTable);
             System.out.println(testTable);
             
-            testTable.setValue("fufuf");
+            testTable.setValue("fufu");
             dao.update(testTable);
             
             TestTable next = dao.selectRecently();
