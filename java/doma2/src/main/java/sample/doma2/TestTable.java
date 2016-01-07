@@ -6,8 +6,8 @@ import org.seasar.doma.jdbc.entity.NamingType;
 @Entity(naming=NamingType.SNAKE_LOWER_CASE)
 public class TestTable {
     
-    public int id;
-    public String value;
+    private int id;
+    private MyDomain value;
     
     @Override
     public String toString() {
