@@ -1,7 +1,5 @@
 package sample.doma2;
 
-import java.util.List;
-
 import org.seasar.doma.jdbc.tx.TransactionManager;
 
 public class Main {
@@ -11,22 +9,9 @@ public class Main {
         TestTableDao dao = new TestTableDaoImpl();
         
         tm.required(() -> {
-            List<TestTable> list = dao.selectAll();
-            list.forEach(System.out::println);
+            TestTable testTable = dao.findById(3);
             
-            TestTable testTable = new TestTable("hoho");
-            dao.insert(testTable);
             System.out.println(testTable);
-            
-            testTable.setValue("fufu");
-            dao.update(testTable);
-            
-            TestTable next = dao.selectRecently();
-            System.out.println(next);
-            
-            dao.delete(next);
-            
-            dao.selectAll().forEach(System.out::println);
         });
     }
 }

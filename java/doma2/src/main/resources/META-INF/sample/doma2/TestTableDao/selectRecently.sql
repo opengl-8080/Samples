@@ -1,6 +1,0 @@
-SELECT *
-  FROM TEST_TABLE
- WHERE ID = (
-        SELECT MAX(ID)
-          FROM TEST_TABLE
- )
