@@ -1,5 +1,6 @@
 package sample.doma2;
 
+import org.seasar.doma.jdbc.SelectOptions;
 import org.seasar.doma.jdbc.tx.TransactionManager;
 
 public class Main {
@@ -9,9 +10,8 @@ public class Main {
         TestTableDao dao = new TestTableDaoImpl();
         
         tm.required(() -> {
-            TestTable testTable = dao.findById(3);
-            
-            System.out.println(testTable);
+            SelectOptions options = SelectOptions.get().offset(1).limit(2);
+            dao.findAll(options).forEach(System.out::println);
         });
     }
 }
