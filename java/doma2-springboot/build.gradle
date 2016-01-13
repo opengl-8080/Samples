@@ -3,6 +3,7 @@ buildscript {
     maven {
       url "https://plugins.gradle.org/m2/"
     }
+    mavenCentral()
   }
   dependencies {
     classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE'
@@ -35,11 +36,12 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-jdbc'
     compile 'org.hsqldb:hsqldb'
     compile 'org.flywaydb:flyway-core'
-    compile 'org.seasar.doma:doma:2.6.0'
+    compile 'org.seasar.doma.boot:doma-spring-boot-starter:1.0.0.RC1'
+    //compile 'org.seasar.doma:doma:2.6.0'
 }
 
 ape {
-    processorJarPattern = /doma.*\.jar/
+    processorJarPattern = /doma-[\d.]+\.jar/
 }
 
 eclipse {
