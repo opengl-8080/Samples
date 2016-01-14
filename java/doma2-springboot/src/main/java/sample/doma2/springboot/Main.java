@@ -8,17 +8,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class Main {
     
+    @Autowired
+    private MyService service;
+    
     public static void main(String[] args) {
         try (ConfigurableApplicationContext ctx = SpringApplication.run(Main.class, args)) {
             Main m = ctx.getBean(Main.class);
-            m.method();
+            m.service.method();
         }
-    }
-    
-    @Autowired
-    private TestTableDao dao;
-
-    private void method() {
-        this.dao.findAll().forEach(System.out::println);
     }
 }
