@@ -14,11 +14,11 @@ public class MyService {
     private TestTableDao dao;
     
     @Transactional
-    public void method() {
+    public void method() throws Exception {
         TestTable testTable = dao.findAll().get(0);
         testTable.setValue(String.valueOf((new Random(new Date().getTime()).nextInt() % 1000)));
         
         this.dao.update(testTable);
-        throw new RuntimeException("test exception");
+        throw new NullPointerException("test exception");
     }
 }
