@@ -1,16 +1,9 @@
 var data = [
-  ['佐藤', 28],
-  ['鈴木', 19],
-  ['田中', 25]
+  {name: '佐藤', age: 25, a: 'A'},
+  {name: '鈴木', age: 11, b: 'B'},
+  {name: '田中', age: 21}
 ];
 
 var grid = document.getElementById('grid');
 
-var table = new Handsontable(grid, {
-    // JSON 文字列にしてから JavaScript オブジェクトに戻す
-    data: JSON.parse(JSON.stringify(data))
-});
-
-data.push(['山田', 22]);
-
-table.render();
+new Handsontable(grid, {data: data});
