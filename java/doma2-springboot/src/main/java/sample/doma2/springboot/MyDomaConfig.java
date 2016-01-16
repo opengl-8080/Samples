@@ -32,13 +32,11 @@ public class MyDomaConfig implements Config {
     @Bean
     @Override
     public DataSource getDataSource() {
-        System.out.println("getDataSource");
         return this.ds;
     }
 
     @Override
     public Dialect getDialect() {
-        System.out.println("getDialect");
         return this.dialect;
     }
 }

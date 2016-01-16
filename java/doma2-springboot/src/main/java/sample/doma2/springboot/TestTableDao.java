@@ -17,6 +17,9 @@ import org.springframework.stereotype.Repository;
     @Annotation(target=AnnotationTarget.CONSTRUCTOR, type=Autowired.class)
 })
 public interface TestTableDao {
+
+    @Select
+    TestTable findById(int id);
     
     @Select
     List<TestTable> findAll();

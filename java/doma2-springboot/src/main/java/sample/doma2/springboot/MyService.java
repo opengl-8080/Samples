@@ -1,7 +1,6 @@
 package sample.doma2.springboot;
 
-import java.util.Date;
-import java.util.Random;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +13,16 @@ public class MyService {
     private TestTableDao dao;
     
     @Transactional
-    public void method() throws Exception {
-        TestTable testTable = dao.findAll().get(0);
-        testTable.setValue(String.valueOf((new Random(new Date().getTime()).nextInt() % 1000)));
+    public void updateAndThorwException(int id, String value, Supplier<Exception> exceptionSupplier) throws Exception {
+        TestTable testTable = this.dao.findById(id);
+        testTable.setValue(value);
         
         this.dao.update(testTable);
-        throw new NullPointerException("test exception");
+        
+        throw exceptionSupplier.get();
+    }
+    
+    public void printAll() {
+        this.dao.findAll().forEach(System.out::println);
     }
 }

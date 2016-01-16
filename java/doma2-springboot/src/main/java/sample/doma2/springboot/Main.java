@@ -14,7 +14,16 @@ public class Main {
     public static void main(String[] args) throws Exception {
         try (ConfigurableApplicationContext ctx = SpringApplication.run(Main.class, args)) {
             Main m = ctx.getBean(Main.class);
-            m.service.method();
+            
+            try {
+                m.service.updateAndThorwException(1, "exception", Exception::new);
+            } catch (Exception e) {}
+
+            try {
+                m.service.updateAndThorwException(2, "runtime exception", NullPointerException::new);
+            } catch (Exception e) {}
+            
+            m.service.printAll();
         }
     }
 }
