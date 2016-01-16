@@ -6,4 +6,11 @@ var data = [
 
 var grid = document.getElementById('grid');
 
-new Handsontable(grid, {data: data});
+var table = new Handsontable(grid, {
+    // JSON 文字列にしてから JavaScript オブジェクトに戻す
+    data: JSON.parse(JSON.stringify(data))
+});
+
+data.push(['山田', 22]);
+
+table.render();
