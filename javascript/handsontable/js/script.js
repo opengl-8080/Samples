@@ -2,8 +2,8 @@ var grid = document.getElementById('grid');
 
 new Handsontable(grid, {
     data: [
-        ['あいうえお', 'かきくけこさしすせそ'],
-        ['やゆよ', 'たちつてと']
+        ['あいうえお', 'かきくけこ'],
+        ['さしすせそ', 'たちつてと']
     ],
-    autoColumnSize: true
+    colHeaders: true
 });
