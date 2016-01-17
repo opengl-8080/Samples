@@ -5,5 +5,5 @@ new Handsontable(grid, {
         ['あいうえお', 'かきくけこ'],
         ['さしすせそ', 'たちつてと']
     ],
-    colHeaders: true
+    colHeaders: ['列１', '列２']
 });
