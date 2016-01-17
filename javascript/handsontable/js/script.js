@@ -5,7 +5,5 @@ new Handsontable(grid, {
         ['あいうえお', 'かきくけこ'],
         ['さしすせそ', 'たちつてと']
     ],
-    colHeaders: function(index) {
-        return ['列A', '列B'][index];
-    }
+    colWidths: 200
 });
