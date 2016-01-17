@@ -6,5 +6,8 @@ new Handsontable(grid, {
         ['b', 'c']
     ],
     colHeaders: true,
-    columnSorting: true
+    columnSorting: {
+        column: 0,
+        sortColumn: false
+    }
 });
