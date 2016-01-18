@@ -5,9 +5,5 @@ new Handsontable(grid, {
         ['a', 'd'],
         ['b', 'c']
     ],
-    colHeaders: true,
-    columnSorting: {
-        column: 0,
-        sortColumn: false
-    }
+    contextMenu: true
 });
