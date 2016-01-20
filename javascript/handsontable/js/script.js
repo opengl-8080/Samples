@@ -10,8 +10,11 @@ var table = new Handsontable(grid, {
 table.updateSettings({
     contextMenu: {
         items: {
-            row_above: {
-                name: '行を挿入'
+            myItem: {
+                name: 'メニュ～',
+                callback: function() {
+                    console.log(arguments);
+                }
             }
         }
     }
