@@ -7,14 +7,26 @@ var table = new Handsontable(grid, {
     ]
 });
 
+var item1 = true;
+
+function switchFlag() {
+    item1 = !item1;
+}
+
 table.updateSettings({
     contextMenu: {
         items: {
-            myItem: {
-                name: 'メニュ～',
-                callback: function() {
-                    console.log(arguments);
-                }
+            item1: {
+                name: function() {
+                    return item1 ? '●item1' : 'item1';
+                },
+                callback: switchFlag
+            },
+            item2: {
+                name: function() {
+                    return !item1 ? '●item2' : 'item2';
+                },
+                callback: switchFlag
             }
         }
     }
