@@ -14,7 +14,7 @@ table.updateSettings({
                 key: 'myItem',
                 name: 'メニュ～',
                 callback: function() {
-                    console.log(arguments);
+                    alert('クリックした！');
                 }
             }
         ]
