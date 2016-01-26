@@ -7,14 +7,20 @@ var table = new Handsontable(grid, {
     ]
 });
 
+var flag = true;
+
 table.updateSettings({
     contextMenu: {
         items: [
             {
-                key: 'myItem',
-                name: 'メニュ～',
-                callback: function() {
-                    alert('クリックした！');
+                name: 'item1',
+                disabled: true
+            },
+            {
+                name: 'item2',
+                disabled: function() {
+                    flag = !flag;
+                    return flag;
                 }
             }
         ]
