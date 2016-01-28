@@ -2,8 +2,10 @@ var grid = document.getElementById('grid');
 
 new Handsontable(grid, {
     data: [
-        ['a', 'd'],
-        ['b', 'c']
+        [1, 2, 3, 4, 5],
+        [1, 2, 3, 4, 5],
+        [1, 2, 3, 4, 5],
+        [1, 2, 3, 4, 5]
     ],
-    copyPaste: false
+    copyColsLimit: 2
 });
