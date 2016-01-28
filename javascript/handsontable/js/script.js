@@ -8,8 +8,10 @@ new Handsontable(grid, {
     ],
     customBorders: [
         {
-            row: 1,
-            col: 1,
+            range: {
+                from: {col: 0, row: 0},
+                to: {col: 1, row: 2}
+            },
             top: {
                 width: 3,
                 color: 'red'
