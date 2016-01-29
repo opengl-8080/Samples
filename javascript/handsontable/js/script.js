@@ -6,5 +6,8 @@ new Handsontable(grid, {
         [1, 2, 3],
         [1, 2, 3]
     ],
-    enterBeginsEditing: false
+    enterMoves: {
+        row: 1,
+        col: 1,
+    }
 });
