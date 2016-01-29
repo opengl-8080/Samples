@@ -6,5 +6,5 @@ new Handsontable(grid, {
         [1, 2, 3],
         [1, 2, 3]
     ],
-    fillHandle: false
+    fillHandle: 'vertical'
 });
