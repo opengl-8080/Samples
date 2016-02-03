@@ -1,16 +1,12 @@
 var grid = document.getElementById('grid');
 
-var data = [];
-for (var i=0; i<50; i++) {
-    var row = [];
-    for (var j=0; j<50; j++) {
-        row.push(i + j);
-    }
-    data.push(row);
-}
+var data = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];
 
 new Handsontable(grid, {
     data: data,
-    fixedColumnsLeft: 2,
-    fixedRowsTop: 2
+    rowHeaders: true
 });
