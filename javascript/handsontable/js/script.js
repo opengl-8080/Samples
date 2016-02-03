@@ -9,5 +9,5 @@ var data = [
 new Handsontable(grid, {
     data: data,
     colHeaders: true,
-    manualColumnMove: true
+    manualColumnResize: true
 });
