@@ -1,28 +1,18 @@
 package sample.junit5;
 
-import org.junit.gen5.api.Nested;
 import org.junit.gen5.api.Test;
 import org.junit.gen5.api.extension.ExtendWith;
 
+@ExtendWith(MyExtend.class)
 public class Junit5Test {
-    
-    @Nested
-    @ExtendWith(MyExtend.class)
-    public class Hoge {
-        
-        @Test
-        public void test() {
-            System.out.println("Hoge.test");
-        }
+
+    @Test
+    public void hoge() {
+        System.out.println("hoge");
     }
-    
-    @Nested
-    @ExtendWith(MyExtend.class)
-    public class Fuga {
-        
-        @Test
-        public void test() {
-            System.out.println("Fuga.test");
-        }
+
+    @Test
+    public void fuga() {
+        System.out.println("fuga");
     }
 }

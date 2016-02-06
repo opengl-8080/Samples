@@ -1,20 +1,19 @@
 package sample.junit5;
 
 import org.junit.gen5.api.extension.ConditionEvaluationResult;
-import org.junit.gen5.api.extension.ContainerExecutionCondition;
-import org.junit.gen5.api.extension.ContainerExtensionContext;
+import org.junit.gen5.api.extension.TestExecutionCondition;
+import org.junit.gen5.api.extension.TestExtensionContext;
 
-public class MyExtend implements ContainerExecutionCondition {
+public class MyExtend implements TestExecutionCondition {
 
     @Override
-    public ConditionEvaluationResult evaluate(ContainerExtensionContext context) {
+    public ConditionEvaluationResult evaluate(TestExtensionContext context) {
         String displayName = context.getDisplayName();
         
-        if (displayName.contains("Hoge")) {
-            return ConditionEvaluationResult.enabled("Hoge なので");
+        if ("hoge".equals(displayName)) {
+            return ConditionEvaluationResult.enabled("hoge なので");
         } else {
-            return ConditionEvaluationResult.disabled("Hoge でないので");
+            return ConditionEvaluationResult.disabled("hoge じゃないので");
         }
     }
-
 }
