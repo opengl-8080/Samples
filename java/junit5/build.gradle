@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+    dependencies {
+        classpath 'org.junit:junit-gradle:5.0.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'org.junit.gen5.gradle'
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.junit:junit5-api:5.0.0-ALPHA'
+}
+
+junit5 {
+    version '5.0.0-ALPHA'
+    // runJunit4 true
+    // matchClassName '.*Test'
+    // reportsDir file('build/test-results/junit5/') // this is the default
+    // logManager 'org.apache.logging.log4j.jul.LogManager'
+    // // requireTag 'fast'
+    // excludeTag 'slow'
+}
+
+apply plugin: 'eclipse'
+
+ext {
+    projectName = 'junit5'
+}
+
+jar {
+    baseName = projectName
+}
+
+eclipse {
+    project.name = projectName
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
