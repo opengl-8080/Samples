@@ -6,6 +6,7 @@ import org.junit.gen5.api.DisplayName;
 import org.junit.gen5.api.Nested;
 import org.junit.gen5.api.Test;
 
+@DisplayName("JUnit5 のテスト")
 public class Junit5Test {
     
     @Nested
