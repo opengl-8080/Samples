@@ -1,19 +1,13 @@
 package sample.junit5;
 
-import org.junit.gen5.api.extension.ConditionEvaluationResult;
-import org.junit.gen5.api.extension.TestExecutionCondition;
+import org.junit.gen5.api.extension.InstancePostProcessor;
 import org.junit.gen5.api.extension.TestExtensionContext;
 
-public class MyExtend implements TestExecutionCondition {
+public class MyExtend implements InstancePostProcessor {
 
     @Override
-    public ConditionEvaluationResult evaluate(TestExtensionContext context) {
-        String displayName = context.getDisplayName();
-        
-        if ("hoge".equals(displayName)) {
-            return ConditionEvaluationResult.enabled("hoge なので");
-        } else {
-            return ConditionEvaluationResult.disabled("hoge じゃないので");
-        }
+    public void postProcessTestInstance(TestExtensionContext context) throws Exception {
+        Object testInstance = context.getTestInstance();
+        System.out.println(testInstance.getClass());
     }
 }
