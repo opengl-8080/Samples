@@ -1,18 +1,28 @@
 package sample.junit5;
 
-import static org.junit.gen5.api.Assertions.*;
-
-import org.junit.gen5.api.DisplayName;
+import org.junit.gen5.api.Nested;
 import org.junit.gen5.api.Test;
-import org.junit.gen5.junit4.runner.JUnit5;
-import org.junit.runner.RunWith;
+import org.junit.gen5.api.extension.ExtendWith;
 
-@RunWith(JUnit5.class)
 public class Junit5Test {
     
-    @Test
-    @DisplayName("テストです")
-    public void test() {
-        assertEquals("hoge", "fuga");
+    @Nested
+    @ExtendWith(MyExtend.class)
+    public class Hoge {
+        
+        @Test
+        public void test() {
+            System.out.println("Hoge.test");
+        }
+    }
+    
+    @Nested
+    @ExtendWith(MyExtend.class)
+    public class Fuga {
+        
+        @Test
+        public void test() {
+            System.out.println("Fuga.test");
+        }
     }
 }

@@ -1,13 +1,13 @@
-// buildscript {
-//     repositories {
-//         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-//     }
-//     dependencies {
-//         classpath 'org.junit:junit-gradle:5.0.0-SNAPSHOT'
-//     }
-// }
-// 
-// apply plugin: 'org.junit.gen5.gradle'
+buildscript {
+    repositories {
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+    dependencies {
+        classpath 'org.junit:junit-gradle:5.0.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'org.junit.gen5.gradle'
 apply plugin: 'java'
 
 sourceCompatibility = '1.8'
@@ -19,20 +19,17 @@ repositories {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
     testCompile 'org.junit:junit5-api:5.0.0-ALPHA'
-    testCompile 'org.junit:junit4-runner:5.0.0-ALPHA'
-    testCompile 'org.junit:junit5-engine:5.0.0-ALPHA'
 }
 
-// junit5 {
-//     version '5.0.0-ALPHA'
-//     // runJunit4 true
-//     // matchClassName '.*Test'
-//     // reportsDir file('build/test-results/junit5/') // this is the default
-//     // logManager 'org.apache.logging.log4j.jul.LogManager'
-//     // requireTag 'hoge'
-// }
+junit5 {
+    version '5.0.0-ALPHA'
+    // runJunit4 true
+    // matchClassName '.*Test'
+    // reportsDir file('build/test-results/junit5/') // this is the default
+    // logManager 'org.apache.logging.log4j.jul.LogManager'
+    // requireTag 'hoge'
+}
 
 apply plugin: 'eclipse'
 
