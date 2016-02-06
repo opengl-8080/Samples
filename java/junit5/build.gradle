@@ -29,7 +29,6 @@ junit5 {
     // reportsDir file('build/test-results/junit5/') // this is the default
     // logManager 'org.apache.logging.log4j.jul.LogManager'
     requireTag 'hoge'
-    excludeTag 'piyo'
 }
 
 apply plugin: 'eclipse'
