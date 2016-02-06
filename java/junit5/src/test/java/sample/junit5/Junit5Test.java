@@ -10,46 +10,64 @@ import org.junit.gen5.api.Test;
 public class Junit5Test {
     
     @BeforeAll
-    public static void beforeAll() {
-        System.out.println("beforeAll");
+    public static void beforeAll1() {
+        System.out.println("beforeAll1");
+    }
+
+    @AfterAll
+    public static void afterAll1() {
+        System.out.println("afterAll1");
     }
     
     @BeforeEach
     public void before1() {
-        System.out.println("  before1");
+        System.out.println("    before1");
     }
-    
-    @Test
-    public void test1() {
-        System.out.println("    test1");
-    }
-    
+
     @AfterEach
     public void after1() {
-        System.out.println("  after1");
+        System.out.println("    after1");
     }
     
-    @AfterAll
-    public static void afterAll() {
-        System.out.println("afterAll");
-    }
-    
-    @Nested
-    public class NestedClass {
+    public static class Base {
+        
+        @BeforeAll
+        public static void beforeAll2() {
+            System.out.println("  beforeAll2");
+        }
+
+        @AfterAll
+        public static void afterAll2() {
+            System.out.println("  afterAll2");
+        }
         
         @BeforeEach
         public void before2() {
-            System.out.println("    before2");
+            System.out.println("      before2");
+        }
+
+        @AfterEach
+        public void after2() {
+            System.out.println("      after2");
+        }
+    }
+    
+    @Nested
+    public class NestedTest extends Base {
+
+        @BeforeEach
+        public void before3() {
+            System.out.println("        before3");
         }
         
         @Test
-        public void test2() {
-            System.out.println("      test2");
+        public void test() {
+            System.out.println("          test");
         }
-        
+
         @AfterEach
-        public void after2() {
-            System.out.println("    after2");
+        public void after3() {
+            System.out.println("        after3");
         }
     }
 }
