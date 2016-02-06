@@ -1,20 +1,28 @@
 package sample.junit5;
 
-import static org.junit.gen5.api.Assumptions.*;
-
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.DisplayName;
 import org.junit.gen5.api.Test;
+import org.junit.gen5.api.TestInfo;
 
 public class Junit5Test {
     
-    @Test
-    public void test1() {
-        assumeTrue(true);
-        System.out.println("test1");
+    @BeforeEach
+    public void before(TestInfo info) {
+        System.out.println(
+            "[before]\n" +
+            "displayName=" + info.getDisplayName() + "\n" +
+            "name=" + info.getName()
+        );
     }
     
     @Test
-    public void test2() {
-        assumeTrue(false);
-        System.out.println("test2");
+    @DisplayName("テスト")
+    public void test(TestInfo info) {
+        System.out.println(
+            "[test]\n" +
+            "displayName=" + info.getDisplayName() + "\n" +
+            "name=" + info.getName()
+        );
     }
 }
