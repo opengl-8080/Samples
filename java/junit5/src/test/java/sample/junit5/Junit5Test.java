@@ -7,7 +7,12 @@ import org.junit.gen5.api.extension.ExtendWith;
 public class Junit5Test {
     
     @Test
-    public void test(String str1, String str2) {
-        System.out.println("test str1=" + str1 + ", str2=" + str2);
+    public void test1() {
+        System.out.println("test1");
+    }
+    
+    @Test
+    public void test2() {
+        System.out.println("test2");
     }
 }
