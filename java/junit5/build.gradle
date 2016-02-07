@@ -20,6 +20,8 @@ repositories {
 
 dependencies {
     testCompile 'org.junit:junit5-api:5.0.0-ALPHA'
+    testCompile 'org.assertj:assertj-core:3.3.0'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
 }
 
 junit5 {
