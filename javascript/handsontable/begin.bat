@@ -4,9 +4,10 @@ set THIS_DIR=%~dp0
 
 cd /d %THIS_DIR%
 
-start index.html
-
 start cmd
 
-http
+start http
 
+set CHROME_EXE="%CHROME_HOME%\chrome.exe"
+
+%CHROME_EXE% http://localhost/index.html
