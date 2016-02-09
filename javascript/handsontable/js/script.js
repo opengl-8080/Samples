@@ -8,6 +8,8 @@ var data = [
 
 new Handsontable(grid, {
     data: data,
-    mergeCells: true,
-    contextMenu: ['mergeCells']
+    mergeCells: [
+        {row: 0, col: 0, rowspan: 2, colspan: 1},
+        {row: 1, col: 1, rowspan: 1, colspan: 2}
+    ]
 });
