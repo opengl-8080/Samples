@@ -8,5 +8,5 @@ var data = [
 
 var table = new Handsontable(grid, {
     data: data,
-    pasteMode: 'shift_right'
+    placeholder: '( ^ω^)'
 });
