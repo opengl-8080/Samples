@@ -8,6 +8,5 @@ var data = [
 
 var table = new Handsontable(grid, {
     data: data,
-    minSpareCols: 2,
-    minSpareRows: 3
+    multiSelect: false
 });
