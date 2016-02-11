@@ -1,14 +1,26 @@
 package sample.jmockit;
 
+import java.util.Collection;
+
 public class Hoge {
     
-    private Fuga fuga;
-    private Piyo piyo;
-    private String string;
+    public Fuga getFuga() {
+        return null;
+    }
     
-    public void print() {
-        System.out.println("fuga=" + this.fuga);
-        System.out.println("piyo=" + this.piyo);
-        System.out.println("string=" + this.string);
+    public String getString() {
+        return "HOGE";
+    }
+    
+    public Object getObject() {
+        return new Object();
+    }
+    
+    public Collection<?> getCollection() {
+        return null;
+    }
+    
+    public int getInt() {
+        return Integer.MAX_VALUE;
     }
 }

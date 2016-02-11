@@ -2,26 +2,23 @@ package sample.jmockit;
 
 import org.junit.Test;
 
-import mockit.Injectable;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
-import mockit.Tested;
 
 public class JMockitTest {
     
-    @Tested
-    private Hoge hoge;
-    @Injectable
-    private Fuga fuga;
     @Mocked
-    private Piyo piyo;
+    private Hoge hoge;
     
     @Test
     public void test() throws Exception {
         new NonStrictExpectations() {{
-            fuga.toString(); result = "Mocked Fuga";
+            hoge.getInt(); result = new int[] {1, 2, 3};
         }};
         
-        this.hoge.print();
+        System.out.println(this.hoge.getInt());
+        System.out.println(this.hoge.getInt());
+        System.out.println(this.hoge.getInt());
+        System.out.println(this.hoge.getInt());
     }
 }
