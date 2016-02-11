@@ -4,6 +4,6 @@ public class Fuga {
     
     @Override
     public String toString() {
-        return "Fuga";
+        return "FUGA";
     }
 }

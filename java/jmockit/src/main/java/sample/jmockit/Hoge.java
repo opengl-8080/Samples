@@ -2,12 +2,13 @@ package sample.jmockit;
 
 public class Hoge {
     
-    private Hoge() {
-        System.out.println("Hoge Constructor");
-    }
+    private Fuga fuga;
+    private Piyo piyo;
+    private String string;
     
-    @Override
-    public String toString() {
-        return "HOGE";
+    public void print() {
+        System.out.println("fuga=" + this.fuga);
+        System.out.println("piyo=" + this.piyo);
+        System.out.println("string=" + this.string);
     }
 }
