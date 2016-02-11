@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+ext {
+    projectName = 'jmockit-sample'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.jmockit:jmockit:1.21'
+    testCompile 'junit:junit:4.12'
+}
+
+eclipse {
+    project.name = projectName
+}
