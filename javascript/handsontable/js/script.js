@@ -6,5 +6,5 @@ var table = new Handsontable(grid, {
         [1, 2, 3],
         [1, 2, 3]
     ],
-    stretchH: 'last'
+    stretchH: 'all'
 });
