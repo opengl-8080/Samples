@@ -6,5 +6,8 @@ var table = new Handsontable(grid, {
         [1, 2, 3],
         [1, 2, 3]
     ],
-    stretchH: 'all'
+    tabMoves: {
+        col: 0,
+        row: 1
+    }
 });
