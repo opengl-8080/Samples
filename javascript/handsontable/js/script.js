@@ -6,8 +6,11 @@ var table = new Handsontable(grid, {
         [1, 2, 3],
         [1, 2, 3]
     ],
-    tabMoves: {
-        col: 0,
-        row: 1
+    tabMoves: function() {
+        console.log(arguments);
+        return {
+            col: 1,
+            row: 0
+        };
     }
 });
