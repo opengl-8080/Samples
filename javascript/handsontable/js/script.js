@@ -4,7 +4,9 @@ new Handsontable(grid, {
     columns: [
         {
             type: 'autocomplete',
-            source: ['one', 'two', 'three', 'four', 'five']
+            source: ['one', 'two', 'three', 'four', 'five'],
+            strict: true,
+            allowInvalid: false
         }
     ]
 });
