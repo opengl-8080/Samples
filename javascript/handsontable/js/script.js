@@ -2,13 +2,15 @@ var grid = document.getElementById('grid');
 
 new Handsontable(grid, {
     data: [
-        [true],
-        [false],
-        [true]
+        ['no'],
+        ['yes'],
+        ['no']
     ],
     columns: [
         {
-            type: 'checkbox'
+            type: 'checkbox',
+            checkedTemplate: 'yes',
+            uncheckedTemplate: 'no'
         }
     ]
 });
