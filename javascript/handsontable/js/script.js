@@ -4,9 +4,10 @@ new Handsontable(grid, {
     columns: [
         {
             type: 'autocomplete',
-            source: ['one', 'two', 'three', 'four', 'five'],
-            strict: true,
-            allowInvalid: false
+            source: function(query, process) {
+                console.log('query=' + query);
+                process(['hoge', 'fuga', 'piyo']);
+            }
         }
     ]
 });
