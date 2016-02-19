@@ -2,15 +2,17 @@ var grid = document.getElementById('grid');
 
 new Handsontable(grid, {
     data: [
-        ['no'],
-        ['yes'],
-        ['no']
+        [false],
+        [true],
+        [false]
     ],
     columns: [
         {
             type: 'checkbox',
-            checkedTemplate: 'yes',
-            uncheckedTemplate: 'no'
+            label: {
+                value: 'チェックボックスやで',
+                position: 'before'
+            }
         }
     ]
 });
