@@ -3,7 +3,8 @@ var grid = document.getElementById('grid');
 new Handsontable(grid, {
     columns: [
         {
-            type: 'password'
+            type: 'password',
+            hashLength: 10
         }
     ]
 });
