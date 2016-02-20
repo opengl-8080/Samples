@@ -4,7 +4,7 @@ new Handsontable(grid, {
     columns: [
         {
             type: 'password',
-            hashLength: 10
+            hashSymbol: '@'
         }
     ]
 });
