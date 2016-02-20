@@ -4,7 +4,12 @@ new Handsontable(grid, {
     columns: [
         {
             type: 'date',
-            defaultDate: '01/01/2016'
+            datePickerConfig: {
+                disableDayFn: function(date) {
+                    var minDate = new Date(2016, 1, 15);
+                    return date < minDate;
+                }
+            }
         }
     ]
 });
