@@ -4,7 +4,7 @@ new Handsontable(grid, {
     columns: [
         {
             type: 'date',
-            dateFormat: 'YYYY-MM-DD'
+            defaultDate: '01/01/2016'
         }
     ]
 });
