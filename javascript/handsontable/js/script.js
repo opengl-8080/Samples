@@ -2,11 +2,9 @@ var grid = document.getElementById('grid');
 
 new Handsontable(grid, {
     columns: [
-        {
-            validator: function(value, callback) {
-                console.log(value);
-                callback(value === 'hoge');
-            }
-        }
+        {type: 'numeric'}
+    ],
+    cell: [
+        {col: 0, row: 2, type: 'date'}
     ]
 });
