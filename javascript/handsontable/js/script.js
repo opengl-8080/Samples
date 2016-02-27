@@ -8,5 +8,4 @@ var table = new Handsontable(grid, {
     ]
 });
 
-table.alter('insert_row', 1);
-table.alter('insert_col', 2);
+table.clear();
