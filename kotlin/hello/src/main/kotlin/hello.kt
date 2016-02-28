@@ -1,3 +1,10 @@
+class Hoge{
+    var string : String = ""
+    private set
+             get
+}
+
 fun main(args : Array<String>) {
-    println("Hello Kotlin!!")
+    var hoge = Hoge()
+    println(hoge.string)
 }
