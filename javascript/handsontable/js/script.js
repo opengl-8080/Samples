@@ -7,7 +7,7 @@ var table = new Handsontable(grid, {
     ]
 });
 
-var cols = table.countRenderedCols();
-var rows = table.countRenderedRows();
+var cols = table.countCols();
+var rows = table.countRows();
 
 console.log('cols=' + cols + ', rows=' + rows);
