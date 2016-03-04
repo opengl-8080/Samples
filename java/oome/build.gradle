@@ -1,0 +1,23 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+ext {
+    projectName = 'OutOfMemoryErrorExercise'
+}
+
+jar {
+    baseName = projectName
+}
+
+eclipse {
+    project.name = projectName
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
