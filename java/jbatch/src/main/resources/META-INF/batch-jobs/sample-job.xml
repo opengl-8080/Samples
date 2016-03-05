@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbatch>
+<job id="xxxx"
+     xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+     version="1.0">
+
+  <step id="sample-chunk">
+    <chunk>
+      <reader    ref="sample.javaee.jbatch.MyItemReader"    />
+      <processor ref="sample.javaee.jbatch.MyItemProcessor" />
+      <writer    ref="sample.javaee.jbatch.MyItemWriter"    />
+    </chunk>
+  </step>
+
+</job>
