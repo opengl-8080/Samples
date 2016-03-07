@@ -1,14 +1,9 @@
 var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
-    cell: [
-        {
-            col: 0,
-            row: 0,
-            type: 'numeric'
-        }
-    ]
+    colWidths: [100, 120],
+    rowHeights: [20, 80]
 });
 
-console.log(table.getCellMeta(0, 0));
-console.log(table.getCellMeta(0, 1));
+console.log(table.getColWidth(0) + ', ' + table.getRowHeight(0));
+console.log(table.getColWidth(1) + ', ' + table.getRowHeight(1));
