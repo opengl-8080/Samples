@@ -2,19 +2,11 @@ var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
     data: [
-        {
-            name: 'sato',
-            age: 13
-        },
-        {
-            name: 'suzuki',
-            age: 15
-        },
-        {
-            name: 'tanaka',
-            age: 18
-        }
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
     ]
 });
 
-console.log(table.getDataAtRowProp(0, 'age'));
+console.table(table.getData());
+console.table(table.getData(0, 1, 1, 2));
