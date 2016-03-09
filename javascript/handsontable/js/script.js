@@ -8,4 +8,4 @@ var table = new Handsontable(grid, {
     ]
 });
 
-console.log(table.getDataAtCol(1));
+console.log(table.getDataAtRow(2));
