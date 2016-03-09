@@ -1,9 +1,13 @@
 var grid = document.getElementById('grid');
 
-var table = new Handsontable(grid);
+var table = new Handsontable(grid, {
+    data: [
+        [1, 2, 3],
+        [true, false, true],
+        ['hoge', 'fuga', 'piyo']
+    ]
+});
 
-var td = grid.querySelector('table tr:nth-child(2) td:nth-child(3)');
-
-var coords = table.getCoords(td);
-
-console.log(coords);
+console.log(table.getDataAtCell(0, 0));
+console.log(table.getDataAtCell(1, 1));
+console.log(table.getDataAtCell(2, 2));
