@@ -17,4 +17,4 @@ var table = new Handsontable(grid, {
     ]
 });
 
-console.log(table.getDataAtProp('name'));
+console.log(table.getDataAtRowProp(0, 'age'));
