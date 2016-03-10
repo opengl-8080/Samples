@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+ext {
+    projectName = 'fisshplate'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://maven.seasar.org/maven2"
+    }
+}
+
+dependencies {
+    compile 'org.seasar.fisshplate:fisshplate:0.1.4'
+}
+
+jar {
+    baseName = projectName
+}
+
+eclipse {
+    project.name = projectName
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
