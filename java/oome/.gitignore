@@ -4,3 +4,6 @@
 build/
 .gradle/
 bin/
+hprof/
+heapstats/
+gclog/
