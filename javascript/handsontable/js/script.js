@@ -1,14 +1,17 @@
 var grid = document.getElementById('grid');
 
-var src = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-];
-
 var table = new Handsontable(grid, {
-    data: src
+    columns: [
+        {type: 'text'},
+        {type: 'numeric'},
+        {type: 'numeric'},
+        {type: 'autocomplete'}
+    ]
 });
 
-console.table(table.getSourceData() === src);
-console.table(table.getData() === src);
+console.log(table.getDataType(0, 0));
+console.log(table.getDataType(0, 1));
+console.log(table.getDataType(0, 2));
+console.log(table.getDataType(0, 3));
+console.log(table.getDataType(0, 1, 0, 2));
+console.log(table.getDataType(0, 0, 0, 3));
