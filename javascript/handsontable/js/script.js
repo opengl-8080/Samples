@@ -1,12 +1,14 @@
 var grid = document.getElementById('grid');
 
+var src = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];
+
 var table = new Handsontable(grid, {
-    data: [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
+    data: src
 });
 
-console.table(table.getData());
-console.table(table.getData(0, 1, 1, 2));
+console.table(table.getSourceData() === src);
+console.table(table.getData() === src);
