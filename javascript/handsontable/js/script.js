@@ -2,10 +2,12 @@ var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
     data: [
-        {name: 'aaa', age: 12},
-        {name: 'bbb', age: 15},
-        {name: 'ccc', age: 18}
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
     ]
 });
 
-table.selectCellByProp(1, 'age');
+table.selectCell(1, 2);
+console.log(table.getValue());
+
