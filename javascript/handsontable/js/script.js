@@ -2,12 +2,14 @@ var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
     data: [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
+        [   1,    2, null],
+        [   4,    5, null],
+        [null, null, null]
     ]
 });
 
-table.selectCell(1, 2);
-console.log(table.getValue());
+console.log(table.isEmptyCol(1));
+console.log(table.isEmptyCol(2));
+console.log(table.isEmptyRow(1));
+console.log(table.isEmptyRow(2));
 
