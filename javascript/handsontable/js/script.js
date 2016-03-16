@@ -12,4 +12,4 @@ var table = new Handsontable(grid, {
 table.populateFromArray(0, 1, [
     [1, 2],
     [3, 4]
-]);
+], 0, 0, 'populateFromArray', 'shift_down');
