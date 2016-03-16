@@ -1,15 +1,15 @@
 var grid = document.getElementById('grid');
 
-var table = new Handsontable(grid, {
-    data: [
-        [   1,    2, null],
-        [   4,    5, null],
-        [null, null, null]
-    ]
-});
+var table = new Handsontable(grid);
 
-console.log(table.isEmptyCol(1));
-console.log(table.isEmptyCol(2));
-console.log(table.isEmptyRow(1));
-console.log(table.isEmptyRow(2));
-
+table.populateFromArray(0, 1, [
+    [1, 2],
+    [3, 4]
+]);
+/*
+table.populateFromArray(2, 2, [
+    ['a', 'b', 'c'],
+    ['d', 'e', 'f'],
+    ['g', 'h', 'i']
+], 3, 4);
+*/
