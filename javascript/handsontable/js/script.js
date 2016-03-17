@@ -2,14 +2,10 @@ var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
     data: [
-        ['a', 'b', 'c', 'd'],
-        ['e', 'f', 'g', 'h'],
-        ['i', 'j', 'k', 'l'],
-        ['m', 'n', 'o', 'p'],
+        {name: 'Sato', age: 14, sex: 'male'},
+        {name: 'Suzuki', age: 16, sex: 'female'},
+        {name: 'Tanaka', age: 18, sex: 'male'}
     ]
 });
 
-table.populateFromArray(0, 1, [
-    [1, 2],
-    [3, 4]
-], 0, 0, 'populateFromArray', 'shift_down');
+console.log('age = ' + table.propToCol('age'));
