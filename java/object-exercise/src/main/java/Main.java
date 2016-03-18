@@ -1,5 +1,5 @@
-import vending.Drink;
-import vending.VendingMachine;
+import vending.before.Drink;
+import vending.before.VendingMachine;
 
 public class Main {
     

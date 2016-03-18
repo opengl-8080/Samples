@@ -1,4 +1,4 @@
-package vending;
+package vending.before;
 
 public class VendingMachine {
 
