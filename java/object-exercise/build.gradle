@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+ext {
+    projectName = 'object-exercise'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.1'
+    testCompile 'org.assertj:assertj-core:3.2.0'
+}
+
+jar {
+    baseName = projectName
+}
+
+eclipse {
+    project.name = projectName
+}
