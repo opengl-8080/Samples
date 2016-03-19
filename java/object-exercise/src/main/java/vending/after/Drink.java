@@ -7,8 +7,16 @@ public class Drink {
     public Drink(DrinkType kind) {
         this.kind = kind;
     }
-
-    public DrinkType getKind() {
-        return kind;
+    
+    public boolean isCoke() {
+        return this.kind == DrinkType.COKE;
+    }
+    
+    public boolean isDietCoke() {
+        return this.kind == DrinkType.DIET_COKE;
+    }
+    
+    public boolean isTea() {
+        return this.kind == DrinkType.TEA;
     }
 }

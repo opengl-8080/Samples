@@ -12,7 +12,7 @@ public class Main {
         Drink drink = vm.buy(Coin.FIVE_HUNDRED, DrinkType.COKE);
         Change charge = vm.refund();
         
-        if (drink.getKind() == DrinkType.COKE) {
+        if (drink.isCoke()) {
             System.out.println("コーラを購入しました。");
             System.out.println("おつりは " + charge.getAmount() + " 円です。");
         } else {
@@ -22,7 +22,7 @@ public class Main {
         drink = vm.buy(Coin.ONE_HUNDRED, DrinkType.DIET_COKE);
         charge = vm.refund();
 
-        if (drink.getKind() == DrinkType.DIET_COKE) {
+        if (drink.isDietCoke()) {
             System.out.println("ダイエットコーラを購入しました。");
             System.out.println("おつりは " + charge.getAmount() + " 円です。");
         } else {
@@ -39,7 +39,6 @@ public class Main {
         if (drink == null) {
             System.out.println("ダイエットコーラは売り切れ");
         } else {
-            System.out.println(drink.getKind());
             throw new RuntimeException("なんか変なん出てきた。。。");
         }
     }
