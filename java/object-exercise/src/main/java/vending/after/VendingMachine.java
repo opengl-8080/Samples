@@ -2,17 +2,8 @@ package vending.after;
 
 public class VendingMachine {
 
-    Stock stockOfCoke = new Stock(5); // コーラの在庫数
-    Stock stockOfDietCoke = new Stock(5); // ダイエットコーラの在庫数
-    Stock stockOfTea = new Stock(5); // お茶の在庫数
-    StockOf100Yen stockOf100Yen = new StockOf100Yen();
-    Change change = new Change();
-
-    public VendingMachine() {
-        for (int i=0; i<10; i++) {
-            this.stockOf100Yen.add(Coin.ONE_HUNDRED);
-        }
-    }
+    Storage storage = new Storage();
+    CoinMech coinMech = new CoinMech();
     
     /**
      * ジュースを購入する.
@@ -25,40 +16,29 @@ public class VendingMachine {
     public Drink buy(Coin payment, DrinkType kindOfDrink) {
         // 100円と500円だけ受け付ける
         if ((payment != Coin.ONE_HUNDRED) && (payment != Coin.FIVE_HUNDRED)) {
-            change.add(payment);
+            coinMech.addChange(payment);
+            return null;
+        }
+        
+        if (storage.isEmpty(kindOfDrink)) {
+            coinMech.addChange(payment);
             return null;
         }
 
-        if ((kindOfDrink == DrinkType.COKE) && stockOfCoke.isEmpty()) {
-            change.add(payment);
-            return null;
-        } else if ((kindOfDrink == DrinkType.DIET_COKE) && stockOfDietCoke.isEmpty()) {
-            change.add(payment);
-            return null;
-        } else if ((kindOfDrink == DrinkType.TEA) && stockOfTea.isEmpty()) {
-            change.add(payment);
-            return null;
-        }
-
-        if (payment == Coin.FIVE_HUNDRED && stockOf100Yen.doesNotHaveChange()) {
+        if (payment == Coin.FIVE_HUNDRED && coinMech.doesNotHaveChange()) {
+            coinMech.addChange(payment);
             return null;
         }
 
         if (payment == Coin.ONE_HUNDRED) {
             // 100円玉を釣り銭に使える
-            stockOf100Yen.add(payment);
+            coinMech.addStockOf100Yen(payment);
         } else if (payment == Coin.FIVE_HUNDRED) {
             // 400円のお釣り
-            change.add(stockOf100Yen.takeOutChange());
+            coinMech.addChange(coinMech.takeOutChange());
         }
 
-        if (kindOfDrink == DrinkType.COKE) {
-            stockOfCoke.decrement();
-        } else if (kindOfDrink == DrinkType.DIET_COKE) {
-            stockOfDietCoke.decrement();
-        } else {
-            stockOfTea.decrement();
-        }
+        storage.decrement(kindOfDrink);
 
         return new Drink(kindOfDrink);
     }
@@ -69,8 +49,6 @@ public class VendingMachine {
      * @return お釣りの金額
      */
     public Change refund() {
-        Change result = change.clone();
-        change.clear();
-        return result;
+        return coinMech.refund();
     }
 }
