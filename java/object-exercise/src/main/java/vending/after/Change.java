@@ -2,7 +2,6 @@ package vending.after;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Change {
     private List<Coin> coins = new ArrayList<>();
@@ -17,7 +16,9 @@ public class Change {
         this.coins.addAll(coins);
     }
 
-    public int getAmount() {
-        return this.coins.stream().collect(Collectors.summingInt(Coin::getAmount));
+    public Money getAmount() {
+        return this.coins.stream()
+                    .map(Coin::toMoney)
+                    .reduce(new Money(0), (sum, money) -> sum.add(money));
     }
 }

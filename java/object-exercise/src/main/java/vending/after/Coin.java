@@ -9,8 +9,8 @@ public enum Coin {
     private Coin(int amount) {
         this.amount = amount;
     }
-
-    public int getAmount() {
-        return amount;
+    
+    public Money toMoney() {
+        return new Money(this.amount);
     }
 }
