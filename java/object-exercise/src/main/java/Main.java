@@ -1,8 +1,8 @@
-import vending.after.Change;
-import vending.after.Coin;
-import vending.after.Drink;
-import vending.after.DrinkType;
 import vending.after.VendingMachine;
+import vending.after.drink.Drink;
+import vending.after.drink.DrinkType;
+import vending.after.money.Change;
+import vending.after.money.Coin;
 
 public class Main {
     

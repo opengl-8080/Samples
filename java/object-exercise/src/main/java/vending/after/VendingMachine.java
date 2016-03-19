@@ -1,5 +1,12 @@
 package vending.after;
 
+import vending.after.drink.Drink;
+import vending.after.drink.DrinkType;
+import vending.after.money.Change;
+import vending.after.money.Coin;
+import vending.after.money.CoinMech;
+import vending.after.stock.Storage;
+
 public class VendingMachine {
 
     private Storage storage = new Storage();

@@ -1,7 +1,10 @@
-package vending.after;
+package vending.after.stock;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import vending.after.drink.Drink;
+import vending.after.drink.DrinkType;
 
 public class Storage {
     private Map<DrinkType, Stock> stocks = new HashMap<>();

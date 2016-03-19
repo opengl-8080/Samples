@@ -1,4 +1,4 @@
-package vending.after;
+package vending.after.money;
 
 import java.util.ArrayList;
 import java.util.List;

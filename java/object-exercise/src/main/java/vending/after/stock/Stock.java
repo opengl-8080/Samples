@@ -1,4 +1,4 @@
-package vending.after;
+package vending.after.stock;
 
 public class Stock {
     

@@ -1,4 +1,4 @@
-package vending.after;
+package vending.after.money;
 
 import static java.util.stream.Collectors.*;
 
