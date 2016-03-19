@@ -8,11 +8,11 @@ public class Stock {
         this.quantity = quantity;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public void decrement() {
         this.quantity--;
+    }
+    
+    public boolean isEmpty() {
+        return this.quantity == 0;
     }
 }
