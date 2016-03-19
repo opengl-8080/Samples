@@ -12,11 +12,13 @@ public class Storage {
         this.stocks.put(DrinkType.TEA, new Stock(5));
     }
 
-    public boolean isEmpty(DrinkType kindOfDrink) {
+    public boolean doesNotHaveStock(DrinkType kindOfDrink) {
         return this.stocks.get(kindOfDrink).isEmpty();
     }
 
-    public void decrement(DrinkType kindOfDrink) {
-        this.stocks.get(kindOfDrink).decrement();
+    public Drink takeOut(DrinkType kindOfDrink) {
+        Stock stock = this.stocks.get(kindOfDrink);
+        stock.decrement();
+        return new Drink(kindOfDrink);
     }
 }

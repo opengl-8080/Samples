@@ -2,38 +2,29 @@ package vending.after;
 
 public class CoinMech {
     
-    private StockOf100Yen stockOf100Yen = new StockOf100Yen();
-    private Change change = new Change();
+    private CashBox cachBox = new CashBox();
+    private Payment payment;
     
     public CoinMech() {
         for (int i=0; i<10; i++) {
-            this.stockOf100Yen.add(Coin.ONE_HUNDRED);
+            this.cachBox.add(Coin.ONE_HUNDRED);
         }
     }
 
-    public void addChange(Coin payment) {
-        this.change.add(payment);
-    }
-
-    public void addChange(Change change) {
-        this.change.add(change);
-    }
-
-    public void addStockOf100Yen(Coin payment) {
-        this.stockOf100Yen.add(payment);
+    public void put(Coin coin) {
+        this.payment = new Payment(coin);
     }
 
     public boolean doesNotHaveChange() {
-        return this.stockOf100Yen.doesNotHaveChange();
-    }
-
-    public Change takeOutChange() {
-        return this.stockOf100Yen.takeOutChange();
+        return this.payment.needChange()
+                && this.cachBox.doesNotHaveChange();
     }
 
     public Change refund() {
-        Change result = change.clone();
-        change.clear();
-        return result;
+        return this.payment.refund();
+    }
+    
+    public void commit() {
+        this.payment.commit(this.cachBox);
     }
 }

@@ -6,15 +6,11 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.IntStream;
 
-public class StockOf100Yen {
+public class CashBox {
     private Stack<Coin> numberOf100Yen = new Stack<>();
 
     public void add(Coin coin) {
         this.numberOf100Yen.add(coin);
-    }
-
-    public Coin pop() {
-        return this.numberOf100Yen.pop();
     }
     
     public boolean doesNotHaveChange() {
