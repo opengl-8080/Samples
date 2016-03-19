@@ -2,17 +2,13 @@ package vending.after;
 
 public class Drink {
 
-    public static final int COKE = 0;
-    public static final int DIET_COKE = 1;
-    public static final int TEA = 2;
+    private DrinkType kind;
 
-    private int kind;
-
-    public Drink(int kind) {
+    public Drink(DrinkType kind) {
         this.kind = kind;
     }
 
-    public int getKind() {
+    public DrinkType getKind() {
         return kind;
     }
 }

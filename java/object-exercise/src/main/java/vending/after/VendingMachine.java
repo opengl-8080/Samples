@@ -1,13 +1,26 @@
 package vending.after;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import static java.util.stream.Collectors.*;
+import java.util.stream.IntStream;
+
 public class VendingMachine {
 
-    int quantityOfCoke = 5; // コーラの在庫数
-    int quantityOfDietCoke = 5; // ダイエットコーラの在庫数
-    int quantityOfTea = 5; // お茶の在庫数
-    int numberOf100Yen = 10; // 100円玉の在庫
-    int charge = 0; // お釣り
+    Stock stockOfCoke = new Stock(5); // コーラの在庫数
+    Stock stockOfDietCoke = new Stock(5); // ダイエットコーラの在庫数
+    Stock stockOfTea = new Stock(5); // お茶の在庫数
+    Stack<Coin> numberOf100Yen = new Stack<>(); // 100円玉の在庫
+    List<Coin> change = new ArrayList<>(); // お釣り
 
+    public VendingMachine() {
+        for (int i=0; i<10; i++) {
+            this.numberOf100Yen.add(Coin.ONE_HUNDRED);
+        }
+    }
+    
+    
     /**
      * ジュースを購入する.
      *
@@ -16,49 +29,53 @@ public class VendingMachine {
      *                    コーラ({@code Juice.COKE}),ダイエットコーラ({@code Juice.DIET_COKE},お茶({@code Juice.TEA})が指定できる.
      * @return 指定したジュース. 在庫不足や釣り銭不足で買えなかった場合は {@code null} が返される.
      */
-    public Drink buy(int payment, int kindOfDrink) {
+    public Drink buy(Coin payment, DrinkType kindOfDrink) {
         // 100円と500円だけ受け付ける
-        if ((payment != 100) && (payment != 500)) {
-            charge += payment;
+        if ((payment != Coin.ONE_HUNDRED) && (payment != Coin.FIVE_HUNDRED)) {
+            change.add(payment);
             return null;
         }
 
-        if ((kindOfDrink == Drink.COKE) && (quantityOfCoke == 0)) {
-            charge += payment;
+        if ((kindOfDrink == DrinkType.COKE) && (stockOfCoke.getQuantity() == 0)) {
+            change.add(payment);
             return null;
-        } else if ((kindOfDrink == Drink.DIET_COKE) && (quantityOfDietCoke == 0)) {
-            charge += payment;
+        } else if ((kindOfDrink == DrinkType.DIET_COKE) && (stockOfDietCoke.getQuantity() == 0)) {
+            change.add(payment);
             return null;
-        } else if ((kindOfDrink == Drink.TEA) && (quantityOfTea == 0)) {
-            charge += payment;
+        } else if ((kindOfDrink == DrinkType.TEA) && (stockOfTea.getQuantity() == 0)) {
+            change.add(payment);
             return null;
         }
 
         // 釣り銭不足
-        if (payment == 500 && numberOf100Yen < 4) {
-            charge += payment;
+        if (payment == Coin.FIVE_HUNDRED && numberOf100Yen.size() < 4) {
+            change.add(payment);
             return null;
         }
 
-        if (payment == 100) {
+        if (payment == Coin.ONE_HUNDRED) {
             // 100円玉を釣り銭に使える
-            numberOf100Yen++;
-        } else if (payment == 500) {
+            numberOf100Yen.add(payment);
+        } else if (payment == Coin.FIVE_HUNDRED) {
             // 400円のお釣り
-            charge += (payment - 100);
-            // 100円玉を釣り銭に使える
-            numberOf100Yen -= (payment - 100) / 100;
+            change.addAll(this.calculateChange());
         }
 
-        if (kindOfDrink == Drink.COKE) {
-            quantityOfCoke--;
-        } else if (kindOfDrink == Drink.DIET_COKE) {
-            quantityOfDietCoke--;
+        if (kindOfDrink == DrinkType.COKE) {
+            stockOfCoke.decrement();
+        } else if (kindOfDrink == DrinkType.DIET_COKE) {
+            stockOfDietCoke.decrement();
         } else {
-            quantityOfTea--;
+            stockOfTea.decrement();
         }
 
         return new Drink(kindOfDrink);
+    }
+    
+    private List<Coin> calculateChange() {
+        return IntStream.range(0, 4)
+                .mapToObj(i -> numberOf100Yen.pop())
+                .collect(toList());
     }
 
     /**
@@ -66,9 +83,9 @@ public class VendingMachine {
      *
      * @return お釣りの金額
      */
-    public int refund() {
-        int result = charge;
-        charge = 0;
+    public List<Coin> refund() {
+        List<Coin> result = new ArrayList<>(this.change);
+        change.clear();
         return result;
     }
 }
