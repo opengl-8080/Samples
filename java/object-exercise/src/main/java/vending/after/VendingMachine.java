@@ -1,9 +1,8 @@
 package vending.after;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 import static java.util.stream.Collectors.*;
+
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class VendingMachine {
@@ -11,15 +10,14 @@ public class VendingMachine {
     Stock stockOfCoke = new Stock(5); // コーラの在庫数
     Stock stockOfDietCoke = new Stock(5); // ダイエットコーラの在庫数
     Stock stockOfTea = new Stock(5); // お茶の在庫数
-    Stack<Coin> numberOf100Yen = new Stack<>(); // 100円玉の在庫
-    List<Coin> change = new ArrayList<>(); // お釣り
+    StockOf100Yen stockOf100Yen = new StockOf100Yen();
+    Change change = new Change();
 
     public VendingMachine() {
         for (int i=0; i<10; i++) {
-            this.numberOf100Yen.add(Coin.ONE_HUNDRED);
+            this.stockOf100Yen.add(Coin.ONE_HUNDRED);
         }
     }
-    
     
     /**
      * ジュースを購入する.
@@ -48,17 +46,17 @@ public class VendingMachine {
         }
 
         // 釣り銭不足
-        if (payment == Coin.FIVE_HUNDRED && numberOf100Yen.size() < 4) {
+        if (payment == Coin.FIVE_HUNDRED && stockOf100Yen.size() < 4) {
             change.add(payment);
             return null;
         }
 
         if (payment == Coin.ONE_HUNDRED) {
             // 100円玉を釣り銭に使える
-            numberOf100Yen.add(payment);
+            stockOf100Yen.add(payment);
         } else if (payment == Coin.FIVE_HUNDRED) {
             // 400円のお釣り
-            change.addAll(this.calculateChange());
+            change.add(this.calculateChange());
         }
 
         if (kindOfDrink == DrinkType.COKE) {
@@ -72,10 +70,12 @@ public class VendingMachine {
         return new Drink(kindOfDrink);
     }
     
-    private List<Coin> calculateChange() {
-        return IntStream.range(0, 4)
-                .mapToObj(i -> numberOf100Yen.pop())
-                .collect(toList());
+    private Change calculateChange() {
+        List<Coin> coins = IntStream.range(0, 4)
+                            .mapToObj(i -> stockOf100Yen.pop())
+                            .collect(toList());
+        
+        return new Change(coins);
     }
 
     /**
@@ -83,8 +83,8 @@ public class VendingMachine {
      *
      * @return お釣りの金額
      */
-    public List<Coin> refund() {
-        List<Coin> result = new ArrayList<>(this.change);
+    public Change refund() {
+        Change result = change.clone();
         change.clear();
         return result;
     }

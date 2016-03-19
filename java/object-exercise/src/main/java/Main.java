@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.stream.Collectors;
-
+import vending.after.Change;
 import vending.after.Coin;
 import vending.after.Drink;
 import vending.after.DrinkType;
@@ -12,11 +10,11 @@ public class Main {
         VendingMachine vm = new VendingMachine();
         
         Drink drink = vm.buy(Coin.FIVE_HUNDRED, DrinkType.COKE);
-        List<Coin> charge = vm.refund();
+        Change charge = vm.refund();
         
         if (drink.getKind() == DrinkType.COKE) {
             System.out.println("コーラを購入しました。");
-            System.out.println("おつりは " + charge.stream().collect(Collectors.summingInt(Coin::getAmount)) + " 円です。");
+            System.out.println("おつりは " + charge.getAmount() + " 円です。");
         } else {
             throw new RuntimeException("コーラ買えんかった(´ﾟдﾟ｀)");
         }
@@ -26,7 +24,7 @@ public class Main {
 
         if (drink.getKind() == DrinkType.DIET_COKE) {
             System.out.println("ダイエットコーラを購入しました。");
-            System.out.println("おつりは " + charge.stream().collect(Collectors.summingInt(Coin::getAmount)) + " 円です。");
+            System.out.println("おつりは " + charge.getAmount() + " 円です。");
         } else {
             throw new RuntimeException("ダイエットコーラ買えんかった(´ﾟдﾟ｀)");
         }
