@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+ext {
+    projectName = 'jxls_sample'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jxls:jxls:2.2.9'
+    compile 'org.jxls:jxls-poi:1.0.8'
+}
+
+jar {
+    baseName = projectName
+}
+
+eclipse {
+    project.name = projectName
+}
