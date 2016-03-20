@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
@@ -16,7 +17,7 @@ public class Main {
              OutputStream out = new FileOutputStream(new File("./excel/out.xlsx"))) {
             
             Context context = new Context();
-            context.putVar("hoge", new Hoge());
+            context.putVar("list", Arrays.asList(1, 2, 3));
             
             JxlsHelper.getInstance().processTemplate(in, out, context);
         }
