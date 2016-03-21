@@ -8,5 +8,5 @@ var table = new Handsontable(grid, {
     ]
 });
 
-var ret = table.spliceCol(1, 1, 2, 'X', 'Y', 'Z');
+var ret = table.spliceRow(1, 1, 2, 'X', 'Y', 'Z');
 console.log(ret);
