@@ -24,4 +24,8 @@ public class CashBox {
         
         return new Change(coins);
     }
+
+    int count() {
+        return this.numberOf100Yen.size();
+    }
 }
