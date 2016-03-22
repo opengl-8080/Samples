@@ -31,8 +31,8 @@ public class Payment {
     }
 
     public Change refund() {
-        if (this.coin == Coin.ONE_HUNDRED) {
-            return new Change();
+        if (this.coin != null) {
+            return new Change(this.coin);
         }
         
         return this.change;
