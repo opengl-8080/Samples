@@ -1,12 +1,13 @@
 var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
-    data: [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
+    colHeaders: true,
+    colWidths: [100, 200]
 });
 
-var ret = table.spliceRow(1, 1, 2, 'X', 'Y', 'Z');
-console.log(ret);
+document.getElementById('button').addEventListener('click', function() {
+    table.updateSettings({
+        colHeaders: ['one', 'two', 'three', 'four']
+    });
+});
+
