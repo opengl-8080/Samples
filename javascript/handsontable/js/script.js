@@ -1,10 +1,17 @@
 var grid = document.getElementById('grid');
 
+
 var table = new Handsontable(grid, {
-    colHeaders: ['one', 'two', 'three', 'four', 'five']
+    data: [
+        ['foo', 'hoge', 'bar']
+    ],
+    columns: [
+        {type: 'numeric', data: 0},
+        {type: 'text', data: 1},
+        {type: 'date', data: 2},
+    ]
 });
 
-console.log(table.getColHeader());
-console.log(table.getColHeader(2));
-console.log(table.getColHeader(5));
-console.log(table.getColHeader(-1));
+document.getElementById('button').addEventListener('click', function() {
+    table.validateCells();
+});
