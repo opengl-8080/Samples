@@ -1,21 +1,11 @@
 var grid = document.getElementById('grid');
 
-var flag = true;
-
 var table = new Handsontable(grid, {
-    contextMenu: {
-        items: [
-            {
-                name: 'item1',
-                disabled: true
-            },
-            {
-                name: 'item2',
-                disabled: function() {
-                    flag = !flag;
-                    return flag;
-                }
-            }
-        ]
-    }
+    data: [
+        {name: 'Sato', age: 14, sex: 'male'},
+        {name: 'Suzuki', age: 16, sex: 'female'},
+        {name: 'Tanaka', age: 18, sex: 'male'}
+    ]
 });
+
+console.log('2 = ' + table.colToProp(2));
