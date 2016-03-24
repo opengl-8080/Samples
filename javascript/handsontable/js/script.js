@@ -1,11 +1,10 @@
 var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid, {
-    data: [
-        {name: 'Sato', age: 14, sex: 'male'},
-        {name: 'Suzuki', age: 16, sex: 'female'},
-        {name: 'Tanaka', age: 18, sex: 'male'}
-    ]
+    colHeaders: ['one', 'two', 'three', 'four', 'five']
 });
 
-console.log('2 = ' + table.colToProp(2));
+console.log(table.getColHeader());
+console.log(table.getColHeader(2));
+console.log(table.getColHeader(5));
+console.log(table.getColHeader(-1));
