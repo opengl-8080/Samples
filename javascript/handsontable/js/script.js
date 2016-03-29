@@ -9,7 +9,9 @@ var table = new Handsontable(grid, {
     search: true
 });
 
-table.search.query('T', function(instance, row, col, data, testResult) {
+Handsontable.Search.global.setDefaultCallback(function(instance, row, col, data, testResult) {
     console.log(arguments);
     instance.getCellMeta(row, col).isSearchResult = testResult;
 });
+
+table.search.query('T');
