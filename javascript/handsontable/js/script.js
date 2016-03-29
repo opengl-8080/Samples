@@ -9,5 +9,5 @@ var table = new Handsontable(grid, {
     search: true
 });
 
-var result = table.search.query('T');
-console.dir(result);
+table.search.query('T');
+table.render();
