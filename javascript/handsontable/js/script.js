@@ -9,9 +9,12 @@ var table = new Handsontable(grid, {
     search: true
 });
 
-Handsontable.Search.global.setDefaultCallback(function(instance, row, col, data, testResult) {
-    console.log(arguments);
-    instance.getCellMeta(row, col).isSearchResult = testResult;
+table.search.query('T', null, function (query, value) {
+    console.dir(arguments);
+  
+    if (typeof query == 'undefined' || query == null || !query.toLowerCase || query.length === 0) {
+        return false;
+    }
+    
+    return value.toString().toLowerCase().indexOf(query.toLowerCase()) !== -1;
 });
-
-table.search.query('T');
