@@ -1,10 +1,7 @@
 var grid = document.getElementById('grid');
 
 new Handsontable(grid, {
-    columns: [
-        {
-            editor: 'select',
-            selectOptions: ['hoge', 'fuga', 'piyo']
-        }
-    ]
+    colHeaders: true,
+    columnSorting: true,
+    sortIndicator: true
 });
