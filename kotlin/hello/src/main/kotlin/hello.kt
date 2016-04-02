@@ -1,10 +1,30 @@
-class Hoge{
-    var string : String = ""
-    private set
-             get
-}
+import foo.*
+import foo.Foo.hoge
 
 fun main(args : Array<String>) {
-    var hoge = Hoge()
-    println(hoge.string)
+    Hoge().method()
+}
+
+class Hoge {
+    companion object Hoge {
+        fun String.hoge() {
+            println("Hoge.Hoge.hoge")
+        }
+    }
+    
+    fun method() {
+        fun String.hoge() {
+            println("Hoge.method.hoge")
+        }
+        
+        "extensions".hoge()
+    }
+    
+    fun String.hoge() {
+        println("Hoge.hoge")
+    }
+}
+
+fun String.hoge() {
+    println("hoge")
 }
