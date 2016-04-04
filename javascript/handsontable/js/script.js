@@ -1,8 +1,13 @@
 var grid = document.getElementById('grid');
 
-new Handsontable(grid, {
-    columns: [
-        {title: 'foo'},
-        {}
-    ]
+var table = new Handsontable(grid, {
+    comments: true
 });
+
+var comments = table.getPlugin('comments');
+
+comments.setRange({
+    from: {row: 1, col: 1}
+});
+comments.editor.setValue('Commnets Plugin');
+comments.saveComment();
