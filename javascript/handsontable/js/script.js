@@ -1,9 +1,13 @@
-var grid1 = document.getElementById('grid1');
-var grid2 = document.getElementById('grid2');
+var grid = document.getElementById('grid');
 
-var table1 = new Handsontable(grid1);
-var table2 = new Handsontable(grid2);
+new Handsontable(grid);
 
-Handsontable.hooks.add('afterSelection', function() {
-    console.log(arguments);
-}, table1);
+function afterSelection(row, col) {
+    console.log('select(' + row + ', ' + col + ')');
+}
+
+Handsontable.hooks.add('afterSelection', afterSelection);
+
+document.getElementById('remove').addEventListener('click', function () {
+    Handsontable.hooks.remove('afterSelection', afterSelection);
+});
