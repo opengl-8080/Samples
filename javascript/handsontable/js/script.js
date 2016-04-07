@@ -1,13 +1,7 @@
 var grid = document.getElementById('grid');
 
-new Handsontable(grid);
+var table = new Handsontable(grid);
 
-function afterSelection(row, col) {
-    console.log('select(' + row + ', ' + col + ')');
-}
+var bucket = Handsontable.hooks.getBucket(table);
 
-Handsontable.hooks.add('afterSelection', afterSelection);
-
-document.getElementById('remove').addEventListener('click', function () {
-    Handsontable.hooks.remove('afterSelection', afterSelection);
-});
+console.log(bucket);
