@@ -3,13 +3,9 @@ var grid = document.getElementById('grid');
 var table = new Handsontable(grid);
 
 Handsontable.hooks.add('beforeKeyDown', function (e) {
-    var editor = this.getActiveEditor();
-    
-    if (editor.isOpened() && isArrowKey(e.keyCode)) {
-        e.stopImmediatePropagation();
+    if (e.keyCode === Handsontable.helper.KEY_CODES.SPACE) {
+        console.log('space!');
+    } else if (Handsontable.helper.isKey(e.keyCode, 'ARROW_LEFT|ARROW_RIGHT')) {
+        console.log('left or right!!');
     }
 });
-
-function isArrowKey(keyCode) {
-    return Handsontable.helper.isKey(keyCode, 'ARROW_UP|ARROW_DOWN|ARROW_LEFT|ARROW_RIGHT');
-}
