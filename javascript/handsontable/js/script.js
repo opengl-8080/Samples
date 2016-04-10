@@ -1,13 +1,12 @@
 var grid = document.getElementById('grid');
 
-var table = new Handsontable(grid);
-
-// 独自のイベントハンドラを登録
-Handsontable.hooks.add('onButtonClick', function () {
-    console.log('click!!');
+var table = new Handsontable(grid, {
+    columnSorting: true,
+    data: [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ]
 });
 
-document.getElementById('button').addEventListener('click', function() {
-    // イベントを発火
-    Handsontable.hooks.run(table, 'onButtonClick');
-});
+table.sort(2, false);
