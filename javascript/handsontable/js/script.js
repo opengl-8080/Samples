@@ -1,12 +1,13 @@
 var grid = document.getElementById('grid');
 
-var table = new Handsontable(grid, {
-    columnSorting: true,
-    data: [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
+var table = new Handsontable(grid);
+
+document.getElementById('button').addEventListener('click', function () {
+    Handsontable.hooks.run(table, 'editCell');
 });
 
-table.sort(2, false);
+Handsontable.hooks.add('editCell', function () {
+    this.selectCell(0, 0)
+    var editor = this.getActiveEditor();
+    editor.beginEditing();
+});
