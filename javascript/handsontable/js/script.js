@@ -2,12 +2,12 @@ var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid);
 
-Handsontable.hooks.register('onButtonClick');
-
+// 独自のイベントハンドラを登録
 Handsontable.hooks.add('onButtonClick', function () {
-    console.log(arguments);
+    console.log('click!!');
 });
 
 document.getElementById('button').addEventListener('click', function() {
-    Handsontable.hooks.run(table, 'onButtonClick', 1, 2, 3, 4, 5, 6, 7);
+    // イベントを発火
+    Handsontable.hooks.run(table, 'onButtonClick');
 });
