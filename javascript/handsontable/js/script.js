@@ -2,12 +2,14 @@ var grid = document.getElementById('grid');
 
 var table = new Handsontable(grid);
 
-document.getElementById('button').addEventListener('click', function () {
-    Handsontable.hooks.run(table, 'editCell');
+Handsontable.hooks.add('beforeKeyDown', function (e) {
+    var editor = this.getActiveEditor();
+    
+    if (editor.isOpened() && isArrowKey(e.keyCode)) {
+        e.stopImmediatePropagation();
+    }
 });
 
-Handsontable.hooks.add('editCell', function () {
-    this.selectCell(0, 0)
-    var editor = this.getActiveEditor();
-    editor.beginEditing();
-});
+function isArrowKey(keyCode) {
+    return Handsontable.helper.isKey(keyCode, 'ARROW_UP|ARROW_DOWN|ARROW_LEFT|ARROW_RIGHT');
+}
