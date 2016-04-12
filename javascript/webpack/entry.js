@@ -1,2 +1,5 @@
-var other = require('./other.js');
-document.write('10 + 32 = ' + other(10, 32));
+var jq = require('jquery/dist/jquery.min.js');
+
+jq(function() {
+    console.log('Hello jQuery!!');
+});
