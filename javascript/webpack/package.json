@@ -7,6 +7,7 @@
     "jquery": "^2.2.3"
   },
   "devDependencies": {
+    "console-loader": "^1.0.0",
     "css-loader": "^0.23.1",
     "json-loader": "^0.5.4",
     "raw-loader": "^0.5.1",
