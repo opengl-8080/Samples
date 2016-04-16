@@ -1,2 +1,2 @@
-var fuga = require('./fuga.js');
-fuga();
+var hoge = require('./hoge.js');
+hoge();
