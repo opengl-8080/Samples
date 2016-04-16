@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 module.exports = {
@@ -10,11 +11,13 @@ module.exports = {
         path: 'output',
         filename: '[name].bundle.js'
     },
+    devtool: 'source-map',
     plugins: [
         new CommonsChunkPlugin({
             name: 'common',
             filename: 'common.js',
             minChunks: 2
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin()
     ]
 };
