@@ -1,2 +1,2 @@
-var foo = require('./foo');
-console.log(foo);
+var foo = require('./hoge.js');
+foo();

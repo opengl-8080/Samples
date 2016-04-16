@@ -1,5 +1,5 @@
 {
-  "name": "webpack",
+  "name": "webpack-sample",
   "version": "1.0.0",
   "description": "",
   "main": "bundle.js",
@@ -12,7 +12,8 @@
     "json-loader": "^0.5.4",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.13.1",
-    "to-string-loader": "^1.1.3"
+    "to-string-loader": "^1.1.3",
+    "webpack": "^1.13.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
