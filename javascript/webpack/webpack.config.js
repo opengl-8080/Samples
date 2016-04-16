@@ -4,6 +4,6 @@ module.exports = {
         filename: 'bundle.js'
     },
     resolve: {
-        modulesDirectories: ['my_modules']
+        extensions: ['', '.txt']
     }
 };
