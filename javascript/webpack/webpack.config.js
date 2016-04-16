@@ -11,6 +11,10 @@ module.exports = {
         filename: '[name].bundle.js'
     },
     plugins: [
-        new CommonsChunkPlugin('common.js')
+        new CommonsChunkPlugin({
+            name: 'common',
+            filename: 'common.js',
+            minChunks: 2
+        })
     ]
 };
