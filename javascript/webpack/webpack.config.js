@@ -4,8 +4,6 @@ module.exports = {
         filename: 'bundle.js'
     },
     resolve: {
-        alias: {
-            foo: 'foo.js'
-        }
+        modulesDirectories: ['my_modules']
     }
 };

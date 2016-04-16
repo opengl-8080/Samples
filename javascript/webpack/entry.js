@@ -1,2 +1,2 @@
-var foo = require('foo');
-console.log(foo);
+var myModule = require('my_module.js');
+console.log(myModule);
