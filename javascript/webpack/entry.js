@@ -1,5 +1,2 @@
-var foo = require('./foo/foo.js');
-foo();
-
-var bar = require('./bar/bar.js');
-bar();
+var foo = require('foo');
+console.log(foo);
