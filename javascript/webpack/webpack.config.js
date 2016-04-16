@@ -1,12 +1,6 @@
-var webpack = require("webpack");
-
 module.exports = {
-    entry: './entry.js',
+    entry: ['./entry1.js', './entry2.js'],
     output: {
         filename: 'bundle.js'
-    },
-    devtool: 'source-map',
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin()
-    ]
+    }
 };
