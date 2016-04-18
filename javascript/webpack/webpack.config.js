@@ -1,11 +1,17 @@
-var path = require('path');
-
 module.exports = {
-    entry: 'entry.js',
+    entry: './entry.ts',
     output: {
         filename: 'bundle.js'
     },
     resolve: {
-        root: [path.resolve(__dirname, './app')]
+        extensions: ['', '.ts', '.js']
+    },
+    modules: {
+        loaders: [
+            {
+                test: /\.ts$/,
+                loader: 'awesome-typescript-loader'
+            }
+        ]
     }
 };
