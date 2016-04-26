@@ -1,30 +1,6 @@
-import foo.*
-import foo.Foo.hoge
-
-fun main(args : Array<String>) {
-    Hoge().method()
+fun main(args: Array<String>) {
+    val f : Runnable = Runnable {println("Hello")}
 }
 
-class Hoge {
-    companion object Hoge {
-        fun String.hoge() {
-            println("Hoge.Hoge.hoge")
-        }
-    }
-    
-    fun method() {
-        fun String.hoge() {
-            println("Hoge.method.hoge")
-        }
-        
-        "extensions".hoge()
-    }
-    
-    fun String.hoge() {
-        println("Hoge.hoge")
-    }
-}
-
-fun String.hoge() {
-    println("hoge")
+fun function(runnable: Runnable) {
 }

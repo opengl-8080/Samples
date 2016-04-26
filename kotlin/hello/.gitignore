@@ -5,3 +5,5 @@ build/
 .project
 .settings/
 *.bak
+.idea/
+kotlin-sample.iml
