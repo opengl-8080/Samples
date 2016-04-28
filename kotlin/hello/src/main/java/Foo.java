@@ -1,5 +1,5 @@
 public class Foo {
 
-    public static void method(Runnable runnable) {
+    public static void main(String[] args) {
     }
 }
