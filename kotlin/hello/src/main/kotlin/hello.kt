@@ -1,20 +1,18 @@
 fun main(args: Array<String>) {
+    val integerHoge = Hoge<Int>(10)
+    val numberBase: Base<Int> = integerHoge
 
-    val a = Hoge("a")
-    val b = Hoge("a")
-
-    println(a === b)
-    println(a == b)
+    println(numberBase.get())
 }
 
-class Hoge(val name: String) {
+interface Base<out T> {
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (!(o is Hoge)) return false
+    fun get(): T
+}
 
-        println("equals()!!")
+class Hoge<U>(private val u: U): Base<U> {
 
-        return this.name == o.name
+    override fun get(): U {
+        return this.u
     }
 }
