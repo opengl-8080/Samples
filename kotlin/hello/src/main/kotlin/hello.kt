@@ -1,7 +1,13 @@
 fun main(args: Array<String>) {
-    hoge()
+    val map = mapOf(Pair("one", "ONE"), Pair("two", "TWO"), Pair("three", "THREE"))
+    val keys = listOf("one", "three")
+
+    val list: List<String> =
+                            map
+                                .filterKeys { keys.contains(it) }
+                                .values
+                                .toList()
+
+    println(list)
 }
 
-@Deprecated("使うな！！")
-fun hoge() {
-}
