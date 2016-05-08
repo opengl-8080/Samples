@@ -1,0 +1,68 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.0.1-1'
+        projectName = 'kotlinjs-sample'
+    }
+    
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+    }
+}
+
+apply plugin: "kotlin2js"
+//apply plugin: 'eclipse'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+    compile "org.jetbrains.kotlin:kotlin-js-library:${kotlinVersion}"
+}
+
+jar {
+    baseName = projectName
+}
+
+compileKotlin2Js.kotlinOptions.outputFile = "build/js/app.js"
+compileKotlin2Js.kotlinOptions.sourceMap = true
+compileKotlin2Js.kotlinOptions.outputPrefix = 'build/js/'
+
+task copyJsFilesFromDependencies(dependsOn: build) {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "build/js/lib"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+        }
+    }
+}
+
+//
+//eclipse {
+//    project {
+//        name = projectName
+//        buildCommand 'org.jetbrains.kotlin.ui.kotlinBuilder'
+//        natures 'org.jetbrains.kotlin.core.kotlinNature'
+//        linkedResource(
+//            name: 'kotlin_bin',
+//            type: '2',
+//            locationUri: "org.jetbrains.kotlin.core.filesystem:/${name}/kotlin_bin"
+//        )
+//    }
+//    classpath.containers 'org.jetbrains.kotlin.core.KOTLIN_CONTAINER'
+//}
+//
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '2.10'
+//}
