@@ -1,12 +1,5 @@
 fun main(args: Array<String>) {
-}
+    val clazz: Class<*> = String::class.java
 
-open class Parent {
-    open fun getValue() = "parent"
-}
-
-class Child: Parent() {
-    private val value = "child"
-
-    override fun getValue() = this.value
+    println("clazz = ${clazz.kotlin}")
 }
