@@ -1,11 +1,16 @@
 package sample.ejb
 
+import sample.cdi.KotlinCdiBean
 import javax.ejb.Stateless
+import javax.inject.Inject
 
 @Stateless
 open class KotlinEjb {
 
-    fun hello(name: String) {
-        println("[$name] Hello Kotlin EJB!!")
+    @Inject
+    lateinit private var bean: KotlinCdiBean
+
+    fun hello() {
+        this.bean.hello()
     }
 }

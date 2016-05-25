@@ -26,8 +26,8 @@ public class JavaResource {
     public String hello() {
         this.javaEjbAtInject.hello("javaEjbAtInject");
         this.javaEjbAtEJB.hello("javaEjbAtEJB");
-        this.kotlinEjbAtInject.hello("kotlinEjbAtInject");
-        this.kotlinEjbAtEJB.hello("kotlinEjbAtEJB");
+//        this.kotlinEjbAtInject.hello("kotlinEjbAtInject");
+//        this.kotlinEjbAtEJB.hello("kotlinEjbAtEJB");
         return "Java Resource";
     }
 }
