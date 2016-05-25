@@ -16,8 +16,8 @@ class MigrateDatabase : ServletContextListener {
     
     override fun contextInitialized(e: ServletContextEvent?) {
         val flyway = Flyway()
-        
-        flyway.setDataSource(this.ds)
+
+        flyway.dataSource = this.ds
         flyway.migrate()
     }
     
