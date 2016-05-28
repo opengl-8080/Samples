@@ -13,10 +13,6 @@ public class Payment {
         return this.coin == Coin.FIVE_HUNDRED;
     }
 
-    public boolean doesNotCommitted() {
-        return this.coin != null;
-    }
-
     public void commit(CashBox cachBox) {
         if (this.coin == Coin.ONE_HUNDRED) {
             cachBox.add(this.coin);
@@ -26,15 +22,17 @@ public class Payment {
         if (this.coin == Coin.FIVE_HUNDRED) {
             this.change = cachBox.takeOutChange();
         }
-        
+
         this.coin = null;
     }
 
     public Change refund() {
-        if (this.coin != null) {
-            return new Change(this.coin);
-        }
-        
-        return this.change;
+        return this.isNotCommited()
+                ? new Change(this.coin)
+                : this.change;
+    }
+
+    private boolean isNotCommited() {
+        return this.coin != null;
     }
 }

@@ -99,25 +99,4 @@ public class PaymentTest {
             assertThat(actual).isEqualTo(expected);
         }
     }
-    
-    @Test
-    public void コミット前なら_未コミット判定はtrue() {
-        // exercise
-        boolean actual = pay100Yen.doesNotCommitted();
-        
-        // verify
-        assertThat(actual).isTrue();
-    }
-    
-    @Test
-    public void コミット後なら_未コミット判定はtrue() {
-        // setup
-        pay100Yen.commit(cashBox);
-        
-        // exercise
-        boolean actual = pay100Yen.doesNotCommitted();
-        
-        // verify
-        assertThat(actual).isFalse();
-    }
 }
