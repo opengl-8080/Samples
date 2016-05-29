@@ -1,5 +1,6 @@
 fun main(args: Array<String>) {
-    val clazz: Class<*> = String::class.java
+    val iterable: Iterable<Int> = listOf(1, 2, 3)
 
-    println("clazz = ${clazz.kotlin}")
+    println(iterable.all { it < 4 })
+    println(iterable.all { it < 3 })
 }
