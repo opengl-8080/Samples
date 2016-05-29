@@ -1,9 +1,5 @@
 fun main(args: Array<String>) {
-    val iterable: Iterable<Iterable<Int>> = listOf(
-        listOf(1, 2, 3),
-        listOf(4, 5, 6),
-        listOf(7, 8, 9)
-    )
+    val iterable: Iterable<String> = listOf("a", "b", "c")
 
-    println(iterable.flatten())
+    println(iterable.fold("Z", { buf, value -> buf + value }))
 }
