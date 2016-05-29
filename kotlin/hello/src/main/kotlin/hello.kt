@@ -1,6 +1,7 @@
 fun main(args: Array<String>) {
     val iterable: Iterable<Int> = listOf(1, 2, 3)
 
-    println(iterable.any { it < 4 })
-    println(iterable.any { it < 0 })
+    val map = iterable.associate { it to it*10 }
+
+    println(map)
 }
