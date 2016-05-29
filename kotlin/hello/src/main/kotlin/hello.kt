@@ -1,5 +1,5 @@
 fun main(args: Array<String>) {
-    val iterable: Iterable<String> = listOf("a", "b", "c")
+    val iterable: Iterable<Int> = listOf(1, 2, 3)
 
-    println(iterable.foldIndexed("Z", { index, buf, value -> "$buf $index=$value" }))
+    iterable.forEach { println(it) }
 }
