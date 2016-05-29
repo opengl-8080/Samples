@@ -1,5 +1,5 @@
 fun main(args: Array<String>) {
     val iterable: Iterable<Int> = listOf(1, 2, 3, 4, 5)
 
-    println(iterable.dropWhile { it != 4 })
+    println(iterable.elementAt(2))
 }
