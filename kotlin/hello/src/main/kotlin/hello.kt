@@ -1,10 +1,7 @@
 fun main(args: Array<String>) {
-    val result = mutableListOf(9);
-    val iterable: Iterable<Int> = listOf(1, 2, 3)
+    val iterable: Iterable<*> = listOf(1, "foo", 2.4, false)
 
-    iterable.filterIndexedTo(result) { index, value ->
-        index == 0 || value == 3
-    }
+    val result = iterable.filterIsInstance<Number>()
 
     println(result)
 }
