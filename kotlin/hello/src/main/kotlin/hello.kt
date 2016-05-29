@@ -1,5 +1,5 @@
 fun main(args: Array<String>) {
-    val iterable: Iterable<Int> = listOf(1, 2, 1, 2, 2, 3, 1, 3)
+    val iterable: Iterable<String> = listOf("foo", "bar", "fizz", "buzz", "hoge")
 
-    println(iterable.distinct())
+    println(iterable.distinctBy { it.length })
 }
