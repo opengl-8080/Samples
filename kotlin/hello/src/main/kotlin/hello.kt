@@ -1,5 +1,6 @@
 fun main(args: Array<String>) {
-    val iterable: Iterable<Int> = listOf(1, 2, 3, 4, 5)
+    val iterable: Iterable<*> = listOf(1, "foo", 2.4, false)
 
-    println(iterable.mapNotNull { if (it % 2 == 0) it else null })
+    println(iterable.filterIsInstance<Number>())
+    println(iterable.filterIsInstance(String::class.java))
 }
