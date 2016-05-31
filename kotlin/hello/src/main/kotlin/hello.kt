@@ -1,6 +1,8 @@
 fun main(args: Array<String>) {
-    val iterable: Iterable<*> = listOf(1, "foo", 2.4, false)
+    val iterable: Iterable<Int> = listOf(1, 2, 3, 4, 5)
 
-    println(iterable.filterIsInstance<Number>())
-    println(iterable.filterIsInstance(String::class.java))
+    val result = mutableListOf("<9>")
+    iterable.mapTo(result) { "<$it>" }
+
+    println(result)
 }
