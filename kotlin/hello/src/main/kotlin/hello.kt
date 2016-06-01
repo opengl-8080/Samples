@@ -1,8 +1,5 @@
 fun main(args: Array<String>) {
-    val iterable = listOf("a", "b", "c")
+    val iterable = listOf("a", "b", null, "c")
 
-    println(iterable.reduce {tmp, value ->
-        println("tmp=$tmp, value=$value")
-        tmp + ":" + value
-    })
+    println(iterable.requireNoNulls())
 }
