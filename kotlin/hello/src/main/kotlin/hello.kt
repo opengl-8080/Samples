@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
-    val iterable = listOf("one" to 1, "two" to 2, "three" to 3)
+    val iterable = listOf(1, 2, 3, 4, 5)
 
-    val result: Pair<List<String>, List<Int>> = iterable.unzip()
+    val result: Iterable<IndexedValue<Int>> = iterable.withIndex()
 
-    println(result)
+    result.forEach { println("index=${it.index}, value=${it.value}") }
 }
