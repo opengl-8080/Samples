@@ -1,7 +1,13 @@
 fun main(args: Array<String>) {
-    val iterable = setOf(1, 2, 3)
+    val iterable = listOf("foo" to "FOO", "bar" to "BAR")
 
-    val list: List<Int> = iterable.toList()
+    val map = iterable.toMap()
 
-    println(list)
+    println(map)
+
+    val result = mutableMapOf("fizz" to "FIZZ")
+
+    iterable.toMap(result)
+
+    println(result)
 }
