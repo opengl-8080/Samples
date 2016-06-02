@@ -1,5 +1,7 @@
 fun main(args: Array<String>) {
-    val iterable = listOf(1, 1, 2, 2, 2, 3, 3)
+    val iterable = setOf(1, 2, 3)
 
-    println(iterable.toHashSet())
+    val list: List<Int> = iterable.toList()
+
+    println(list)
 }
