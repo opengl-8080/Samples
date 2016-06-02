@@ -1,13 +1,7 @@
 fun main(args: Array<String>) {
-    val iterable = listOf("foo" to "FOO", "bar" to "BAR")
+    val iterable = listOf(1, 2, 3)
 
-    val map = iterable.toMap()
-
-    println(map)
-
-    val result = mutableMapOf("fizz" to "FIZZ")
-
-    iterable.toMap(result)
+    val result: MutableList<Int> = iterable.toMutableList()
 
     println(result)
 }
