@@ -1,7 +1,9 @@
-fun main(args: Array<String>) {
-    val iterable = listOf(1, 1, 2, 3, 3)
+import java.util.*
 
-    val result: Set<Int> = iterable.toSet()
+fun main(args: Array<String>) {
+    val iterable = listOf(3, 1, 2, 3, 1, 4)
+
+    val result: SortedSet<Int> = iterable.toSortedSet()
 
     println(result)
 }
