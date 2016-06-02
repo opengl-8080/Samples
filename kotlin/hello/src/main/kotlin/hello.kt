@@ -1,5 +1,9 @@
 fun main(args: Array<String>) {
-    val iterable = listOf(1, 2, 3, 4, 5)
+    val iterable = listOf(1, 2, 3)
 
-    println(iterable.takeWhile { it < 5 })
+    val result: MutableCollection<Int> = mutableListOf(9)
+
+    iterable.toCollection(result)
+
+    println(result)
 }
