@@ -1,8 +1,7 @@
 fun main(args: Array<String>) {
-    val iterable1 = listOf(1, 2, 3, 4)
-    val iterable2 = listOf(2, 4, 5, 6)
+    val iterable = listOf("one" to 1, "two" to 2, "three" to 3)
 
-    val result: Set<Int> = iterable1.union(iterable2)
+    val result: Pair<List<String>, List<Int>> = iterable.unzip()
 
     println(result)
 }
