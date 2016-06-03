@@ -1,6 +1,8 @@
 fun main(args: Array<String>) {
-    val list = listOf(1, 2, 3)
+    val list = listOf("a", "b", "c")
 
-    println(list.getOrElse(0, { 9 }))
-    println(list.getOrElse(4, { 9 }))
+    println(list.reduceRight { value, tmp ->
+        println("value=$value, tmp=$tmp")
+        tmp + ":" + value
+    })
 }
