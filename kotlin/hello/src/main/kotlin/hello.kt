@@ -1,5 +1,7 @@
 fun main(args: Array<String>) {
-    val list = listOf(1, 2, 3, 4, 5)
+    val mutableIterable = mutableListOf(1, 2, 3, 1, 2, 3)
 
-    println(list.takeLastWhile { it > 2 })
+    mutableIterable.removeAll { it == 3 }
+
+    println(mutableIterable)
 }
