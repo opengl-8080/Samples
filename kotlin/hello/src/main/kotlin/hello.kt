@@ -1,7 +1,9 @@
 fun main(args: Array<String>) {
-    val mutableList = mutableListOf("aaa", "bb", "c")
+    val mutableList = mutableListOf(3, 1, 2)
 
-    mutableList.sortBy { it.length }
+    mutableList.sort()
+    println(mutableList)
 
+    mutableList.sortDescending()
     println(mutableList)
 }
