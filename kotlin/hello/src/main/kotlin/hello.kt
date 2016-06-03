@@ -1,9 +1,5 @@
 fun main(args: Array<String>) {
-    val list = listOf("one", "two", "three", "four", "five")
+    val list = listOf(1, 2, 3, 4, 5)
 
-    println(list.component1())
-    println(list.component2())
-    println(list.component3())
-    println(list.component4())
-    println(list.component5())
+    println(list.dropLast(2))
 }
