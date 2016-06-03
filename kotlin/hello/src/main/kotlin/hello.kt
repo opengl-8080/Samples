@@ -1,8 +1,6 @@
-import java.util.*
-
 fun main(args: Array<String>) {
-    val mutableList = mutableListOf(2, 3, 1)
+    val map = mapOf("one" to "ONE", "two" to "TWO", "three" to "THREE")
 
-    mutableList.sortWith(Comparator { a, b ->  b - a})
-    println(mutableList)
+    println(map.all { it.key is String })
+    println(map.all { it.key.contains("o") })
 }
