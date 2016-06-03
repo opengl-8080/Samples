@@ -1,7 +1,16 @@
 fun main(args: Array<String>) {
-    val intCollection = listOf(1, 2, 3, 4)
+    val list = mutableListOf(1, 2, 3)
 
-    val intArray: Array<Int> = intCollection.toTypedArray()
+    println("[before] list = $list")
 
-    intArray.forEach { println(it) }
+    val asReversed = list.asReversed()
+
+    println("[after asReversed] list = $list")
+    println("[after asReversed] asReversed = $asReversed")
+
+    list += 9
+    asReversed += 99
+
+    println("[after modify] list = $list")
+    println("[after modify] asReversed = $asReversed")
 }
