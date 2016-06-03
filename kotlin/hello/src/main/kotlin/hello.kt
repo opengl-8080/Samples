@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
-    val iterable1 = listOf(1, 2, 3, 4)
-    val iterable2 = listOf<Int>()
+    val intCollection = listOf(1, 2, 3, 4)
 
-    println(iterable1.orEmpty())
-    println(iterable2.orEmpty())
+    val intArray: IntArray = intCollection.toIntArray()
+
+    intArray.forEach { println(it) }
 }
