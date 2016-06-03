@@ -1,7 +1,10 @@
 fun main(args: Array<String>) {
-    val mutableIterable = mutableListOf(1, 2, 3, 1, 2, 3)
+    val mutableCollection = mutableListOf(1, 2, 3)
+    val iterable = listOf(7, 8)
 
-    mutableIterable.retainAll { it == 3 }
+    mutableCollection.plusAssign(iterable)
+    println(mutableCollection)
 
-    println(mutableIterable)
+    mutableCollection += 9
+    println(mutableCollection)
 }
