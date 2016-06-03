@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
-    val mutableList = mutableListOf(3, 1, 2)
+    val mutableList = mutableListOf("aaa", "bb", "c")
 
-    mutableList.sort()
+    mutableList.sortBy { it.length }
 
     println(mutableList)
 }
