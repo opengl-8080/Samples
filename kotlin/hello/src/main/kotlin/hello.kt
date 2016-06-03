@@ -1,5 +1,7 @@
 fun main(args: Array<String>) {
-    val iterable = listOf("a", "b", "c")
+    val list = listOf("0:one", "1:two", "2:three", "3:four", "4:five")
+    println(list.slice(2..4))
 
-    println(iterable.foldRight("Z", { value, buf -> buf + value }))
+    val indices = listOf(1, 3, 4)
+    println(list.slice(indices))
 }
