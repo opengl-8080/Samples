@@ -1,8 +1,5 @@
 fun main(args: Array<String>) {
-    val list = listOf("a", "b", "c")
+    val iterable = listOf("a", "b", "c")
 
-    println(list.reduceRight { value, tmp ->
-        println("value=$value, tmp=$tmp")
-        tmp + ":" + value
-    })
+    println(iterable.foldRight("Z", { value, buf -> buf + value }))
 }
