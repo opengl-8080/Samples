@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
-    val mutableCollection = mutableListOf(1, 2, 3)
+    val mutableList = mutableListOf(1, 2, 3)
 
-    mutableCollection.remove(2)
+    mutableList.reverse()
 
-    println(mutableCollection)
+    println(mutableList)
 }
