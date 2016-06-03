@@ -1,9 +1,8 @@
+import java.util.*
+
 fun main(args: Array<String>) {
-    val mutableList = mutableListOf(3, 1, 2)
+    val mutableList = mutableListOf(2, 3, 1)
 
-    mutableList.sort()
-    println(mutableList)
-
-    mutableList.sortDescending()
+    mutableList.sortWith(Comparator { a, b ->  b - a})
     println(mutableList)
 }
