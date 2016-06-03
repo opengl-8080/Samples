@@ -1,10 +1,9 @@
-import java.util.*
-
 fun main(args: Array<String>) {
-    val list = listOf(1, 2, 2, 3, 3, 3)
+    val list = listOf("one", "two", "three", "four", "five")
 
-    println(list.binarySearch(3))
-    println(list.binarySearch(9))
-    println(list.binarySearch(element = 3, fromIndex = 0, toIndex = 2))
-    println(list.binarySearch(element = 3, comparator = Comparator { a, b -> a - b }))
+    println(list.component1())
+    println(list.component2())
+    println(list.component3())
+    println(list.component4())
+    println(list.component5())
 }
