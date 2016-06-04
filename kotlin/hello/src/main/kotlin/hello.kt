@@ -1,6 +1,7 @@
 fun main(args: Array<String>) {
-    val map = mapOf("one" to "ONE", "two" to "TWO", "three" to "THREE")
+    val map1 = mapOf("one" to "ONE", "two" to "TWO", "three" to "THREE")
+    val map2: Map<String, String>? = null
 
-    println(map.getOrElse("one", {"DEFAULT"}))
-    println(map.getOrElse("nine", {"DEFAULT"}))
+    println(map1.orEmpty())
+    println(map2.orEmpty())
 }
