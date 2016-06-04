@@ -1,8 +1,9 @@
 fun main(args: Array<String>) {
     val mutableMap = mutableMapOf("one" to "ONE", "two" to "TWO", "three" to "THREE")
 
-    println(mutableMap.getOrPut("one", {"DEFAULT"}))
+    mutableMap.putAll(mapOf("four" to "FOUR", "five" to "FIVE"))
     println(mutableMap)
-    println(mutableMap.getOrPut("four", {"DEFAULT"}))
+
+    mutableMap.putAll(listOf("six" to "SIX"))
     println(mutableMap)
 }
