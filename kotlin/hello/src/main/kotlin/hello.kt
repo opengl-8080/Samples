@@ -1,10 +1,9 @@
-import java.util.*
-
 fun main(args: Array<String>) {
     val map = mapOf("one" to "ONE", "two" to "TWO", "three" to "THREE")
 
-    val comparator = Comparator<Map.Entry<String, String>> { a, b -> a.key.compareTo(b.key) }
+    println(map.plus(mapOf("four" to "FOUR")))
+    println(map.plus("five" to "FIVE"))
+    println(map.plus(listOf("six" to "SIX")))
 
-    println(map.maxWith(comparator))
-    println(map.minWith(comparator))
+    println(map + ("seven" to "SEVEN"))
 }
