@@ -1,4 +1,7 @@
 package domain;
 
-public class OrderStatus {
+public enum OrderStatus {
+    REQUEST,
+    PLAN,
+    RESULT,
 }
