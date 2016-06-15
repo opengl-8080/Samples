@@ -1,20 +1,23 @@
 package sample.jaxrs;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import java.util.HashSet;
-import java.util.Set;
+import javax.ws.rs.core.Context;
 
 @ApplicationPath("/api")
 public class MyApplication extends Application {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        System.out.println("getClasses");
-        Set<Class<?>> classes = new HashSet<>();
+    public MyApplication() {
+        System.out.println("default");
+    }
 
-        classes.add(FugaResource.class);
+    public MyApplication(@Context ServletConfig sc) {
+        System.out.println("sc = " + sc);
+    }
 
-        return classes;
+    public MyApplication(@Context ServletConfig sc1, @Context ServletContext sc2) {
+        System.out.println("sc1 = " + sc1 + ", sc2 = " + sc2);
     }
 }
