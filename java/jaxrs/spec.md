@@ -92,7 +92,14 @@
     - `@Context` を除いて、他のアノテーションをサポートする場合、リソースクラスのインスタンスはリクエストごとに生成されなければならない。
     - リソースクラスがリクエスト以外のライフサイクルの場合、 JAX-RS の実装は警告を表示すべき。
         - Jersey@Payara は警告ださなかった。。。
-    -
+    - パラメータとして受け取れる型
+        - `ParamConverterProvider` によって登録された `ParamConverter`
+        - プリミティブ型
+        - String を１つだけ受け取るコンストラクタを持つクラス
+        - valueOf(String) か fromString(String) という static メソッドを持つクラス。
+            - 両方ある場合は、 valueOf() が使われる。
+            - ただし、 enum の場合は fromString() が優先される。
+
 
 
 

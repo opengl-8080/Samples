@@ -1,27 +1,46 @@
 package sample.web;
 
-import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-import java.io.Serializable;
 
 
 @Path("hello")
-@SessionScoped
-public class HelloResource implements Serializable {
+public class HelloResource {
 
-    @PathParam("hoge")
-    private String pathParam;
+    @QueryParam("hoge")
+    private Hoge hoge;
 
     @QueryParam("fuga")
-    private String queryParam;
+    private Fuga fuga;
 
     @GET
-    @Path("{hoge}")
     public String hello() {
-        System.out.println(this.hashCode() + ", " + this.getClass());
-        return "Hello JAX-RS (pathParam=" + this.pathParam + ", queryParam=" + queryParam + ")";
+        return this.hoge + " : " + this.fuga;
+    }
+
+    public static class Hoge {
+
+        private String value;
+
+        public Hoge(String value) {
+            System.out.println("Constructor");
+            this.value = value;
+        }
+
+//        public static Hoge valueOf(String value) {
+//            System.out.println("valueOf()");
+//            return new Hoge(value);
+//        }
+
+        public static Hoge fromString(String value) {
+            System.out.println("fromString");
+            return new Hoge(value);
+        }
+
+        @Override
+        public String toString() {
+            return "Hoge(" + this.value + ")";
+        }
     }
 }
