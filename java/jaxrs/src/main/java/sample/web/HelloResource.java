@@ -11,4 +11,8 @@ public class HelloResource {
     public String hello() {
         return "Hello JAX-RS";
     }
+
+    private HelloResource() {
+        System.out.println("Hello Resource");
+    }
 }
