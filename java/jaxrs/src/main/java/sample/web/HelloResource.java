@@ -1,18 +1,27 @@
 package sample.web;
 
+import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import java.io.Serializable;
 
 
 @Path("hello")
-public class HelloResource {
+@SessionScoped
+public class HelloResource implements Serializable {
+
+    @PathParam("hoge")
+    private String pathParam;
+
+    @QueryParam("fuga")
+    private String queryParam;
 
     @GET
+    @Path("{hoge}")
     public String hello() {
-        return "Hello JAX-RS";
-    }
-
-    private HelloResource() {
-        System.out.println("Hello Resource");
+        System.out.println(this.hashCode() + ", " + this.getClass());
+        return "Hello JAX-RS (pathParam=" + this.pathParam + ", queryParam=" + queryParam + ")";
     }
 }
