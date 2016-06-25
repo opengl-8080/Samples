@@ -9,9 +9,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ConsoleReader console = new ConsoleReader();
 
-        console.setPrompt("jline > ");
-
-        System.out.println(console.readLine());
-        System.out.println(console.readLine());
+        System.out.println(console.readLine('*'));
     }
 }
