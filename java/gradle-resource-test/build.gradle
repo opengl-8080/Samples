@@ -1,0 +1,19 @@
+apply plugin: 'application'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava.options.encoding = 'UTF-8'
+
+mainClassName = 'sample.Main'
+
+
+startScripts {
+    classpath += files('xxx')
+    doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile    = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\xxx', '%APP_HOME%')
+        unixScriptFile.text  = unixScriptFile.text.replace('$APP_HOME/lib/xxx', '$APP_HOME')
+    }
+}
