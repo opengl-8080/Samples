@@ -1,0 +1,11 @@
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'jline:jline:2.9'
+}
+
+mainClassName = 'sample.jline.Main'
