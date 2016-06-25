@@ -9,6 +9,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ConsoleReader console = new ConsoleReader();
 
-        System.out.println(console.readLine('*'));
+        System.out.println(console.readLine((char)0));
     }
 }
