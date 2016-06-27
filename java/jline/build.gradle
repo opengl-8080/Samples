@@ -5,7 +5,7 @@ repositories {
 }
 
 dependencies {
-    compile 'jline:jline:2.9'
+    compile 'jline:jline:2.14.2'
 }
 
 mainClassName = 'sample.jline.Main'

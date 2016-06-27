@@ -7,8 +7,14 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+
         ConsoleReader console = new ConsoleReader();
 
-        System.out.println(console.readLine((char)0));
+        console.println("hoge");
+        console.print("fuga");
+        console.println("piyo");
+        console.flush();
+
+        console.println("foo");
     }
 }
