@@ -9,3 +9,5 @@ dependencies {
 }
 
 mainClassName = 'sample.jline.Main'
+
+startScripts.applicationName = 'jline-sample'

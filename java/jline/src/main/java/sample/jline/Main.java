@@ -7,8 +7,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         ConsoleReader console = new ConsoleReader();
 
-        System.out.println("1");
-        console.accept();
-        System.out.println("2");
+        console.print("ABC");
+        console.putString("123");
+        console.flush();
+        console.readLine();
     }
 }
