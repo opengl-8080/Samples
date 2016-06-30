@@ -7,9 +7,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         ConsoleReader console = new ConsoleReader();
 
-        console.putString("123");
-        console.flush();
-        console.backspace();
+        console.setBellEnabled(true);
+        console.beep();
         console.flush();
     }
 }
