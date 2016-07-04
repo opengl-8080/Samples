@@ -1,0 +1,9 @@
+.classpath
+.project
+.settings/
+build/
+.gradle/
+bin/
+checkstyle-7.0-all.jar
+out.txt
+.idea/
