@@ -2,7 +2,10 @@ package sample.checkstyle;
 
 public class Main {
 
-    public static void main(String[] args) {
-        System.out.println("Hello Checkstyle!!");
-    }
+    private int aaaa;
+    private int Aaaa;
+    private int AAaa;
+    private int AAAa;
+    private int AAAA;
+    private int AAAAa;
 }
