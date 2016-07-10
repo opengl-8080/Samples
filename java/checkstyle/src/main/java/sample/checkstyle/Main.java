@@ -1,27 +1,28 @@
 package sample.checkstyle;
 
-import javax.xml.bind.annotation.XmlElement;
-
 public class Main {
 
-    @XmlElement
-    int a;
-
-    @XmlElement() // アノテーションは閉じ括弧を持つことはできません。
-    int b;
-
-    @SuppressWarnings("xxx")
-    int c;
-
-    @SuppressWarnings(value="xxx")
-    int d;
-
-    @SuppressWarnings({"xxx"}) // アノテーションの書式は 'COMPACT_NO_ARRAY' でなければなりません 。
-    int e;
-
-    @SuppressWarnings({"xxx", "yyy"})
-    int f;
-
-    @SuppressWarnings({"xxx", "yyy", }) // アノテーションの配列値の末尾をカンマにすることはできません。
-    int g;
+    public static void main(String[] args) {
+        new Object() {//1
+            //2
+            //3
+            //4
+            //5
+            //6
+            //7
+            //8
+            //9
+            //10
+            //11
+            //12
+            //13
+            //14
+            //15
+            //16
+            //17
+            //18
+            //19
+            //20
+        };//21
+    }
 }
