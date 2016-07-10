@@ -4,6 +4,6 @@
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="TreeWalker">
-        <module name="ArrayTrailingComma" />
+        <module name="ArrayTypeStyle" />
     </module>
 </module>
