@@ -1,8 +1,7 @@
 package sample.checkstyle;
 
 public class Main {
-
-    public class Aaa<T> {}
-    public class Bbb<a> {}
-    public class Ccc<AB> {}
+    static final int abc_def = 1;
+    static final int ABC_DEF = 1;
+    static final int A$C_D$F = 1;
 }
