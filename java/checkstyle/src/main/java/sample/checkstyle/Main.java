@@ -2,7 +2,7 @@ package sample.checkstyle;
 
 public class Main {
 
-    public static void main(String[] args) {
-        int i = args.length == 0 ? -1 : 1;
-    }
+    public class Aaa<T> {}
+    public class Bbb<a> {}
+    public class Ccc<AB> {}
 }
