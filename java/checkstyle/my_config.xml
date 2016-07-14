@@ -4,8 +4,9 @@
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="TreeWalker">
-        <module name="ConstantName">
-            <property name="severity" value="warning" />
+        <module name="MemberName">
+            <message key="name.invalidPattern"
+                     value="許可されたパターン=''{0}'' 実際の名前=''{1}''" />
         </module>
     </module>
 </module>
