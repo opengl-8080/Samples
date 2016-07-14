@@ -4,6 +4,9 @@
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="TreeWalker">
-        <module name="InterfaceTypeParameterName" />
+        <property name="tabWidth" value="11" />
+        <module name="LineLength">
+            <property name="max" value="50" />
+        </module>
     </module>
 </module>

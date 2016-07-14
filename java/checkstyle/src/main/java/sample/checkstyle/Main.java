@@ -1,7 +1,9 @@
 package sample.checkstyle;
 
 public class Main {
-    interface Aaa<T> {}
-    interface Bbb<a> {}
-    interface Ccc<AB> {}
+
+	public static void main(String[] args) {
+		final int i = 0;
+		final int ABC_DEF = 0;
+	}
 }
