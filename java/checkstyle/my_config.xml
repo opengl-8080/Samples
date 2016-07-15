@@ -6,7 +6,7 @@
     <module name="TreeWalker">
         <module name="MemberName">
             <message key="name.invalidPattern"
-                     value="許可されたパターン=''{0}'' 実際の名前=''{1}''" />
+                     value="許可されたパターン=''{1}'' 実際の名前=''{0}''" />
         </module>
     </module>
 </module>
