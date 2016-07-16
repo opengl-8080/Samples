@@ -9,4 +9,8 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    compile 'org.jsoup:jsoup:1.9.2'
+}
+
 // checkstyle.configFile = file('my_config.xml')
