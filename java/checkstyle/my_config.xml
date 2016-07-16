@@ -3,10 +3,16 @@
         "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
+
+    <module name="SuppressWithNearbyCommentFilter">
+        <property name="offCommentFormat" value="CHECKSTYLE\:OFF (\w+)" />
+        <property name="onCommentFormat" value="CHECKSTYLE\:ON (\w+)" />
+        <property name="checkFormat" value="$1" />
+    </module>
+
     <module name="TreeWalker">
-        <module name="MemberName">
-            <message key="name.invalidPattern"
-                     value="許可されたパターン=''{1}'' 実際の名前=''{0}''" />
-        </module>
+        <module name="FileContentsHolder" />
+        <module name="MemberName" />
+        <module name="ConstantName" />
     </module>
 </module>
