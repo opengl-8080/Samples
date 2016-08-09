@@ -1,9 +1,15 @@
 package sample.findbugs;
 
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        String text = null;
-        System.out.println("text.length=" + text.length());
+    private String name;
+
+    @Nonnull
+    public String method() {
+        return null;
     }
 }

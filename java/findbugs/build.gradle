@@ -15,6 +15,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.google.code.findbugs:annotations:3.0.1'
 }
 
 jar {
@@ -27,4 +28,3 @@ tasks.withType(FindBugs) {
         html.enabled = true
     }
 }
-
