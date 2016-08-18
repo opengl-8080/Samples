@@ -1,15 +1,29 @@
 package sample.findbugs;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-@Immutable
 public class Main {
 
-    private String name;
+    public void method() {
+        String text = null;
+        System.out.println("text.length=" + text.length());
 
-    @Nonnull
-    public String method() {
-        return null;
+        try {
+            InputStream in = new FileInputStream(new File("./test"));
+        } catch (IOException e) {
+        }
+    }
+
+    public static void main(String[] args) {
+        String text = null;
+        System.out.println("text.length=" + text.length());
+
+        try {
+            InputStream in = new FileInputStream(new File("./test"));
+        } catch (IOException e) {
+        }
     }
 }
