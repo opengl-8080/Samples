@@ -1,6 +1,6 @@
 package sample.findbugs;
 
-public class Main {
+public class Bar {
 
     private String value = "";
 
