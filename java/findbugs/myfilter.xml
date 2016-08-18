@@ -2,6 +2,6 @@
 <FindBugsFilter>
     <Match>
         <Class name="sample.findbugs.Main" />
-        <Bug category="CORRECTNESS" />
+        <Bug code="SA" />
     </Match>
 </FindBugsFilter>
