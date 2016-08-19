@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'lib', include: '*.jar')
+    compile 'org.apache.lucene:lucene-core:5.2.1'
+    compile 'org.apache.lucene:lucene-queryparser:5.2.1'
+    compile 'org.apache.lucene:lucene-analyzers-common:5.2.1'
+    compile 'org.apache.commons:commons-math3:3.5'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.sangupta:jopensurf:1.0.0'
+    compile 'nu.pattern:opencv:2.4.9-7'
+}
