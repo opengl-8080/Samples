@@ -2,12 +2,13 @@ package sample.findbugs;
 
 public class Main {
 
-    public void method() {
-//        try {
-//            new Exception();
-//        } catch (Exception e) {
-//        }
+    private String value = "";
 
-        new Exception();
+    public void method() {
+        value = value;
+
+        if (value == value) {
+            new Exception();
+        }
     }
 }

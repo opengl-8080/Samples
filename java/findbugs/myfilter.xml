@@ -2,6 +2,9 @@
 <FindBugsFilter>
     <Match>
         <Class name="sample.findbugs.Main" />
-        <!--<Confidence value="1" />-->
+        <Or>
+            <Rank value="3" />
+            <Rank value="11" />
+        </Or>
     </Match>
 </FindBugsFilter>
