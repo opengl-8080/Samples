@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <Match>
-        <Class name="sample.findbugs.Main" />
-        <Or>
-            <Rank value="3" />
-            <Rank value="11" />
-        </Or>
+        <Package name="sample.findbugs.filter" />
     </Match>
 </FindBugsFilter>
