@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <Match>
-        <Package name="~sample\.findbugs\.filter(\..*)?" />
+        <Package name="sample.findbugs" />
+        <Class name="sample.findbugs.Main" />
+        <!--<Source name="Main.java" />-->
     </Match>
 </FindBugsFilter>
