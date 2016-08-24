@@ -2,26 +2,28 @@ package sample.findbugs;
 
 public class Main {
 
-    private String value = "";
-
-    public void method() {
-        value = value;
-
-        if (value == value) {
-            new Exception();
-        }
+    public void foo() {
+        new Exception();
     }
 
-    private static class InnerClass {
+    public void foo(String text) {
+        new Exception();
+    }
 
-        private String value = "";
+    public void bar() {
+        new Exception();
+    }
 
-        public void method() {
-            value = value;
+    public void bar(String text, int i) {
+        new Exception();
+    }
 
-            if (value == value) {
-                new Exception();
-            }
-        }
+    public void fizz() {
+        new Exception();
+    }
+
+    public int buzz() {
+        new Exception();
+        return 1;
     }
 }

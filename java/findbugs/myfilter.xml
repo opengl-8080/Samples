@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <Match>
-        <Package name="sample.findbugs" />
-        <Class name="sample.findbugs.Main" />
-        <!--<Source name="Main.java" />-->
+        <Or>
+            <Method name="foo" />
+            <Method name="bar" params="java.lang.String, int" />
+            <Method returns="int" />
+        </Or>
     </Match>
 </FindBugsFilter>
