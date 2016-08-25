@@ -2,9 +2,9 @@
 <FindBugsFilter>
     <Match>
         <Or>
-            <Method name="foo" />
-            <Method name="bar" params="java.lang.String, int" />
-            <Method returns="int" />
+            <Field name="fizz" />
+            <Field name="buzz" type="int" />
+            <Field type="java.math.BigDecimal" />
         </Or>
     </Match>
 </FindBugsFilter>
