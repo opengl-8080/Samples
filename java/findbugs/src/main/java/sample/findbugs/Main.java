@@ -1,18 +1,38 @@
 package sample.findbugs;
 
-import java.math.BigDecimal;
-
 public class Main {
+    static class Foo {
+        void fizz() {
+            new Exception();
+        }
 
-    class Foo {
-        private int fizz;
-        private int buzz;
-        private BigDecimal hoge;
+        void buzz() {
+            new Exception();
+        }
+
+        void buzz(String text) {
+            new Exception();
+        }
+
+        void hoge() {
+            new Exception();
+        }
     }
 
-    class Bar {
-        private String fizz;
-        private String buzz;
-        private BigDecimal fuga;
+    static class Bar {
+        void fizz() {
+            new Exception();
+        }
+        void fizz(String text) {
+            new Exception();
+        }
+
+        void buzz() {
+            new Exception();
+        }
+
+        void fuga() {
+            new Exception();
+        }
     }
 }
