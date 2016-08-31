@@ -2,14 +2,8 @@
 <FindBugsFilter>
     <Match>
         <And>
-            <Source name="Main.java" />
-            <Or>
-                <Method name="fizz" />
-                <Method name="buzz" />
-            </Or>
-            <Not>
-                <Method params="java.lang.String" />
-            </Not>
+            <Class name="sample.findbugs.Main" />
+            <Method params="int" />
         </And>
     </Match>
 </FindBugsFilter>

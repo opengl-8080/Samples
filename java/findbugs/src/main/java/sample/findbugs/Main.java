@@ -1,38 +1,16 @@
 package sample.findbugs;
 
 public class Main {
-    static class Foo {
-        void fizz() {
-            new Exception();
-        }
 
-        void buzz() {
-            new Exception();
-        }
-
-        void buzz(String text) {
-            new Exception();
-        }
-
-        void hoge() {
-            new Exception();
-        }
+    public void hoge(int i) {
+        new Exception();
     }
 
-    static class Bar {
-        void fizz() {
-            new Exception();
-        }
-        void fizz(String text) {
-            new Exception();
-        }
+    public void fuga(int i) {
+        new Exception();
+    }
 
-        void buzz() {
-            new Exception();
-        }
-
-        void fuga() {
-            new Exception();
-        }
+    public void piyo(long l) {
+        new Exception();
     }
 }
