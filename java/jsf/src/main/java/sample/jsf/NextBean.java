@@ -9,8 +9,13 @@ public class NextBean {
 
     private String message;
 
-    public String execute(int id, String command) {
-        this.message = "id=" + id + ", command=" + command;
+    public String gusu() {
+        this.message = "Gusu!!";
+        return "next.xhtml";
+    }
+
+    public String kisu() {
+        this.message = "Kisu!!";
         return "next.xhtml";
     }
 

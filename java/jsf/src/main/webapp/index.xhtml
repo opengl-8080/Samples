@@ -10,12 +10,17 @@
     <body>
         <f:metadata>
             <f:viewParam name="id" value="#{sampleBean.id}" />
-            <f:viewAction action="#{sampleBean.init()}" />
+            <f:viewAction action="#{sampleBean.init}" />
         </f:metadata>
 
         <form jsfc="h:form">
-            <input type="submit" jsfc="h:commandButton" value="#{sampleBean.buttonLabel}"
-                   action="#{nextBean.execute(sampleBean.id, sampleBean.command)}" />
+            <h:commandButton value="偶数" action="#{nextBean.gusu}" rendered="#{sampleBean.flag}">
+                <f:param name="id" value="#{param['id']}" />
+            </h:commandButton>
+
+            <h:commandButton value="奇数" action="#{nextBean.kisu}" rendered="#{!sampleBean.flag}">
+                <f:param name="id" value="#{param['id']}" />
+            </h:commandButton>
         </form>
     </body>
 </html>

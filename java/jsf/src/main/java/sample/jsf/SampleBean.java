@@ -1,46 +1,44 @@
 package sample.jsf;
 
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import java.io.Serializable;
 
-@Named
-@RequestScoped
-public class SampleBean {
+@Named("sampleBean")
+@ViewScoped
+public class SampleBean implements Serializable {
     private int id;
-    private String buttonLabel;
-    private String command;
+    private boolean flag;
 
     public void init() {
-        if (this.id % 2 == 0) {
-            this.buttonLabel = "偶数";
-            this.command = "ぐうすう";
-        } else {
-            this.buttonLabel = "奇数";
-            this.command = "きすう";
-        }
+        this.flag = (this.id % 2 == 0);
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setButtonLabel(String buttonLabel) {
-        this.buttonLabel = buttonLabel;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
     public int getId() {
         return id;
     }
 
-    public String getButtonLabel() {
-        return buttonLabel;
+    public String gusu() {
+        return "next.xhtml";
     }
 
-    public String getCommand() {
-        return command;
+    public String kisu() {
+        return "next.xhtml";
+    }
+
+    @Override
+    public String toString() {
+        return "SampleBean{" +
+                "id=" + id +
+                ", flag=" + flag +
+                '}';
+    }
+
+    public boolean isFlag() {
+        return flag;
     }
 }
