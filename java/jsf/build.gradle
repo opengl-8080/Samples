@@ -1,0 +1,16 @@
+apply plugin: 'war'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax:javaee-api:7.0'
+}
+
+war.baseName = 'jsf-sample'

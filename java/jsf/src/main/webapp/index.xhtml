@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hello JSF</title>
+    </head>
+    <body>
+        <f:metadata>
+            <f:viewParam name="id" value="#{sampleBean.id}" />
+            <f:viewAction action="#{sampleBean.init()}" />
+        </f:metadata>
+
+        <form jsfc="h:form">
+            <input type="submit" jsfc="h:commandButton" value="#{sampleBean.buttonLabel}"
+                   action="#{nextBean.execute(sampleBean.id, sampleBean.command)}" />
+        </form>
+    </body>
+</html>
