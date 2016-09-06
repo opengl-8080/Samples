@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
         <meta charset="UTF-8" />
@@ -10,17 +9,7 @@
     <body>
         <f:metadata>
             <f:viewParam name="id" value="#{sampleBean.id}" />
-            <f:viewAction action="#{sampleBean.init}" />
+            <f:viewAction action="#{sampleBean.init()}" />
         </f:metadata>
-
-        <form jsfc="h:form">
-            <h:commandButton value="偶数" action="#{nextBean.gusu}" rendered="#{sampleBean.flag}">
-                <f:param name="id" value="#{param['id']}" />
-            </h:commandButton>
-
-            <h:commandButton value="奇数" action="#{nextBean.kisu}" rendered="#{!sampleBean.flag}">
-                <f:param name="id" value="#{param['id']}" />
-            </h:commandButton>
-        </form>
     </body>
 </html>
