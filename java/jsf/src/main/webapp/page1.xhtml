@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
   <head>
     <meta charset="UTF-8" />
     <title>Page1</title>
   </head>
   <body>
     <h1>Page1</h1>
-    <a jsf:outcome="/page2.xhtml">Page112</a>
+    <a jsf:outcome="/page2.xhtml">
+      Page2
+      <f:param name="key" value="QueryParameter" />
+    </a>
   </body>
 </html>
