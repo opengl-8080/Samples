@@ -1,4 +1,5 @@
 apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -13,4 +14,13 @@ dependencies {
     providedCompile 'javax:javaee-api:7.0'
 }
 
-war.baseName = 'jsf-sample'
+eclipse.project.name = 'jsf'
+
+war.baseName = 'jsf'
+
+task deploy(type: Exec, dependsOn: war) {
+    def payaraHome = System.env.PAYARA_HOME
+    def asadmin = /$payaraHome\bin\asadmin.bat/
+
+    commandLine('cmd', '/C', asadmin, 'deploy', '--force=true', war.archivePath)
+}

@@ -3,3 +3,7 @@ build/
 .idea/
 .gradle/
 *.log
+.classpath
+.project
+.settings/
+/bin/
