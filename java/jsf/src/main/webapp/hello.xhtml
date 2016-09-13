@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
   <head>
     <meta charset="UTF-8" />
-    <title>Page1</title>
+    <title>Hello</title>
   </head>
   <body>
-    <f:metadata>
-      <f:viewParam name="queryParameter" value="#{helloBean.value}" />
-    </f:metadata>
-    
-    <h1>#{helloBean.message}</h1>
+    <form jsf:id="form">
+      <textarea jsf:value="#{helloBean.value}" maxlength="10" />
+      <input type="submit" jsf:action="#{helloBean.submit()}" value="Submit" />
+    </form>
   </body>
 </html>

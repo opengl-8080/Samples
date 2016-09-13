@@ -1,12 +1,25 @@
 package sample.jsf;
 
 import javax.enterprise.inject.Model;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 @Model
 public class BackingBean {
     
-    public String page2() {
-        System.out.println("page2()");
-        return "page2.xhtml";
+    private String value;
+
+    public String submit() {
+        Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        flash.put("value", this.value);
+        return "/page2.xhtml?faces-redirect=true";
+    }
+    
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }
