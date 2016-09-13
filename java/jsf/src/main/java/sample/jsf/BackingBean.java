@@ -6,6 +6,7 @@ import javax.enterprise.inject.Model;
 public class BackingBean {
     
     public String page2() {
+        System.out.println("page2()");
         return "page2.xhtml";
     }
 }
