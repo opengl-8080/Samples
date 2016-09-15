@@ -1,0 +1,98 @@
+MAIN  START
+        LD   GR5,BEGINIDX
+LOOP    CPA  GR5,ENDIDX    ; 100 と比較
+        JPL  FINISH        ; GR5 > 100 なら終了
+        LD   GR1,GR5
+        LD   GR2,FIFTEEN
+        CALL DIVIDE        ; 15 で割る
+        CPA  GR4,ZERO      ; あまりを 0 と比較
+        JZE  PUTFZBZ       ; 15 で割り切れたら fizzbuzz 出力
+        LD   GR1,GR5
+        LD   GR2,FIVE
+        CALL DIVIDE        ; 5 で割る
+        CPA  GR4,ZERO
+        JZE  PUTBUZZ       ; 割り切れたら buzz 出力
+        LD   GR1,GR5
+        LD   GR2,THREE
+        CALL DIVIDE        ; 3 で割る
+        CPA  GR4,ZERO
+        JZE  PUTFIZZ       ; 割り切れたら fizz 出力
+        CALL MSGHUND
+        JUMP COUNTUP
+PUTFIZZ OUT  FIZZ,LEN4     ; fizz 出力
+        JUMP COUNTUP
+PUTBUZZ OUT  BUZZ,LEN4     ; buzz 出力
+        JUMP COUNTUP
+PUTFZBZ OUT  FIZZBUZZ,LEN8 ; fizzbuzz 出力
+        JUMP COUNTUP
+COUNTUP ADDA GR5,ONE      ; 1加算して次のループへ
+        JUMP LOOP
+
+FINISH  RET               ; プログラム終了
+
+; GR5 出力する数値
+; GR6 現在のメッセージサイズ
+; GR7 文字保存一時領域
+MSGHUND LD   GR6,ZERO
+        LD   GR1,GR5
+        LD   GR2,HUNDRED
+        CALL DIVIDE
+        CPA  GR3,ZERO
+        JMI  MSGTEN
+        JZE  MSGTEN
+        LD   GR7,NUM,GR3
+        ST   GR7,MSG,GR6
+        ADDA GR6,ONE
+MSGTEN  LD   GR1,GR4
+        LD   GR2,TEN
+        CALL DIVIDE
+        CPA  GR3,ZERO
+        JMI  MSGONE
+        JZE  MSGONE
+        LD   GR7,NUM,GR3
+        ST   GR7,MSG,GR6
+        ADDA GR6,ONE
+MSGONE  LD   GR7,NUM,GR4
+        ST   GR7,MSG,GR6
+        ADDA GR6,ONE
+        ST   GR6,LEN
+        OUT  MSG,LEN
+        RET
+
+; GR1 割られる数
+; GR2 割る数
+; GR3 商
+; GR4 余り
+DIVIDE LD   GR3,ZERO  ; 商を初期化
+DNEXT  CPA  GR1,GR2   ; 割れるか検証
+       JMI  DIVEND    ; 割れないなら終了
+       SUBA GR1,GR2   ; GR1 - GR2
+       ADDA GR3,ONE   ; 商を加算
+       JUMP DNEXT     ; 次のステップ
+DIVEND LD  GR4,GR1    ; 余りを GR4 に保存
+       RET            ; 割り算終了
+
+
+BEGINIDX DC 1           ; 開始インデックス
+ENDIDX   DC 100         ; 終了インデックス
+
+FIZZ     DC 'fizz'      ; fizzメッセージ
+BUZZ     DC 'buzz'      ; buzzメッセージ
+FIZZBUZZ DC 'fizzbuzz'  ; fizzbuzzメッセージ
+LEN1     DC 1           ; 長さ1
+LEN4     DC 4           ; 長さ4
+LEN8     DC 8           ; 長さ8
+
+ZERO     DC 0           ; 数値0
+ONE      DC 1           ; 数値1
+THREE    DC 3           ; 数値3
+FIVE     DC 5           ; 数値5
+TEN      DC 10          ; 数値10
+FIFTEEN  DC 15          ; 数値15
+HUNDRED  DC 100         ; 数値100
+
+NUM DC '0123456789'     ; 文字変換テーブル
+MSG DS 3                ; 数値出力用メッセージ領域
+LEN DS 1                ; 数値文字列の長さ
+
+    END
