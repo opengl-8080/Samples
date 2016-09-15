@@ -1,0 +1,7 @@
+; 「Hello, World!」の文字列を出力するプログラム
+MAIN     START
+         OUT    BUF,LEN         ; 文字列を出力
+         RET                    ; 実行を終了
+BUF      DC     'Hello, World!' ; 文字列
+LEN      DC     13              ; 長さ
+         END
