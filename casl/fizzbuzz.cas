@@ -1,7 +1,6 @@
 MAIN  START
         LD   GR5,BEGINIDX
         CALL LOOP
-        RET
 
 LOOP    CPA  GR5,ENDIDX    ; 100 ‚Æ”äŠr
         JPL  FINISH        ; GR5 > 100 ‚È‚çI—¹
