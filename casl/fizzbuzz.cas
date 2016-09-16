@@ -1,5 +1,8 @@
 MAIN  START
         LD   GR5,BEGINIDX
+        CALL LOOP
+        RET
+
 LOOP    CPA  GR5,ENDIDX    ; 100 と比較
         JPL  FINISH        ; GR5 > 100 なら終了
         LD   GR1,GR5
@@ -27,8 +30,7 @@ PUTFZBZ OUT  FIZZBUZZ,LEN8 ; fizzbuzz 出力
         JUMP COUNTUP
 COUNTUP ADDA GR5,ONE      ; 1加算して次のループへ
         JUMP LOOP
-
-FINISH  RET               ; プログラム終了
+FINISH  RET
 
 ; GR5 出力する数値
 ; GR6 現在のメッセージサイズ
