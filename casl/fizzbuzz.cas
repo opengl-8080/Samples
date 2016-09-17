@@ -65,6 +65,7 @@ MSGONE  LD   GR7,NUM,GR4
 ; GR3 商
 ; GR4 余り
 DIVIDE LD   GR3,ZERO  ; 商を初期化
+       JUMP DNEXT     ; 割り算開始
 DNEXT  CPA  GR1,GR2   ; 割れるか検証
        JMI  DIVEND    ; 割れないなら終了
        SUBA GR1,GR2   ; GR1 - GR2
