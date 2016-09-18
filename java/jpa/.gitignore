@@ -7,4 +7,5 @@ bin/
 database/
 derby.log
 /db/
+.idea/
 
