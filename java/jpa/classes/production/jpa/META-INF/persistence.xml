@@ -7,10 +7,6 @@
 
   <persistence-unit name="SampleUnit" transaction-type="RESOURCE_LOCAL">
     <class>sample.domain.Sample</class>
-    <class>sample.domain.order.Order</class>
-    <class>sample.domain.order.OrderDetail</class>
-    <class>sample.domain.order.Customer</class>
-    <class>sample.domain.order.Item</class>
     <exclude-unlisted-classes/>
 
     <properties>

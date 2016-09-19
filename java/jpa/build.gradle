@@ -7,6 +7,14 @@ targetCompatibility = '1.8'
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
+configurations {
+    provided
+}
+
+sourceSets {
+    main { compileClasspath += configurations.provided }
+}
+
 ext {
     projectName = 'jpa'
 }
@@ -16,9 +24,10 @@ repositories {
 }
 
 dependencies {
-//    compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.4'
+    provided 'org.projectlombok:lombok:1.16.10'
+    compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.4'
 //    compile 'org.hibernate:hibernate-entitymanager:5.2.2.Final'
-    compile 'org.apache.openjpa:openjpa:2.4.1'
+//    compile 'org.apache.openjpa:openjpa:2.4.1'
 //    compile 'org.datanucleus:javax.persistence:2.1.0'
 //    compile 'javax.jdo:jdo-api:3.1'
 //    compile 'org.datanucleus:datanucleus-core:5.0.2'
