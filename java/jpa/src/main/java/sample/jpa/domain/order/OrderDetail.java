@@ -1,7 +1,7 @@
 package sample.jpa.domain.order;
 
 import lombok.ToString;
-import sample.jpa.domain.Key;
+import sample.jpa.domain.Id;
 import sample.jpa.domain.item.Item;
 import sample.jpa.domain.item.ItemCode;
 import sample.jpa.domain.item.ItemName;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @ToString
 public class OrderDetail implements Serializable {
     @EmbeddedId
-    private Key<OrderDetail> id;
+    private Id<OrderDetail> id;
     @Embedded
     @AttributeOverride(name="value", column=@Column(name="item_code"))
     private ItemCode itemCode;
@@ -32,7 +32,7 @@ public class OrderDetail implements Serializable {
     @Embedded
     private Quantity quantity;
 
-    public OrderDetail(Key<OrderDetail> id, ItemCode itemCode, Price price, ItemName itemName, Quantity quantity) {
+    public OrderDetail(Id<OrderDetail> id, ItemCode itemCode, Price price, ItemName itemName, Quantity quantity) {
         this.id = id;
         this.itemCode = itemCode;
         this.price = price;

@@ -12,6 +12,6 @@ public class ModifyOrderService {
     public void modify(OrderNumber orderNumber, OrderForm orderForm) {
         Order order = this.orderRepository.findWithLock(orderNumber);
 
-        
+
     }
 }
