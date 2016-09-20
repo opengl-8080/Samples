@@ -7,6 +7,10 @@
 
   <persistence-unit name="SampleUnit" transaction-type="RESOURCE_LOCAL">
     <class>sample.domain.Sample</class>
+    <class>sample.jpa.domain.order.Order</class>
+    <class>sample.jpa.domain.order.OrderDetail</class>
+    <class>sample.jpa.domain.customer.Customer</class>
+    <class>sample.jpa.domain.item.Item</class>
     <exclude-unlisted-classes/>
 
     <properties>
