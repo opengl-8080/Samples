@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Hello JSF</title>
-    </head>
-    <body>
-        <f:metadata>
-            <f:viewParam name="id" value="#{sampleBean.id}" />
-            <f:viewAction action="#{sampleBean.init()}" />
-        </f:metadata>
-    </body>
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Index</title>
+  </head>
+  <body>
+    <form jsf:id="form">
+      <input type="text" jsf:value="#{requestScopedBean.value}" />
+      <input type="submit" jsf:action="#{requestScopedBean.method()}" value="Submit" />
+    </form>
+  </body>
 </html>
