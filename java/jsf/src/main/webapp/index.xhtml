@@ -8,8 +8,9 @@
   </head>
   <body>
     <form jsf:id="form">
-      <input type="text" jsf:value="#{requestScopedBean.value}" />
-      <input type="submit" jsf:action="#{requestScopedBean.method()}" value="Submit" />
+      <input type="text" jsf:value="#{sessionScopedBean.value}" />
+      <input type="submit" jsf:action="#{sessionScopedBean.method()}" value="Submit" />
+      <input type="submit" jsf:action="#{sessionScopedBean.killSession()}" value="Kill Session" />
     </form>
   </body>
 </html>
