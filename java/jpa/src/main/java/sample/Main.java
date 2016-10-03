@@ -1,6 +1,7 @@
 package sample;
 
 import sample.jpa.EntityAlpha;
+import sample.jpa.EnumAlpha;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,8 +25,8 @@ public class Main {
             TypedQuery<EntityAlpha> query = em.createQuery("select e from EntityAlpha e", EntityAlpha.class);
             query.getResultList().forEach(System.out::println);
 
-            EntityAlpha a = new EntityAlpha("a", false, 2, 3.1, new BigInteger("123"), new BigDecimal("3.2"), new Date(), new Date());
-            em.persist(a);
+            EntityAlpha entityAlpha = new EntityAlpha(EnumAlpha.ALPHA, EnumAlpha.GAMMA);
+            em.persist(entityAlpha);
 
             tx.commit();
         } finally {
