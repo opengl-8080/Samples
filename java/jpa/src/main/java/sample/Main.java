@@ -1,24 +1,19 @@
 package sample;
 
-import sample.jpa.domain.order.Order;
+import sample.jpa.EntityAlpha;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-//        Connection con = DriverManager.getConnection("jdbc:mysql://localhost/jpa?user=test&password=test");
-//        JdbcOrderRepository repository = new JdbcOrderRepository();
-//        repository.setCon(con);
-//
-//        Order order = repository.find(new OrderNumber("O000000001"));
-//        System.out.println(order);
-
-
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("SampleUnit");
         EntityManager em = factory.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -26,11 +21,12 @@ public class Main {
         tx.begin();
 
         try {
-            TypedQuery<Order> query = em.createNamedQuery(Order.FIND_ALL, Order.class);
-            for (Order order : query.getResultList()) {
-                System.out.println(order);
+            TypedQuery<EntityAlpha> query = em.createQuery("select e from EntityAlpha e", EntityAlpha.class);
+            query.getResultList().forEach(System.out::println);
 
-            }
+            EntityAlpha a = new EntityAlpha("a", false, 2, 3.1, new BigInteger("123"), new BigDecimal("3.2"), new Date(), new Date());
+            em.persist(a);
+
             tx.commit();
         } finally {
             if (tx.isActive()) {

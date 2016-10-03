@@ -72,4 +72,12 @@ public class Order implements Serializable {
     }
 
     @Deprecated protected Order() {}
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setDueDate(DueDate dueDate) {
+        this.dueDate = dueDate;
+    }
 }
