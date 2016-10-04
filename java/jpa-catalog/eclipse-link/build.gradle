@@ -1,0 +1,5 @@
+
+dependencies {
+    compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.4'
+    compile project(':domain')
+}

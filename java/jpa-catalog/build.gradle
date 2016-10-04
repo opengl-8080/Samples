@@ -1,0 +1,24 @@
+allprojects {
+    apply plugin: 'java'
+
+    compileJava.options.encoding = 'UTF-8'
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        provided
+    }
+
+    sourceSets {
+        main { compileClasspath += configurations.provided }
+    }
+
+    dependencies {
+        provided 'org.projectlombok:lombok:1.16.10'
+        compile 'mysql:mysql-connector-java:5.1.39'
+    }
+}

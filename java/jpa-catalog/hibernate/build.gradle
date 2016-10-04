@@ -1,0 +1,5 @@
+
+dependencies {
+    compile 'org.hibernate:hibernate-entitymanager:5.2.2.Final'
+    compile project(':domain')
+}
