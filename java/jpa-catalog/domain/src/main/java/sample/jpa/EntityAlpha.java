@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -32,6 +33,7 @@ public class EntityAlpha implements Serializable {
         name="list_table",
         joinColumns=@JoinColumn(name="table_alpha_id")
     )
+    @OrderColumn(name="index_value")
     @Column(name="value")
     private List<String> list;
 
