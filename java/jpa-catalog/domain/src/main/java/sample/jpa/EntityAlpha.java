@@ -3,21 +3,13 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Map;
 
 @Entity
 @Table(name="table_alpha")
@@ -28,20 +20,10 @@ public class EntityAlpha implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Embedded
+    private EmbeddableAlpha embeddableAlpha;
 
-    @ElementCollection(fetch=FetchType.EAGER)
-    @CollectionTable(
-        name="map_table",
-        joinColumns=@JoinColumn(name="table_alpha_id")
-    )
-    @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name="map_key")
-    @Column(name="map_value")
-    private Map<EnumAlpha, String> map;
-
-    public EntityAlpha(String name, Map<EnumAlpha, String> map) {
-        this.name = name;
-        this.map = map;
+    public EntityAlpha(EmbeddableAlpha embeddableAlpha) {
+        this.embeddableAlpha = embeddableAlpha;
     }
 }

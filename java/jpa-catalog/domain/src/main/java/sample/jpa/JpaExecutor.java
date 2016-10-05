@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class JpaExecutor {
@@ -21,12 +22,9 @@ public class JpaExecutor {
             query.getResultList().forEach(System.out::println);
             System.out.println("************************************************************");
 
-            HashMap<EnumAlpha, String> map = new HashMap<>();
-            map.put(EnumAlpha.ALPHA, "Alpha");
-            map.put(EnumAlpha.BETA, "Beta");
-            map.put(EnumAlpha.GAMMA, "Gamma");
 
-            EntityAlpha entity = new EntityAlpha(name, map);
+
+            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name));
             em.persist(entity);
 
             tx.commit();
