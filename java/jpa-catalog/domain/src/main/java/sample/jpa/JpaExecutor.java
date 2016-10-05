@@ -21,10 +21,10 @@ public class JpaExecutor {
             query.getResultList().forEach(System.out::println);
             System.out.println("************************************************************");
 
-            HashMap<String, String> map = new HashMap<>();
-            map.put(name + "1", "Alpha");
-            map.put(name + "2", "Beta");
-            map.put(name + "3", "Gamma");
+            HashMap<EnumAlpha, String> map = new HashMap<>();
+            map.put(EnumAlpha.ALPHA, "Alpha");
+            map.put(EnumAlpha.BETA, "Beta");
+            map.put(EnumAlpha.GAMMA, "Gamma");
 
             EntityAlpha entity = new EntityAlpha(name, map);
             em.persist(entity);

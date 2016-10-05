@@ -7,12 +7,14 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Map;
@@ -33,11 +35,12 @@ public class EntityAlpha implements Serializable {
         name="map_table",
         joinColumns=@JoinColumn(name="table_alpha_id")
     )
+    @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name="map_key")
     @Column(name="map_value")
-    private Map<String, String> map;
+    private Map<EnumAlpha, String> map;
 
-    public EntityAlpha(String name, Map<String, String> map) {
+    public EntityAlpha(String name, Map<EnumAlpha, String> map) {
         this.name = name;
         this.map = map;
     }
