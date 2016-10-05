@@ -23,8 +23,7 @@ public class JpaExecutor {
             System.out.println("************************************************************");
 
 
-
-            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name));
+            EntityAlpha entity = new EntityAlpha(name);
             em.persist(entity);
 
             tx.commit();
