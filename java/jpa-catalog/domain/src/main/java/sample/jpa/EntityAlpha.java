@@ -12,10 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OrderColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name="table_alpha")
@@ -30,15 +30,15 @@ public class EntityAlpha implements Serializable {
 
     @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(
-        name="list_table",
+        name="map_table",
         joinColumns=@JoinColumn(name="table_alpha_id")
     )
-    @OrderColumn(name="index_value")
-    @Column(name="value")
-    private List<String> list;
+    @MapKeyColumn(name="map_key")
+    @Column(name="map_value")
+    private Map<String, String> map;
 
-    public EntityAlpha(String name, List<String> list) {
+    public EntityAlpha(String name, Map<String, String> map) {
         this.name = name;
-        this.list = list;
+        this.map = map;
     }
 }
