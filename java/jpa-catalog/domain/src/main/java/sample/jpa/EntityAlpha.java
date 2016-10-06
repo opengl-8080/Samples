@@ -5,16 +5,16 @@ import lombok.ToString;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name="table_alpha")
@@ -27,21 +27,23 @@ public class EntityAlpha implements Serializable {
 
     private String name;
 
-    @Embedded
     @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(
-        name="list_table",
+        name="map_table",
         joinColumns=@JoinColumn(name="table_alpha_id")
     )
-    private List<EmbeddableAlpha> list;
+    @MapKeyColumn(name="map_key")
+    private Map<String, EmbeddableAlpha> map;
 
-    public EntityAlpha(String name, List<EmbeddableAlpha> list) {
+    public EntityAlpha(String name, Map<String, EmbeddableAlpha> map) {
         this.name = name;
-        this.list = list;
+        this.map = map;
     }
 
     public void test() {
-        this.list.remove(0);
-        this.list.add(new EmbeddableAlpha("abc"));
+        String next = this.map.keySet().iterator().next();
+        this.map.remove(next);
+
+        this.map.put("test", new EmbeddableAlpha("TEST"));
     }
 }

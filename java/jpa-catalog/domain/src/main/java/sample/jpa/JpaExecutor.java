@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JpaExecutor {
     public static void execute(String name) {
@@ -28,8 +29,11 @@ public class JpaExecutor {
             System.out.println("************************************************************");
 
 
-
-            EntityAlpha entity = new EntityAlpha(name, Arrays.asList(new EmbeddableAlpha("x"), new EmbeddableAlpha("y"), new EmbeddableAlpha("z")));
+            Map<String, EmbeddableAlpha> map = new HashMap<>();
+            map.put("X", new EmbeddableAlpha("XXX"));
+            map.put("Y", new EmbeddableAlpha("YYY"));
+            map.put("Z", new EmbeddableAlpha("ZZZ"));
+            EntityAlpha entity = new EntityAlpha(name, map);
             em.persist(entity);
 
             tx.commit();
