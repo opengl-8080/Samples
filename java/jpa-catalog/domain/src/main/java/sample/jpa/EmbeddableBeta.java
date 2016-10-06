@@ -6,22 +6,17 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import java.io.Serializable;
 
 @Embeddable
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class EmbeddableAlpha implements Serializable {
-    @Column(name="alpha_value")
+public class EmbeddableBeta implements Serializable {
+    @Column(name="beta_value")
     private String value;
 
-    @Embedded
-    private EmbeddableBeta beta;
-
-    public EmbeddableAlpha(String value, EmbeddableBeta beta) {
+    public EmbeddableBeta(String value) {
         this.value = value;
-        this.beta = beta;
     }
 }
