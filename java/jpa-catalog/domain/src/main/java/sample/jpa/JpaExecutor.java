@@ -1,10 +1,12 @@
 package sample.jpa;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -17,13 +19,17 @@ public class JpaExecutor {
         tx.begin();
 
         try {
-            Query query = em.createQuery("select a from EntityAlpha a");
+            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a", EntityAlpha.class);
             System.out.println("************************************************************");
-            query.getResultList().forEach(System.out::println);
+            query.getResultList().forEach(e -> {
+                System.out.println(e);
+                e.test();
+            });
             System.out.println("************************************************************");
 
 
-            EntityAlpha entity = new EntityAlpha(name);
+
+            EntityAlpha entity = new EntityAlpha(name, Arrays.asList(new EmbeddableAlpha("x"), new EmbeddableAlpha("y"), new EmbeddableAlpha("z")));
             em.persist(entity);
 
             tx.commit();
