@@ -1,13 +1,10 @@
 package sample.jpa;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +26,12 @@ public class JpaExecutor {
             System.out.println("************************************************************");
 
 
-            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name, new EmbeddableBeta(name + "test")));
+            Map<EmbeddableAlpha, String> map = new HashMap<>();
+            map.put(new EmbeddableAlpha("a"), "AAA");
+            map.put(new EmbeddableAlpha("b"), "BBB");
+            map.put(new EmbeddableAlpha("c"), "CCC");
+
+            EntityAlpha entity = new EntityAlpha(name, map);
             em.persist(entity);
 
             tx.commit();
