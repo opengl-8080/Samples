@@ -25,13 +25,7 @@ public class JpaExecutor {
             });
             System.out.println("************************************************************");
 
-
-            Map<EmbeddableAlpha, String> map = new HashMap<>();
-            map.put(new EmbeddableAlpha("a"), "AAA");
-            map.put(new EmbeddableAlpha("b"), "BBB");
-            map.put(new EmbeddableAlpha("c"), "CCC");
-
-            EntityAlpha entity = new EntityAlpha(name, map);
+            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name), new EmbeddableAlpha(name+ "bar"));
             em.persist(entity);
 
             tx.commit();

@@ -3,18 +3,15 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Map;
 
 @Entity
 @Table(name="table_alpha")
@@ -24,25 +21,19 @@ public class EntityAlpha implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    @Embedded
+    private EmbeddableAlpha foo;
+    @Embedded
+    @AttributeOverride(name="value", column=@Column(name="bar"))
+    private EmbeddableAlpha bar;
 
-    private String name;
-
-    @ElementCollection(fetch=FetchType.EAGER)
-    @CollectionTable(
-        name="map_table",
-        joinColumns=@JoinColumn(name="table_alpha_id")
-    )
-    @Column(name="map_value")
-    private Map<EmbeddableAlpha, String> map;
-
-    public EntityAlpha(String name, Map<EmbeddableAlpha, String> map) {
-        this.name = name;
-        this.map = map;
+    public EntityAlpha(EmbeddableAlpha foo, EmbeddableAlpha bar) {
+        this.foo = foo;
+        this.bar = bar;
     }
 
     public void test() {
-        EmbeddableAlpha key = this.map.keySet().iterator().next();
-        this.map.remove(key);
-        this.map.put(new EmbeddableAlpha("z"), "ZZZ");
+        this.foo = new EmbeddableAlpha("FOO");
+        this.bar = new EmbeddableAlpha("BAR");
     }
 }
