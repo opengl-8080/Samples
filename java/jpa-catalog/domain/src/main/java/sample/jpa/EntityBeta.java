@@ -3,9 +3,6 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,21 +11,20 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name="table_alpha")
+@Table(name="table_beta")
 @ToString
 @NoArgsConstructor
-public class EntityAlpha implements Serializable {
+public class EntityBeta implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    @Embedded
-    private EmbeddableAlpha alpha;
+    private String name;
 
-    public EntityAlpha(EmbeddableAlpha alpha) {
-        this.alpha = alpha;
+    public EntityBeta(String name) {
+        this.name = name;
     }
 
-    public void update(String value1, String value2) {
-        this.alpha.test(value1, value2);
+    public void update(String name) {
+        this.name = name;
     }
 }

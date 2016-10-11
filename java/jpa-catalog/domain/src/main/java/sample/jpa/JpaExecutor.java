@@ -21,11 +21,11 @@ public class JpaExecutor {
             System.out.println("************************************************************");
             query.getResultList().forEach(e -> {
                 System.out.println(e);
-                e.test();
+                e.update(name + "1", name + "2");
             });
             System.out.println("************************************************************");
 
-            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name), new EmbeddableAlpha(name+ "bar"));
+            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name, "[" + name + "]"));
             em.persist(entity);
 
             tx.commit();
