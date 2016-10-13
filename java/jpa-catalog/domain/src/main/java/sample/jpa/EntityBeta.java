@@ -18,6 +18,7 @@ public class EntityBeta implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
     private String name;
 
     public EntityBeta(String name) {

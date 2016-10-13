@@ -5,8 +5,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JpaExecutor {
     public static void execute(String name) {
@@ -25,7 +23,7 @@ public class JpaExecutor {
             });
             System.out.println("************************************************************");
 
-            EntityAlpha entity = new EntityAlpha(new EmbeddableAlpha(name, "[" + name + "]"));
+            EntityAlpha entity = new EntityAlpha(name + "2", new EntityBeta(name + "1"));
             em.persist(entity);
 
             tx.commit();

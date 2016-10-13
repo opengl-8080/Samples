@@ -3,13 +3,13 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -21,14 +21,20 @@ public class EntityAlpha implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    @Embedded
-    private EmbeddableAlpha alpha;
 
-    public EntityAlpha(EmbeddableAlpha alpha) {
-        this.alpha = alpha;
+    private String name;
+
+    @OneToOne(cascade=CascadeType.PERSIST)
+    @JoinColumn(name="beta_id")
+    private EntityBeta beta;
+
+    public EntityAlpha(String name, EntityBeta beta) {
+        this.name = name;
+        this.beta = beta;
     }
 
-    public void update(String value1, String value2) {
-        this.alpha.test(value1, value2);
+    public void update(String name, String beta) {
+        this.name = name;
+        this.beta.update(beta);
     }
 }
