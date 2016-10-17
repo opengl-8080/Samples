@@ -3,10 +3,9 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -15,11 +14,15 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 public class EntityBeta implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private EmbeddableId id;
 
     private String name;
+
+    @PrePersist
+    private void prePersist() {
+        this.id = new EmbeddableId();
+    }
 
     public EntityBeta(String name) {
         this.name = name;
@@ -27,5 +30,9 @@ public class EntityBeta implements Serializable {
 
     public void update(String name) {
         this.name = name;
+    }
+
+    public long getLongId() {
+        return this.id.getValue();
     }
 }

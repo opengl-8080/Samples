@@ -18,4 +18,8 @@ public class EmbeddableId implements Serializable {
     @Column(name="id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long value;
+
+    public Long getValue() {
+        return value;
+    }
 }
