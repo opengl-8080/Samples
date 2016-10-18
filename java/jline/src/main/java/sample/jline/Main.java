@@ -1,16 +1,23 @@
 package sample.jline;
 
 import jline.console.ConsoleReader;
+import jline.console.KeyMap;
+import jline.console.UserInterruptException;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
         ConsoleReader console = new ConsoleReader();
-        console.putString("12345");
-        console.flush();
+        console.setPrompt("jline>");
+        console.setHandleUserInterrupt(true);
+        console.setKeyMap(KeyMap.VI_MOVE);
 
-        console.moveCursor(-3);
-        console.killLine();
-        console.flush();
+        try {
+            while (true) {
+                console.readLine();
+            }
+        } catch (UserInterruptException e) {
+            // ignore
+        }
     }
 }
