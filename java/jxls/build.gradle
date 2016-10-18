@@ -15,8 +15,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jxls:jxls:2.2.9'
-    compile 'org.jxls:jxls-poi:1.0.8'
+    compile 'org.jxls:jxls-poi:1.0.11'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
 }
 
 jar {
