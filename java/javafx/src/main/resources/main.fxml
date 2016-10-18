@@ -4,14 +4,4 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
-   <children>
-      <HBox layoutX="65.0" layoutY="92.0" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <fx:include fx:id="button1" source="my-button.fxml" />
-            <fx:include fx:id="button2" source="my-button.fxml" />
-         </children>
-      </HBox>
-      <Label layoutX="300.0" layoutY="192.0" text="メインだよ" />
-   </children>
-</Pane>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController" />
