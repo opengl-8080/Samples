@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Main {
@@ -23,9 +24,11 @@ public class Main {
 
         try {
             TypedQuery<EntityAlpha> query = em.createQuery("select e from EntityAlpha e", EntityAlpha.class);
+            System.out.println("*********************************************************************");
             query.getResultList().forEach(System.out::println);
+            System.out.println("*********************************************************************");
 
-            EntityAlpha entityAlpha = new EntityAlpha(EnumAlpha.ALPHA, EnumAlpha.GAMMA);
+            EntityAlpha entityAlpha = new EntityAlpha(Arrays.asList("A", "B", "C"));
             em.persist(entityAlpha);
 
             tx.commit();
