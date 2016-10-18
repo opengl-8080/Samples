@@ -4,10 +4,12 @@
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
 
-    <module name="SuppressWithNearbyCommentFilter" />
+    <module name="SuppressionFilter">
+        <property name="file" value="suppression-config.xml" />
+    </module>
 
     <module name="TreeWalker">
-        <module name="FileContentsHolder" />
         <module name="MemberName" />
+        <module name="ConstantName" />
     </module>
 </module>
