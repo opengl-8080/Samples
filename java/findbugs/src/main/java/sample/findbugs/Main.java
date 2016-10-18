@@ -2,15 +2,14 @@ package sample.findbugs;
 
 public class Main {
 
-    public void hoge(int i) {
+    public void method() {
         new Exception();
     }
 
-    public void fuga(int i) {
-        new Exception();
-    }
+    private static class InnerClass {
 
-    public void piyo(long l) {
-        new Exception();
+        public void method() {
+            new Exception();
+        }
     }
 }
