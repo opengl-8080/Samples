@@ -1,13 +1,10 @@
 package sample.jpa;
 
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -16,15 +13,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class EntityBeta implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="key_1")
+    private String key1;
+
+    @Id
+    @Column(name="key_2")
+    private String key2;
 
     private String name;
 
-    @OneToOne(mappedBy="beta")
-    private EntityAlpha alpha;
-
-    public EntityBeta(String name) {
+    public EntityBeta(String key1, String key2, String name) {
+        this.key1 = key1;
+        this.key2 = key2;
         this.name = name;
     }
 
@@ -35,7 +35,8 @@ public class EntityBeta implements Serializable {
     @Override
     public String toString() {
         return "EntityBeta{" +
-                "id=" + id +
+                "key1='" + key1 + '\'' +
+                ", key2='" + key2 + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

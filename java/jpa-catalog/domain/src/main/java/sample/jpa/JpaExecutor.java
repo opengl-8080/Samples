@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class JpaExecutor {
     public static void execute(String name) {
@@ -17,13 +18,13 @@ public class JpaExecutor {
         try {
             TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a", EntityAlpha.class);
             System.out.println("************************************************************");
-            query.getResultList().forEach(e -> {
-                System.out.println(e);
-                e.update(name + "1", name + "2");
-            });
+            List<EntityAlpha> list = query.getResultList();
+            list.forEach(System.out::println);
+            list.get(0).update(name + "9", name + "Z");
+
             System.out.println("************************************************************");
 
-            EntityAlpha entity = new EntityAlpha(name + "2", new EntityBeta(name + "1"));
+            EntityAlpha entity = new EntityAlpha(name + "1", new EntityBeta(name + "A", name + "B", name));
             em.persist(entity);
 
             tx.commit();

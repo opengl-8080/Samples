@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -25,7 +26,10 @@ public class EntityAlpha implements Serializable {
     private String name;
 
     @OneToOne(cascade=CascadeType.PERSIST)
-    @JoinColumn(name="beta_id")
+    @JoinColumns({
+        @JoinColumn(name="beta_key_1", referencedColumnName="key_1"),
+        @JoinColumn(name="beta_key_2", referencedColumnName="key_2")
+    })
     private EntityBeta beta;
 
     public EntityAlpha(String name, EntityBeta beta) {
