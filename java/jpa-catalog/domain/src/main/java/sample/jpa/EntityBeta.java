@@ -2,9 +2,10 @@ package sample.jpa;
 
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -12,19 +13,20 @@ import java.io.Serializable;
 @Table(name="table_beta")
 @NoArgsConstructor
 public class EntityBeta implements Serializable {
-    @Id
-    @Column(name="key_1")
-    private String key1;
-
-    @Id
-    @Column(name="key_2")
-    private String key2;
+    @EmbeddedId
+    private EmbeddableId id;
 
     private String name;
 
-    public EntityBeta(String key1, String key2, String name) {
-        this.key1 = key1;
-        this.key2 = key2;
+    @OneToOne(mappedBy="beta")
+    private EntityAlpha alpha;
+
+    @PrePersist
+    private void prePersist() {
+        this.id = new EmbeddableId();
+    }
+
+    public EntityBeta(String name) {
         this.name = name;
     }
 
@@ -35,8 +37,7 @@ public class EntityBeta implements Serializable {
     @Override
     public String toString() {
         return "EntityBeta{" +
-                "key1='" + key1 + '\'' +
-                ", key2='" + key2 + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }

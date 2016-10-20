@@ -24,7 +24,7 @@ public class JpaExecutor {
 
             System.out.println("************************************************************");
 
-            EntityAlpha entity = new EntityAlpha(name + "1", new EntityBeta(name + "A", name + "B", name));
+            EntityAlpha entity = new EntityAlpha(name + "1", new EntityBeta(name));
             em.persist(entity);
 
             tx.commit();
