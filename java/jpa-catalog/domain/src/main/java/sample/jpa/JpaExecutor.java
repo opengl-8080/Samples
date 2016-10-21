@@ -20,11 +20,11 @@ public class JpaExecutor {
             System.out.println("************************************************************");
             List<EntityAlpha> list = query.getResultList();
             list.forEach(System.out::println);
-            list.get(0).update(name + "9", name + "Z");
+            list.get(0).update(name + "9", name + "Z", name + "Y");
 
             System.out.println("************************************************************");
 
-            EntityAlpha entity = new EntityAlpha(name + "1", new EntityBeta(name));
+            EntityAlpha entity = new EntityAlpha(name + "1", new EntityBeta(name + "A"), new EntityBeta(name + "B"));
             em.persist(entity);
 
             tx.commit();
