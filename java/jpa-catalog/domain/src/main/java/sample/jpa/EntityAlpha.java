@@ -3,11 +3,13 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -18,23 +20,23 @@ import java.util.stream.Collectors;
 @Table(name="table_alpha")
 @NoArgsConstructor
 public class EntityAlpha implements Serializable {
-    @EmbeddedId
-    private EmbeddableId id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
     @OneToMany(cascade=CascadeType.PERSIST)
-    @JoinColumn(name="alpha_id", referencedColumnName="id")
+    @JoinTable(
+        name="alpha_beta",
+        joinColumns=@JoinColumn(name="alpha_id"),
+        inverseJoinColumns=@JoinColumn(name="beta_id")
+    )
     private List<EntityBeta> betaList;
 
     public EntityAlpha(String name, EntityBeta... beta) {
         this.name = name;
         this.betaList = Arrays.asList(beta);
-    }
-
-    @PrePersist
-    private void prePersist() {
-        this.id = new EmbeddableId();
     }
 
     public void update(String name, String... beta) {
