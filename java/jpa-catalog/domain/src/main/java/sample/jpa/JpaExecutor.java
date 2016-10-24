@@ -16,16 +16,24 @@ public class JpaExecutor {
         tx.begin();
 
         try {
-            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a", EntityAlpha.class);
-            System.out.println("************************************************************");
+            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a order by a.id asc", EntityAlpha.class);
             List<EntityAlpha> list = query.getResultList();
-            list.forEach(System.out::println);
-            list.get(0).update(name + "9", name + "Z", name + "Y");
+            list.forEach(a -> System.out.println("*** " + a));
 
-            System.out.println("************************************************************");
+            if (list.size() == 1) {
+                EntityAlpha first = list.get(0);
+                first.update("update(" + name + ")");
+            } else if (list.size() == 2) {
+                EntityAlpha first = list.get(0);
+                em.remove(first);
 
-            EntityAlpha entity = new EntityAlpha(name + "1", new EntityBeta(name + "A"), new EntityBeta(name + "B"));
-            em.persist(entity);
+                EntityAlpha second = list.get(1);
+                second.update("UPDATE(" + name + ")");
+            }
+
+            String n = "insert(" + name + ")";
+            EntityAlpha insert = new EntityAlpha(n, new EntityBeta(n + "[1]"), new EntityBeta(n + "[2]"));
+            em.persist(insert);
 
             tx.commit();
         } catch (Exception e) {

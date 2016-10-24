@@ -3,47 +3,43 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name="table_alpha")
 @NoArgsConstructor
 public class EntityAlpha implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private EmbeddableId id;
 
     private String name;
 
-    @OneToMany(cascade=CascadeType.PERSIST)
-    @JoinTable(
-        name="alpha_beta",
-        joinColumns=@JoinColumn(name="alpha_id"),
-        inverseJoinColumns=@JoinColumn(name="beta_id")
-    )
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name="alpha_id", referencedColumnName="id")
     private List<EntityBeta> betaList;
+
+    @PrePersist
+    private void prePersist() {
+        this.id = new EmbeddableId();
+    }
 
     public EntityAlpha(String name, EntityBeta... beta) {
         this.name = name;
-        this.betaList = Arrays.asList(beta);
+        this.betaList = java.util.Arrays.asList(beta);
     }
 
-    public void update(String name, String... beta) {
+    public void update(String name) {
         this.name = name;
 
-        for (int i = 0; i < beta.length; i++) {
-            this.betaList.get(i).update(beta[i]);
+        for (int i = 0; i < this.betaList.size(); i++) {
+            this.betaList.get(i).update(name + "[" + i + "]");
         }
     }
 
@@ -52,9 +48,19 @@ public class EntityAlpha implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("{id=" + id + ", name=" + name + ", betaList=[");
 
-        String text = this.betaList.stream().map(EntityBeta::toString).collect(Collectors.joining(", "));
+        String text = this.betaList.stream().map(EntityBeta::toString).collect(java.util.stream.Collectors.joining(", "));
         sb.append(text).append("]}");
 
         return sb.toString();
+    }
+
+    public void delete() {
+        if (0 < this.betaList.size()) {
+            this.betaList.remove(0);
+        }
+    }
+
+    public String id() {
+        return "" + this.id;
     }
 }
