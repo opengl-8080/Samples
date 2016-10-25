@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -22,7 +23,11 @@ public class EntityAlpha implements Serializable {
     private String name;
 
     @OneToMany(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name="alpha_id", referencedColumnName="id")
+    @JoinTable(
+        name="alpha_beta",
+        joinColumns=@JoinColumn(name="alpha_id", referencedColumnName="id"),
+        inverseJoinColumns=@JoinColumn(name="beta_id", referencedColumnName="id")
+    )
     private List<EntityBeta> betaList;
 
     @PrePersist

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -20,7 +21,11 @@ public class EntityBeta implements Serializable {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="alpha_id", referencedColumnName="id")
+    @JoinTable(
+        name="alpha_beta",
+        joinColumns=@JoinColumn(name="beta_id", referencedColumnName="id"),
+        inverseJoinColumns=@JoinColumn(name="alpha_id", referencedColumnName="id")
+    )
     private EntityAlpha alpha;
 
     @PrePersist
