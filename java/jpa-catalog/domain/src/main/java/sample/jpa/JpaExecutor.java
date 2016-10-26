@@ -5,7 +5,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JpaExecutor {
     public static void execute(String name) {
@@ -31,8 +33,12 @@ public class JpaExecutor {
                 second.update("UPDATE(" + name + ")");
             }
 
+            Map<EmbeddableAlpha, EntityBeta> map = new HashMap<>();
+            map.put(new EmbeddableAlpha("foo"), new EntityBeta(name + "[1]"));
+            map.put(new EmbeddableAlpha("bar"), new EntityBeta(name + "[2]"));
+
             String n = "insert(" + name + ")";
-            EntityAlpha insert = new EntityAlpha(n, new EntityBeta(n + "[1]"), new EntityBeta(n + "[2]"));
+            EntityAlpha insert = new EntityAlpha(n, map);
             em.persist(insert);
 
             tx.commit();
