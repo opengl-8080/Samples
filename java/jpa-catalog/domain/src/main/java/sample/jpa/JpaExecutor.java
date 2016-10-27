@@ -33,9 +33,15 @@ public class JpaExecutor {
                 second.update("UPDATE(" + name + ")");
             }
 
-            Map<EmbeddableAlpha, EntityBeta> map = new HashMap<>();
-            map.put(new EmbeddableAlpha("foo"), new EntityBeta(name + "[1]"));
-            map.put(new EmbeddableAlpha("bar"), new EntityBeta(name + "[2]"));
+            EntityBeta beta1 = new EntityBeta(name + "[1]");
+            EntityBeta beta2 = new EntityBeta(name + "[2]");
+            em.persist(beta1);
+            em.persist(beta2);
+            em.flush();
+
+            Map<EntityBeta, EmbeddableAlpha> map = new HashMap<>();
+            map.put(beta1, new EmbeddableAlpha("foo"));
+            map.put(beta2, new EmbeddableAlpha("bar"));
 
             String n = "insert(" + name + ")";
             EntityAlpha insert = new EntityAlpha(n, map);

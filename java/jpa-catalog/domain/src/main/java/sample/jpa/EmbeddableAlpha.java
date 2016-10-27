@@ -15,6 +15,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmbeddableAlpha implements Serializable {
-    @Column(name="map_key")
+    @Column(name="map_value")
     private String value;
 }

@@ -2,14 +2,14 @@ package sample.jpa;
 
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Map;
@@ -24,15 +24,15 @@ public class EntityAlpha implements Serializable {
 
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinTable(
+    @ElementCollection
+    @CollectionTable(
         name="alpha_beta_map",
-        joinColumns = @JoinColumn(name="table_alpha_id"),
-        inverseJoinColumns = @JoinColumn(name="table_beta_id")
+        joinColumns=@JoinColumn(name="table_alpha_id")
     )
-    private Map<EmbeddableAlpha, EntityBeta> map;
+    @MapKeyJoinColumn(name="table_beta_id")
+    private Map<EntityBeta, EmbeddableAlpha> map;
 
-    public EntityAlpha(String name, Map<EmbeddableAlpha, EntityBeta> map) {
+    public EntityAlpha(String name, Map<EntityBeta, EmbeddableAlpha> map) {
         this.name = name;
         this.map = map;
     }
@@ -41,7 +41,7 @@ public class EntityAlpha implements Serializable {
         this.name = name;
 
         int i=0;
-        for (EntityBeta entityBeta : this.map.values()) {
+        for (EntityBeta entityBeta : this.map.keySet()) {
             entityBeta.update(name + "[" + i + "]");
             i++;
         }
@@ -61,7 +61,7 @@ public class EntityAlpha implements Serializable {
     }
 
     public void delete() {
-        java.util.Iterator<Map.Entry<EmbeddableAlpha, EntityBeta>> ite = this.map.entrySet().iterator();
+        java.util.Iterator<Map.Entry<EntityBeta, EmbeddableAlpha>> ite = this.map.entrySet().iterator();
         ite.next();
         ite.remove();
     }
