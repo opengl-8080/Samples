@@ -39,9 +39,9 @@ public class JpaExecutor {
             em.persist(beta2);
             em.flush();
 
-            Map<EntityBeta, EmbeddableAlpha> map = new HashMap<>();
-            map.put(beta1, new EmbeddableAlpha("foo"));
-            map.put(beta2, new EmbeddableAlpha("bar"));
+            Map<EntityBeta, EntityGamma> map = new HashMap<>();
+            map.put(beta1, new EntityGamma("foo"));
+            map.put(beta2, new EntityGamma("bar"));
 
             String n = "insert(" + name + ")";
             EntityAlpha insert = new EntityAlpha(n, map);

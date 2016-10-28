@@ -8,6 +8,7 @@
     <persistence-unit name="SampleUnit" transaction-type="RESOURCE_LOCAL">
         <class>sample.jpa.EntityAlpha</class>
         <class>sample.jpa.EntityBeta</class>
+        <class>sample.jpa.EntityGamma</class>
         <exclude-unlisted-classes/>
 
         <properties>
