@@ -1,25 +1,25 @@
 package sample.jpa;
 
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.MapKeyJoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Map;
+import java.util.List;
 
 @Entity
 @Table(name="table_alpha")
 @NoArgsConstructor
+@ToString
 public class EntityAlpha implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,47 +27,34 @@ public class EntityAlpha implements Serializable {
 
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinTable(
-        name="alpha_beta_gamma",
+        name="alpha_beta",
         joinColumns=@JoinColumn(name="table_alpha_id"),
-        inverseJoinColumns=@JoinColumn(name="table_gamma_id")
+        inverseJoinColumns=@JoinColumn(name="table_beta_id")
     )
-    @MapKeyJoinColumn(name="table_beta_id")
-    private Map<EntityBeta, EntityGamma> map;
+    private List<EntityBeta> betaList;
 
-    public EntityAlpha(String name, Map<EntityBeta, EntityGamma> map) {
+    public EntityAlpha(String name, List<EntityBeta> betaList) {
         this.name = name;
-        this.map = map;
+        this.betaList = betaList;
     }
 
     public void update(String name) {
         this.name = name;
 
-        int i=0;
-        for (Map.Entry<EntityBeta, EntityGamma> entry : this.map.entrySet()) {
-            entry.getKey().update("update(" + i + ")");
-            entry.getValue().update("update{" + i + "}");
-            i++;
+        for (int i1 = 0; i1 < betaList.size(); i1++) {
+            this.betaList.get(i1).update(name + "[" + i1 + "]");
         }
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{id=" + id + ", name=" + name + ", map={");
-
-        String text = this.map.entrySet().stream().map(e -> "[" + e.getKey() + ": " + e.getValue() + "]")
-                .collect(java.util.stream.Collectors.joining(", "));
-
-        sb.append(text).append("}}");
-
-        return sb.toString();
-    }
-
     public void delete() {
-        java.util.Iterator<Map.Entry<EntityBeta, EntityGamma>> ite = this.map.entrySet().iterator();
+        java.util.Iterator<EntityBeta> ite = this.betaList.iterator();
         ite.next();
         ite.remove();
+    }
+
+    Long id() {
+        return this.id;
     }
 }

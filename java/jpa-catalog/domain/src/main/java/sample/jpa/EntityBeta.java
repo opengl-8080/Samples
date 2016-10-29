@@ -1,26 +1,28 @@
 package sample.jpa;
 
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Table(name="table_beta")
 @NoArgsConstructor
-@ToString
 public class EntityBeta implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
+    @ManyToMany(mappedBy="betaList")
+    private List<EntityAlpha> alphaList;
 
     public EntityBeta(String name) {
         this.name = name;
@@ -31,13 +33,11 @@ public class EntityBeta implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof EntityBeta
-                && Objects.equals(this.id, ((EntityBeta) obj).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.id == null ? 0 : this.id.hashCode();
+    public String toString() {
+        return "EntityBeta{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", alphaList=[" + this.alphaList.stream().map(it -> "" + it.id()).collect(java.util.stream.Collectors.joining(", ")) + "]" +
+                '}';
     }
 }
