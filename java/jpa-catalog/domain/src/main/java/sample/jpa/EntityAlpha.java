@@ -4,14 +4,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -21,19 +20,23 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class EntityAlpha implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private EmbeddableId id;
 
     private String name;
 
     @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinTable(
         name="alpha_beta",
-        joinColumns=@JoinColumn(name="table_alpha_id"),
-        inverseJoinColumns=@JoinColumn(name="table_beta_id")
+        joinColumns=@JoinColumn(name="table_alpha_id", referencedColumnName="id"),
+        inverseJoinColumns=@JoinColumn(name="table_beta_id", referencedColumnName="id")
     )
     private List<EntityBeta> betaList;
+
+    @PrePersist
+    private void prePersist() {
+        this.id = new EmbeddableId();
+    }
 
     public EntityAlpha(String name, List<EntityBeta> betaList) {
         this.name = name;
@@ -54,7 +57,7 @@ public class EntityAlpha implements Serializable {
         ite.remove();
     }
 
-    Long id() {
+    EmbeddableId id() {
         return this.id;
     }
 }
