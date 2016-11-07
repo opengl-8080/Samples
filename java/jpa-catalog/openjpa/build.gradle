@@ -1,0 +1,5 @@
+
+dependencies {
+    compile 'org.apache.openjpa:openjpa:2.4.1'
+    compile project(':domain')
+}

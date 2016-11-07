@@ -17,29 +17,34 @@ public class JpaExecutor {
         tx.begin();
 
         try {
-            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a order by a.id asc", EntityAlpha.class);
-            List<EntityAlpha> list = query.getResultList();
-            list.forEach(a -> System.out.println("*** " + a));
+            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a where a.embeddableAlpha = :value", EntityAlpha.class);
+            query.setParameter("value", new EmbeddableAlpha("aaa"));
+            List<EntityAlpha> resultList = query.getResultList();
+            resultList.forEach(System.out::println);
 
-            if (list.size() == 1) {
-                EntityAlpha first = list.get(0);
-                first.update("update(" + name + ")");
-            } else if (list.size() == 2) {
-                EntityAlpha first = list.get(0);
-                em.remove(first);
-
-                EntityAlpha second = list.get(1);
-                second.update("UPDATE(" + name + ")");
-            }
-
-            List<EntityBeta> betaList = Arrays.asList(
-                    new EntityBeta("foo"),
-                    new EntityBeta("bar")
-            );
-
-            String n = "insert(" + name + ")";
-            EntityAlpha insert = new EntityAlpha(n, betaList);
-            em.persist(insert);
+//            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a order by a.id asc", EntityAlpha.class);
+//            List<EntityAlpha> list = query.getResultList();
+//            list.forEach(a -> System.out.println("*** " + a));
+//
+//            if (list.size() == 1) {
+//                EntityAlpha first = list.get(0);
+//                first.update("update(" + name + ")");
+//            } else if (list.size() == 2) {
+//                EntityAlpha first = list.get(0);
+//                em.remove(first);
+//
+//                EntityAlpha second = list.get(1);
+//                second.update("UPDATE(" + name + ")");
+//            }
+//
+//            List<EntityBeta> betaList = Arrays.asList(
+//                    new EntityBeta("foo"),
+//                    new EntityBeta("bar")
+//            );
+//
+//            String n = "insert(" + name + ")";
+//            EntityAlpha insert = new EntityAlpha(n, betaList);
+//            em.persist(insert);
 
             tx.commit();
         } catch (Exception e) {
