@@ -8,17 +8,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name="alpha_beta_gamma")
+@Table(name="table_alpha")
+@Inheritance(strategy=InheritanceType.JOINED)
 @NoArgsConstructor
 @ToString
 public class EntityAlpha implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
     @Column(name="alpha_name")
     protected String name;
 

@@ -5,9 +5,11 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
+@Table(name="table_gamma")
 @ToString
 @NoArgsConstructor
 public class EntityGamma extends EntityBeta implements Serializable {
