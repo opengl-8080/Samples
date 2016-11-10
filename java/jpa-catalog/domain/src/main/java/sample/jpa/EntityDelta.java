@@ -3,35 +3,38 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name="table_alpha")
-@Inheritance(strategy=InheritanceType.JOINED)
-@NoArgsConstructor
+@Table(name="table_delta")
 @ToString
-public class EntityAlpha implements Serializable {
+@NoArgsConstructor
+public class EntityDelta implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="alpha_name")
-    protected String name;
+    private String name;
 
-    public EntityAlpha(String name) {
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="table_beta_id")
+    private EntityBeta beta;
+
+    public EntityDelta(String name, EntityBeta beta) {
         this.name = name;
+        this.beta = beta;
     }
 
     public void update(String name) {
         this.name = name;
+        this.beta.update(name);
     }
-
 }

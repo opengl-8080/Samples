@@ -5,8 +5,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 public class JpaExecutor {
@@ -24,18 +22,10 @@ public class JpaExecutor {
 //            List<EntityAlpha> resultList = query.getResultList();
 //            resultList.forEach(System.out::println);
 
-            exec(em, EntityAlpha.class, name);
-            exec(em, EntityBeta.class, name);
-            exec(em, EntityGamma.class, name);
-
-            EntityAlpha alpha = new EntityAlpha("insert(" + name + ")");
-            em.persist(alpha);
-
-            EntityBeta beta = new EntityBeta("Insert[" + name + "]", "Insert{" + name + "}");
-            em.persist(beta);
-
-            EntityGamma gamma = new EntityGamma("INSERT'" + name + "'", "INSERT\"" + name + "\"", "INSERT|" + name + "|");
-            em.persist(gamma);
+            first(em, name);
+//            second(em, name);
+//            third(em, name);
+//            fourth(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -45,6 +35,42 @@ public class JpaExecutor {
                 tx.rollback();
             }
         }
+    }
+
+    private static void first(EntityManager em, String name) {
+//        EntityAlpha alpha = new EntityAlpha(name);
+//        EntityGamma gamma = new EntityGamma(name, alpha);
+//        em.persist(gamma);
+
+        EntityBeta beta = new EntityBeta("name(" + name + ")", "code(" + name + ")");
+//        em.persist(beta);
+//        em.flush();
+        EntityDelta delta = new EntityDelta(name, beta);
+        em.persist(delta);
+    }
+
+    private static void second(EntityManager em, String name) {
+        TypedQuery<EntityGamma> query = em.createQuery("select a from EntityGamma a", EntityGamma.class);
+        query.getResultList().forEach(System.out::println);
+
+        TypedQuery<EntityDelta> query2 = em.createQuery("select a from EntityDelta a", EntityDelta.class);
+        query2.getResultList().forEach(System.out::println);
+    }
+
+    private static void third(EntityManager em, String name) {
+        TypedQuery<EntityGamma> query = em.createQuery("select a from EntityGamma a", EntityGamma.class);
+        query.getResultList().get(0).update("UPDATE(" + name + ")");
+
+        TypedQuery<EntityDelta> query2 = em.createQuery("select a from EntityDelta a", EntityDelta.class);
+        query2.getResultList().get(0).update("UPDATE(" + name + ")");
+    }
+
+    private static void fourth(EntityManager em) {
+        TypedQuery<EntityGamma> query = em.createQuery("select a from EntityGamma a", EntityGamma.class);
+        em.remove(query.getResultList().get(0));
+
+        TypedQuery<EntityDelta> query2 = em.createQuery("select a from EntityDelta a", EntityDelta.class);
+        em.remove(query2.getResultList().get(0));
     }
 
     private static <T extends EntityAlpha> void exec(EntityManager em, Class<T> clazz, String name) {

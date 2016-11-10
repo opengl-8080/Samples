@@ -9,6 +9,7 @@
         <class>sample.jpa.EntityAlpha</class>
         <class>sample.jpa.EntityBeta</class>
         <class>sample.jpa.EntityGamma</class>
+        <class>sample.jpa.EntityDelta</class>
         <exclude-unlisted-classes/>
 
         <properties>
@@ -16,8 +17,8 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jpa"/>
             <property name="javax.persistence.jdbc.user" value="test"/>
             <property name="javax.persistence.jdbc.password" value="test"/>
-            <!--<property name="eclipselink.logging.level" value="FINE" />-->
-            <!--<property name="eclipselink.logging.parameters" value="true"/>-->
+            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.logging.parameters" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

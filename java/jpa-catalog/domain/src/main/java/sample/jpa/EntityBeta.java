@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity
 @Table(name="table_beta")
 @NoArgsConstructor
-@ToString
+@ToString(callSuper = true)
 public class EntityBeta extends EntityAlpha implements Serializable {
     @Column(name="beta_code")
     protected String code;
