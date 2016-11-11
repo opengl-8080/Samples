@@ -25,7 +25,7 @@ public class EntityDelta implements Serializable {
     private String name;
 
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="table_beta_id")
+    @JoinColumn(name="table_alpha_id")
     private EntityBeta beta;
 
     public EntityDelta(String name, EntityBeta beta) {
