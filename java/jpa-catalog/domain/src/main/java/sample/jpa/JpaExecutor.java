@@ -22,9 +22,9 @@ public class JpaExecutor {
 //            List<EntityAlpha> resultList = query.getResultList();
 //            resultList.forEach(System.out::println);
 
-//            first(em, name);
-//            second(em, name);
-//            third(em, name);
+//            first(em, name + "(1)");
+//            second(em, name + "(2)");
+//            third(em, name + "(3)");
             fourth(em);
 
             tx.commit();
@@ -38,11 +38,14 @@ public class JpaExecutor {
     }
 
     private static void first(EntityManager em, String name) {
-        EntityAlpha alpha = new EntityAlpha(name);
+        EntityEpsilon epsilon = new EntityEpsilon(name);
+        EntityAlpha alpha = new EntityAlpha(name, epsilon);
         EntityGamma gamma = new EntityGamma(name, alpha);
         em.persist(gamma);
 
-        EntityBeta beta = new EntityBeta("name(" + name + ")", "code(" + name + ")");
+        EntityEpsilon epsilon2 = new EntityEpsilon(name);
+        EntityZeta zeta = new EntityZeta(name);
+        EntityBeta beta = new EntityBeta("name(" + name + ")", epsilon2, "code(" + name + ")", zeta);
         EntityDelta delta = new EntityDelta(name, beta);
         em.persist(delta);
     }

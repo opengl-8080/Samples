@@ -10,6 +10,8 @@
         <class>sample.jpa.EntityBeta</class>
         <class>sample.jpa.EntityGamma</class>
         <class>sample.jpa.EntityDelta</class>
+        <class>sample.jpa.EntityEpsilon</class>
+        <class>sample.jpa.EntityZeta</class>
         <exclude-unlisted-classes/>
 
         <properties>
