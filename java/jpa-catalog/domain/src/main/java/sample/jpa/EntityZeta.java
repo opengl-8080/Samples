@@ -3,10 +3,13 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -19,6 +22,9 @@ public class EntityZeta implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @ElementCollection
+    @CollectionTable
+    @ManyToOne
     private String name;
 
     public EntityZeta(String name) {

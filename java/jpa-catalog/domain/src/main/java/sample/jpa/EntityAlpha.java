@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,21 +22,20 @@ public class EntityAlpha implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="alpha_name")
-    protected String name;
+    private String name;
 
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="table_epsilon_id")
-    protected EntityEpsilon epsilon;
+    @JoinColumn(name="table_beta_id")
+    private EntityBeta beta;
 
-    public EntityAlpha(String name, EntityEpsilon epsilon) {
+    public EntityAlpha(String name, EntityBeta beta) {
         this.name = name;
-        this.epsilon = epsilon;
+        this.beta = beta;
     }
 
     public void update(String name) {
         this.name = name;
-        this.epsilon.update(name);
+        this.beta.update(name);
     }
 
 }

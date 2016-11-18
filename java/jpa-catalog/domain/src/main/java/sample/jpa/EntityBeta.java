@@ -3,9 +3,10 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -14,25 +15,25 @@ import java.io.Serializable;
 @Entity
 @Table(name="table_beta")
 @NoArgsConstructor
-@ToString(callSuper = true)
-public class EntityBeta extends EntityAlpha implements Serializable {
-    @Column(name="beta_code")
-    protected String code;
+@ToString
+public class EntityBeta implements Serializable {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToOne(cascade= CascadeType.ALL)
-    @JoinColumn(name="table_zeta_id")
-    protected EntityZeta zeta;
+    private String name;
 
-    public EntityBeta(String name, EntityEpsilon epsilon, String code, EntityZeta zeta) {
-        super(name, epsilon);
-        this.code = code;
-        this.zeta = zeta;
+    @OneToOne
+    @JoinColumn(name="table_gamma_id")
+    private EntityGamma gamma;
+
+    public EntityBeta(String name, EntityGamma gamma) {
+        this.name = name;
+        this.gamma = gamma;
     }
 
-    @Override
     public void update(String name) {
         this.name = "Update{" + name + "}";
-        this.code = "Update[" + name + "]";
-        this.zeta.update(name);
+        this.gamma.update(name);
     }
 }

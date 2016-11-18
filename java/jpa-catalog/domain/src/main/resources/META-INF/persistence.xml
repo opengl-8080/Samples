@@ -9,9 +9,12 @@
         <class>sample.jpa.EntityAlpha</class>
         <class>sample.jpa.EntityBeta</class>
         <class>sample.jpa.EntityGamma</class>
-        <class>sample.jpa.EntityDelta</class>
-        <class>sample.jpa.EntityEpsilon</class>
-        <class>sample.jpa.EntityZeta</class>
+        <class>order.Order</class>
+        <class>order.OrderDetail</class>
+        <class>item.Item</class>
+        <!--<class>sample.jpa.EntityDelta</class>-->
+        <!--<class>sample.jpa.EntityEpsilon</class>-->
+        <!--<class>sample.jpa.EntityZeta</class>-->
         <exclude-unlisted-classes/>
 
         <properties>

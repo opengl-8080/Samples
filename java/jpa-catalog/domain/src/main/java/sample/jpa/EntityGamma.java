@@ -3,13 +3,10 @@ package sample.jpa;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -24,17 +21,11 @@ public class EntityGamma implements Serializable {
 
     private String name;
 
-    @OneToOne(cascade= CascadeType.ALL)
-    @JoinColumn(name="table_alpha_id")
-    private EntityAlpha alpha;
-
-    public EntityGamma(String name, EntityAlpha alpha) {
+    public EntityGamma(String name) {
         this.name = name;
-        this.alpha = alpha;
     }
 
     public void update(String name) {
         this.name = name;
-        this.alpha.update(name);
     }
 }
