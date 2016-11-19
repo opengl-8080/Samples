@@ -1,9 +1,11 @@
 package sample.jpa;
 
 import item.Item;
+import item.ItemName;
+import item.ItemUnitPrice;
 import order.DeliveryDate;
-import order.Order;
-import order.OrderDetail;
+import order.OrderRequest;
+import order.OrderRequestDetail;
 import order.Quantity;
 
 import javax.persistence.EntityManager;
@@ -32,8 +34,8 @@ public class JpaExecutor {
 //            em.persist(item2);
 //            em.persist(item3);
 
-//            TypedQuery<Order> query = em.createQuery("select o from Orders o where o.id = 17", Order.class);
-//            Order singleResult = query.getSingleResult();
+//            TypedQuery<OrderRequest> query = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 1", OrderRequest.class);
+//            OrderRequest singleResult = query.getSingleResult();
 //            System.out.println(singleResult);
 
 //            TypedQuery<Item> query = em.createQuery("select i from Item i order by i.id", Item.class);
@@ -42,21 +44,21 @@ public class JpaExecutor {
 //            Item item2 = items.get(1);
 //            Item item3 = items.get(2);
 //
-//            Order order1 = new Order(new DeliveryDate(new Date()), Arrays.asList(
-//                    new OrderDetail(item1, new Quantity(3)),
-//                    new OrderDetail(item2, new Quantity(1))
+//            OrderRequest orderRequest1 = new OrderRequest(new DeliveryDate(new Date()), Arrays.asList(
+//                    new OrderRequestDetail(item1, new Quantity(3)),
+//                    new OrderRequestDetail(item2, new Quantity(1))
 //                ));
 //
-//            em.persist(order1);
-//            Order order2 = new Order(new DeliveryDate(new Date()), Arrays.asList(
-//                    new OrderDetail(item3, new Quantity(2)),
-//                    new OrderDetail(item2, new Quantity(4)),
-//                    new OrderDetail(item1, new Quantity(5))
+//            em.persist(orderRequest1);
+//            OrderRequest orderRequest2 = new OrderRequest(new DeliveryDate(new Date()), Arrays.asList(
+//                    new OrderRequestDetail(item3, new Quantity(2)),
+//                    new OrderRequestDetail(item2, new Quantity(4)),
+//                    new OrderRequestDetail(item1, new Quantity(5))
 //            ));
-//            em.persist(order2);
+//            em.persist(orderRequest2);
 
-            TypedQuery<Order> query1 = em.createQuery("select o from Orders o where o.id = 38", Order.class);
-            Order order = query1.getSingleResult();
+            TypedQuery<OrderRequest> query1 = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 2", OrderRequest.class);
+            OrderRequest order = query1.getSingleResult();
 //            order.update();
             em.remove(order);
 

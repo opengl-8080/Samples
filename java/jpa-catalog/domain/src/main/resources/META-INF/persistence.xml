@@ -9,8 +9,8 @@
         <class>sample.jpa.EntityAlpha</class>
         <class>sample.jpa.EntityBeta</class>
         <class>sample.jpa.EntityGamma</class>
-        <class>order.Order</class>
-        <class>order.OrderDetail</class>
+        <class>order.OrderRequest</class>
+        <class>order.OrderRequestDetail</class>
         <class>item.Item</class>
         <!--<class>sample.jpa.EntityDelta</class>-->
         <!--<class>sample.jpa.EntityEpsilon</class>-->
