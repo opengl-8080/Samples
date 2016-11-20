@@ -3,15 +3,13 @@ package order;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-@Embeddable
+//@Embeddable
 @EqualsAndHashCode
 @ToString
 public class Quantity implements Serializable {
-    @Column(name="quantity")
+//    @Column(name="quantity")
     private int value;
 
     public Quantity(int value) {

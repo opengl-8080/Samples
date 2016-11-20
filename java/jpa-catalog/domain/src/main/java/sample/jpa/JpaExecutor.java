@@ -26,13 +26,13 @@ public class JpaExecutor {
         tx.begin();
 
         try {
-//            Item item1 = new Item(new ItemName("item1"), new ItemUnitPrice(300));
-//            Item item2 = new Item(new ItemName("item2"), new ItemUnitPrice(500));
-//            Item item3 = new Item(new ItemName("item3"), new ItemUnitPrice(1200));
-//
-//            em.persist(item1);
-//            em.persist(item2);
-//            em.persist(item3);
+            Item item1 = new Item(new ItemName("item1"), new ItemUnitPrice(300));
+            Item item2 = new Item(new ItemName("item2"), new ItemUnitPrice(500));
+            Item item3 = new Item(new ItemName("item3"), new ItemUnitPrice(1200));
+
+            em.persist(item1);
+            em.persist(item2);
+            em.persist(item3);
 
 //            TypedQuery<OrderRequest> query = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 1", OrderRequest.class);
 //            OrderRequest singleResult = query.getSingleResult();
@@ -57,10 +57,10 @@ public class JpaExecutor {
 //            ));
 //            em.persist(orderRequest2);
 
-            TypedQuery<OrderRequest> query1 = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 2", OrderRequest.class);
-            OrderRequest order = query1.getSingleResult();
+//            TypedQuery<OrderRequest> query1 = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 2", OrderRequest.class);
+//            OrderRequest order = query1.getSingleResult();
 //            order.update();
-            em.remove(order);
+//            em.remove(order);
 
 //            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a where a.embeddableAlpha.value < (:value).value", EntityAlpha.class);
 //            query.setParameter("value", 6);

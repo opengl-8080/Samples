@@ -3,16 +3,15 @@ package order;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Date;
 
-@Embeddable
+//@Embeddable
 @EqualsAndHashCode
 @ToString
 public class DeliveryDate implements Serializable {
-    @Column(name="delivery_date")
+//    @Temporal(TemporalType.DATE)
+//    @Column(name="delivery_date")
     private Date date;
 
     public DeliveryDate(Date date) {

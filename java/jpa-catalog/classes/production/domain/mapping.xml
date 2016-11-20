@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings
+       xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+                           http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+       version="2.1">
+    <description>JPA Sample</description>
+
+    <!--<persistence-unit-metadata>-->
+        <!--<xml-mapping-metadata-complete/>-->
+    <!--</persistence-unit-metadata>-->
+
+    <entity class="order.OrderRequest" access="PROPERTY">
+        <table name="order_requests" />
+
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY" />
+            </id>
+
+            <embedded name="deliveryDate" />
+
+            <one-to-many name="orderRequestDetails" fetch="EAGER">
+                <cascade>ALL</cascade>
+                <join-table name="order_request_relations">
+                    <join-column name="order_request_id" />
+                    <inverse-join-column name="order_request_details_id" />
+                </join-table>
+            </one-to-many>
+        </attributes>
+    </entity>
+
+    <embeddable class="order.DeliveryDate">
+        <attributes>
+            <basic name="date">
+                <column name="delivery_date" />
+                <temporal>DATE</temporal>
+            </basic>
+        </attributes>
+    </embeddable>
+
+    <entity class="order.OrderRequestDetail">
+        <table name="order_request_details" />
+
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY" />
+            </id>
+
+            <one-to-one name="item">
+                <join-column name="items_id" />
+            </one-to-one>
+
+            <embedded name="itemName" />
+
+            <embedded name="itemUnitPrice" />
+
+            <embedded name="quantity" />
+        </attributes>
+    </entity>
+
+    <embeddable class="order.Quantity">
+        <attributes>
+            <basic name="value">
+                <column name="quantity" />
+            </basic>
+        </attributes>
+    </embeddable>
+
+    <embeddable class="item.ItemName">
+        <attributes>
+            <basic name="value">
+                <column name="item_name" />
+            </basic>
+        </attributes>
+    </embeddable>
+
+    <embeddable class="item.ItemUnitPrice">
+        <attributes>
+            <basic name="value">
+                <column name="item_unit_price" />
+            </basic>
+        </attributes>
+    </embeddable>
+
+    <entity class="item.Item">
+        <table name="items" />
+
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY" />
+            </id>
+
+            <embedded name="name">
+                <attribute-override name="value">
+                    <column name="name" />
+                </attribute-override>
+            </embedded>
+
+            <embedded name="unitPrice">
+                <attribute-override name="value">
+                    <column name="unit_price" />
+                </attribute-override>
+            </embedded>
+        </attributes>
+    </entity>
+</entity-mappings>

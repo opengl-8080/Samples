@@ -5,31 +5,23 @@ import item.ItemName;
 import item.ItemUnitPrice;
 import lombok.ToString;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
-@Table(name="order_request_details")
+//@Entity
+//@Table(name="order_request_details")
 @ToString
 public class OrderRequestDetail implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name="items_id")
+//    @OneToOne
+//    @JoinColumn(name="items_id")
     private Item item;
-    @Embedded
+//    @Embedded
     private ItemName itemName;
-    @Embedded
+//    @Embedded
     private ItemUnitPrice itemUnitPrice;
-    @Embedded
+//    @Embedded
     private Quantity quantity;
 
     public OrderRequestDetail(Item item, Quantity quantity) {
