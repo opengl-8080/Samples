@@ -1,6 +1,5 @@
 package sample.jpa;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,10 +10,13 @@ import java.io.Serializable;
 
 @Embeddable
 @ToString
-@NoArgsConstructor
 @EqualsAndHashCode
-@AllArgsConstructor
+@NoArgsConstructor
 public class EmbeddableAlpha implements Serializable {
-    @Column(name="embeddable_value")
-    private int value;
+    @Column(name="list_value")
+    private String value;
+
+    public EmbeddableAlpha(String value) {
+        this.value = value;
+    }
 }

@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
-@Table(name="table_gamma")
+//@Entity
+//@Table(name="table_gamma")
 @ToString
 @NoArgsConstructor
 public class EntityGamma implements Serializable {

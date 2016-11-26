@@ -7,6 +7,7 @@ import order.DeliveryDate;
 import order.OrderRequest;
 import order.OrderRequestDetail;
 import order.Quantity;
+import sample.Id;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,17 +27,23 @@ public class JpaExecutor {
         tx.begin();
 
         try {
-            Item item1 = new Item(new ItemName("item1"), new ItemUnitPrice(300));
-            Item item2 = new Item(new ItemName("item2"), new ItemUnitPrice(500));
-            Item item3 = new Item(new ItemName("item3"), new ItemUnitPrice(1200));
+//            EntityBeta beta = new EntityBeta("[" + name + "]");
+//            EntityAlpha alpha = new EntityAlpha("{" + name + "}", beta);
+//            em.persist(alpha);
 
-            em.persist(item1);
-            em.persist(item2);
-            em.persist(item3);
+            EntityAlpha alpha = em.find(EntityAlpha.class, new Id<EntityAlpha>(2L));
+            em.remove(alpha);
 
-//            TypedQuery<OrderRequest> query = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 1", OrderRequest.class);
-//            OrderRequest singleResult = query.getSingleResult();
-//            System.out.println(singleResult);
+//            Item item1 = new Item(new ItemName("item1"), new ItemUnitPrice(300));
+//            Item item2 = new Item(new ItemName("item2"), new ItemUnitPrice(500));
+//            Item item3 = new Item(new ItemName("item3"), new ItemUnitPrice(1200));
+//
+//            em.persist(item1);
+//            em.persist(item2);
+//            em.persist(item3);
+
+//            TypedQuery<OrderRequest> query = em.createQuery("select orderRequest from OrderRequest orderRequest", OrderRequest.class);
+//            System.out.println(query.getResultList().get(0));
 
 //            TypedQuery<Item> query = em.createQuery("select i from Item i order by i.id", Item.class);
 //            List<Item> items = query.getResultList();
@@ -57,8 +64,8 @@ public class JpaExecutor {
 //            ));
 //            em.persist(orderRequest2);
 
-//            TypedQuery<OrderRequest> query1 = em.createQuery("select orderRequest from OrderRequest orderRequest where orderRequest.id = 2", OrderRequest.class);
-//            OrderRequest order = query1.getSingleResult();
+//            TypedQuery<OrderRequest> query1 = em.createQuery("select orderRequest from OrderRequest orderRequest", OrderRequest.class);
+//            OrderRequest order = query1.getResultList().get(0);
 //            order.update();
 //            em.remove(order);
 
