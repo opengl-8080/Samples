@@ -10,7 +10,7 @@
 
         <class>sample.jpa.EntityAlpha</class>
         <class>sample.jpa.EntityBeta</class>
-        <!--<class>sample.jpa.EntityGamma</class>-->
+        <class>sample.jpa.EntityGamma</class>
 
         <!--<class>order.OrderRequest</class>-->
         <!--<class>order.OrderRequestDetail</class>-->

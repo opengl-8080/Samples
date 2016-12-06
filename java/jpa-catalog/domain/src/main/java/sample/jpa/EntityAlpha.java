@@ -2,47 +2,51 @@ package sample.jpa;
 
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import sample.Id;
 
-import javax.persistence.CascadeType;
-import javax.persistence.EmbeddedId;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name="table_alpha")
 @NoArgsConstructor
 @ToString
 public class EntityAlpha implements Serializable {
-    @EmbeddedId
-    private Id<EntityAlpha> id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
     
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(
-        name="table_beta_id",
-        referencedColumnName="id"
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name="map_table",
+        joinColumns=@JoinColumn(name="table_alpha_id")
     )
-    private EntityBeta beta;
+    @MapKeyJoinColumn(name = "table_beta_id")
+    @Column(name="map_value")
+    private Map<EntityBeta, String> map = new HashMap<>();
     
-    @PrePersist
-    private void setupId() {
-        this.id = new Id<>();
-    }
-
-    public EntityAlpha(String name, EntityBeta beta) {
+    public EntityAlpha(String name) {
         this.name = name;
-        this.beta = beta;
     }
-
-    public void update(String name) {
-        this.name = "update(" + name + ")";
-        this.beta.update(name);
+    
+    public void put(EntityBeta beta, String value) {
+        this.map.put(beta, value);
     }
-
+    
+    public void remove(EntityBeta beta) {
+        this.map.remove(beta);
+    }
 }

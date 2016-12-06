@@ -13,7 +13,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class EmbeddableAlpha implements Serializable {
-    @Column(name="list_value")
+    @Column(name="map_key")
     private String value;
 
     public EmbeddableAlpha(String value) {

@@ -32,9 +32,4 @@ public class EntityDelta implements Serializable {
         this.name = name;
         this.beta = beta;
     }
-
-    public void update(String name) {
-        this.name = name;
-        this.beta.update(name);
-    }
 }

@@ -1,24 +1,63 @@
 package sample.jpa;
 
-import item.Item;
-import item.ItemName;
-import item.ItemUnitPrice;
-import order.DeliveryDate;
-import order.OrderRequest;
-import order.OrderRequestDetail;
-import order.Quantity;
-import sample.Id;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class JpaExecutor {
+    
+    private static void doAndPrintQuery(EntityManager em, String jpql, Consumer<TypedQuery<EntityAlpha>> parameterSetter) {
+        System.out.println("*********************************************************************");
+        try {
+            TypedQuery<EntityAlpha> query = em.createQuery(jpql, EntityAlpha.class);
+            parameterSetter.accept(query);
+
+            query.getResultList().forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    private static DateValue value(int year, int month, int day) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = formatter.parse(year + "-" + month + "-" + day);
+            return new DateValue(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private static TextValue value(String textValue) {
+        return new TextValue(textValue);
+    }
+    
+    private static NumberValue value(int numberValue) {
+        return new NumberValue(numberValue);
+    }
+
+    private static MultipleValues value(int numberValue, String textValue, String dateValue) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date date = formatter.parse(dateValue);
+            
+            return new MultipleValues(numberValue, textValue, date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static void execute(String name) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("SampleUnit");
         EntityManager em = factory.createEntityManager();
@@ -27,58 +66,12 @@ public class JpaExecutor {
         tx.begin();
 
         try {
-//            EntityBeta beta = new EntityBeta("[" + name + "]");
-//            EntityAlpha alpha = new EntityAlpha("{" + name + "}", beta);
-//            em.persist(alpha);
-
-            EntityAlpha alpha = em.find(EntityAlpha.class, new Id<EntityAlpha>(2L));
-            em.remove(alpha);
-
-//            Item item1 = new Item(new ItemName("item1"), new ItemUnitPrice(300));
-//            Item item2 = new Item(new ItemName("item2"), new ItemUnitPrice(500));
-//            Item item3 = new Item(new ItemName("item3"), new ItemUnitPrice(1200));
-//
-//            em.persist(item1);
-//            em.persist(item2);
-//            em.persist(item3);
-
-//            TypedQuery<OrderRequest> query = em.createQuery("select orderRequest from OrderRequest orderRequest", OrderRequest.class);
-//            System.out.println(query.getResultList().get(0));
-
-//            TypedQuery<Item> query = em.createQuery("select i from Item i order by i.id", Item.class);
-//            List<Item> items = query.getResultList();
-//            Item item1 = items.get(0);
-//            Item item2 = items.get(1);
-//            Item item3 = items.get(2);
-//
-//            OrderRequest orderRequest1 = new OrderRequest(new DeliveryDate(new Date()), Arrays.asList(
-//                    new OrderRequestDetail(item1, new Quantity(3)),
-//                    new OrderRequestDetail(item2, new Quantity(1))
-//                ));
-//
-//            em.persist(orderRequest1);
-//            OrderRequest orderRequest2 = new OrderRequest(new DeliveryDate(new Date()), Arrays.asList(
-//                    new OrderRequestDetail(item3, new Quantity(2)),
-//                    new OrderRequestDetail(item2, new Quantity(4)),
-//                    new OrderRequestDetail(item1, new Quantity(5))
-//            ));
-//            em.persist(orderRequest2);
-
-//            TypedQuery<OrderRequest> query1 = em.createQuery("select orderRequest from OrderRequest orderRequest", OrderRequest.class);
-//            OrderRequest order = query1.getResultList().get(0);
-//            order.update();
-//            em.remove(order);
-
-//            TypedQuery<EntityAlpha> query = em.createQuery("select a from EntityAlpha a where a.embeddableAlpha.value < (:value).value", EntityAlpha.class);
-//            query.setParameter("value", 6);
-//            query.setParameter("value2", new EmbeddableAlpha("ccc"));
-//            List<EntityAlpha> resultList = query.getResultList();
-//            resultList.forEach(System.out::println);
-
-//            first(em, name + "(1)");
-//            second(em, name + "(2)");
-//            third(em, name + "(3)");
-//            fourth(em);
+            EntityBeta beta = em.find(EntityBeta.class, 3L);
+            TypedQuery<EntityAlpha> query = em.createQuery(
+                    "select a from EntityAlpha a join a.map m where key(m) = :key", EntityAlpha.class);
+            query.setParameter("key", beta);
+            
+            query.getResultList().forEach(System.out::println);
 
             tx.commit();
         } catch (Exception e) {
