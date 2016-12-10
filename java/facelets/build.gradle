@@ -1,0 +1,30 @@
+apply plugin: 'war'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax:javaee-api:7.0'
+}
+
+war.baseName = 'facelets'
+
+task deploy(type: Exec, dependsOn: war) {
+    def payaraHome = System.env.PAYARA_HOME
+    def asadmin = /$payaraHome\bin\asadmin.bat/
+
+    commandLine('cmd', '/C', asadmin, 'deploy', war.archivePath)
+}
+
+
+task redeploy(type: Exec, dependsOn: war) {
+    def payaraHome = System.env.PAYARA_HOME
+    def asadmin = /$payaraHome\bin\asadmin.bat/
+
+    commandLine('cmd', '/C', asadmin, 'redeploy', '--name', war.baseName, '--keepstate=true', war.archivePath)
+}
