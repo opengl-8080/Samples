@@ -16,14 +16,18 @@ public class Main {
         ).start();
     }
     
-    synchronized private static void printDate(int year, int month, int day) {
+    private static void printDate(int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);
         cal.set(Calendar.DAY_OF_MONTH,day);
         
         String expected = "Date(" + year + "/" + month + "/" + day + ")";
-        String actual = sdf.format(cal.getTime());
+        String actual;
+        
+        synchronized (sdf) {
+            actual = sdf.format(cal.getTime());
+        }
         
         System.out.println(expected + " = " + actual);
     }
