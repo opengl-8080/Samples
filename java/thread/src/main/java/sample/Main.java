@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Main {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    
     public static void main(String[] args) {
         new Thread(() ->
             printDate(2015, 10, 11)
@@ -23,11 +21,9 @@ public class Main {
         cal.set(Calendar.DAY_OF_MONTH,day);
         
         String expected = "Date(" + year + "/" + month + "/" + day + ")";
-        String actual;
         
-        synchronized (sdf) {
-            actual = sdf.format(cal.getTime());
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String actual = sdf.format(cal.getTime());
         
         System.out.println(expected + " = " + actual);
     }
