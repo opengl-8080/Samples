@@ -1,9 +1,11 @@
 package sample;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
+    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+    
     public static void main(String[] args) {
         new Thread(() ->
             printDate(2015, 10, 11)
@@ -15,15 +17,10 @@ public class Main {
     }
     
     private static void printDate(int year, int month, int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH,day);
-        
+        LocalDate date = LocalDate.of(year, month, day);
+
         String expected = "Date(" + year + "/" + month + "/" + day + ")";
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String actual = sdf.format(cal.getTime());
+        String actual = formatter.format(date);
         
         System.out.println(expected + " = " + actual);
     }
