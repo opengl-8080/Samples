@@ -1,14 +1,15 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE'
-    }
-}
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE'
+//    }
+//}
 
-apply plugin: 'java'
-apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: 'jetty'
+//apply plugin: 'spring-boot'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -18,9 +19,11 @@ repositories {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    compile 'org.springframework.boot:spring-boot-starter-security'
+//    compile 'org.springframework.boot:spring-boot-starter-web'
+//    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.security:spring-security-web:4.2.1.RELEASE'
+    compile 'org.springframework.security:spring-security-config:4.2.1.RELEASE'
 }
 
-jar.baseName = 'spring-security-sample'
+war.baseName = 'spring-security-sample'
