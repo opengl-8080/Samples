@@ -8,7 +8,6 @@
 //}
 
 apply plugin: 'war'
-apply plugin: 'jetty'
 //apply plugin: 'spring-boot'
 
 sourceCompatibility = '1.8'
