@@ -10,7 +10,7 @@
     
     <http>
         <intercept-url pattern="/secure/**" access="isAuthenticated()" />
-        <form-login login-page="/login.html" />
+        <form-login />
     </http>
     
     <authentication-manager />
