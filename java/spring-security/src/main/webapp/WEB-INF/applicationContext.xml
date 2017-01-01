@@ -13,5 +13,9 @@
         <form-login />
     </http>
     
-    <authentication-manager />
+    <authentication-manager>
+        <authentication-provider user-service-ref="myUserDetailsService" />
+    </authentication-manager>
+    
+    <beans:bean id="myUserDetailsService" class="sample.spring.security.MyUserDetailsService" />
 </beans:beans>
