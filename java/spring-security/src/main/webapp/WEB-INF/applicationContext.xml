@@ -11,6 +11,7 @@
     <http>
         <intercept-url pattern="/secure/**" access="isAuthenticated()" />
         <form-login />
+        <logout />
     </http>
     
     <authentication-manager>
