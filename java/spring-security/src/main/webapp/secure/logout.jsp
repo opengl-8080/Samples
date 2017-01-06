@@ -13,7 +13,5 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <input type="submit" value="Logout" />
         </form>
-        requestScope._csrf = ${requestScope._csrf}
-        attribute = <%=request.getAttribute("_csrf")%>
     </body>
 </html>

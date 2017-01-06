@@ -10,14 +10,14 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class MyUserDetailsService implements UserDetailsService {
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (!"test".equals(username)) {
             throw new UsernameNotFoundException("無効なユーザーです");
         }
         
-        String password = "test";
+        String password = "$2a$08$BEGKzsHbIjbdk6i3S5eB.u/wgKPtzIWA45SwmZwRvrpTqmWPdVUu2";
         Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
         
         return new User(username, password, authorities);

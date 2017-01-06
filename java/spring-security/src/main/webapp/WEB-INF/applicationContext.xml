@@ -15,8 +15,11 @@
     </http>
     
     <authentication-manager>
-        <authentication-provider user-service-ref="myUserDetailsService" />
+        <authentication-provider user-service-ref="myUserDetailsService">
+            <password-encoder ref="bcryptEncoder" />
+        </authentication-provider>
     </authentication-manager>
     
     <beans:bean id="myUserDetailsService" class="sample.spring.security.MyUserDetailsService" />
+    <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 </beans:beans>
