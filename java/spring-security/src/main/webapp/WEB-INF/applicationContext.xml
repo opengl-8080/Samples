@@ -10,7 +10,7 @@
     
     <http>
         <intercept-url pattern="/secure/**" access="isAuthenticated()" />
-        <form-login />
+        <form-login login-page="/login.jsp" />
         <logout />
     </http>
     
