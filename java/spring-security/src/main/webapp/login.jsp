@@ -8,13 +8,13 @@
     </head>
     <body>
         <h1>ログイン</h1>
-        <c:url var="loginUrl" value="/my-login" />
+        <c:url var="loginUrl" value="/login" />
         <form action="${loginUrl}" method="post">
             <div>
-                username: <input name="loginId" type="text" />
+                username: <input name="username" type="text" />
             </div>
             <div>
-                password: <input name="pass" type="password" />
+                password: <input name="password" type="password" />
             </div>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <input type="submit" value="login" />

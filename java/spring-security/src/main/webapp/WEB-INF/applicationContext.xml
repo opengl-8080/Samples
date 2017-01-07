@@ -10,12 +10,13 @@
     
     <http>
         <intercept-url pattern="/login.jsp" access="permitAll" />
+        <intercept-url pattern="/login-failure.html" access="permitAll" />
+        <intercept-url pattern="/logout-success.html" access="permitAll" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
         <form-login login-page="/login.jsp"
-                    login-processing-url="/my-login"
-                    username-parameter="loginId"
-                    password-parameter="pass" />
-        <logout />
+                    default-target-url="/login-success.html"
+                    authentication-failure-url="/login-failure.html" />
+        <logout logout-success-url="/logout-success.html" />
     </http>
     
     <authentication-manager>
