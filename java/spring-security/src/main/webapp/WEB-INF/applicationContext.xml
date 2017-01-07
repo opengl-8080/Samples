@@ -11,7 +11,10 @@
     <http>
         <intercept-url pattern="/login.jsp" access="permitAll" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
-        <form-login login-page="/login.jsp" />
+        <form-login login-page="/login.jsp"
+                    login-processing-url="/my-login"
+                    username-parameter="loginId"
+                    password-parameter="pass" />
         <logout />
     </http>
     
