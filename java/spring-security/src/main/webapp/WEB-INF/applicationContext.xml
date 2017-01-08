@@ -10,11 +10,10 @@
     
     <http>
         <intercept-url pattern="/login.jsp" access="permitAll" />
+        <intercept-url pattern="/admin.html" access="hasRole('admin')" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
-        <form-login login-page="/login.jsp"
-                    authentication-success-handler-ref="myLoginSuccessHandler"
-                    authentication-failure-handler-ref="myLoginFailureHandler"/>
-        <logout success-handler-ref="myLogoutHandler" />
+        <form-login login-page="/login.jsp" />
+        <logout />
     </http>
     
     <authentication-manager>
@@ -24,8 +23,5 @@
     </authentication-manager>
     
     <beans:bean id="myUserDetailsService" class="sample.spring.security.MyUserDetailsService" />
-    <beans:bean id="myLoginSuccessHandler" class="sample.spring.security.MyLoginSuccessHandler" />
-    <beans:bean id="myLoginFailureHandler" class="sample.spring.security.MyLoginFailureHandler" />
-    <beans:bean id="myLogoutHandler" class="sample.spring.security.MyLogoutHandler" />
     <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 </beans:beans>
