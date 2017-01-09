@@ -202,4 +202,65 @@ Spring Security が提供する、もっとも共通的に使用される `Acces
 例えば、 Web 記事には、一時停止アカウントのアクセス拒否を行う Voter について記載されています。
 https://spring.io/blog/2009/01/03/spring-security-customization-part-2-adjusting-secured-session-in-real-time
 
+> 24.4 Hierarchical Roles
+> It is a common requirement that a particular role in an application should automatically "include" other roles.
+アプリケーションにおける特定のロールが他のロールを自動的に含むというのは、共通する要件です。
+
+> For example, in an application which has the concept of an "admin" and a "user" role, you may want an admin to be able to do everything a normal user can.
+例えば、管理者とユーザーというロールを持つアプリケーションでは、管理者は一般ユーザーができることをすべてできるようにしたいと考えるでしょう。
+
+> To achieve this, you can either make sure that all admin users are also assigned the "user" role.
+このためには、全ての管理者ユーザーに、ユーザーロールもまたアサインすることになります。
+
+> Alternatively, you can modify every access constraint which requires the "user" role to also include the "admin" role.
+？？？
+
+> This can get quite complicated if you have a lot of different roles in your application.
+このことは、アプリケーションに複数の役割がある場合に複雑になります。
+
+> The use of a role-hierarchy allows you to configure which roles (or authorities) should include others.
+ロール階層化を使うと、ロール（もしくは権限）を他のものに含ませることができるようになります。
+
+> An extended version of Spring Security’s RoleVoter, RoleHierarchyVoter, is configured with a RoleHierarchy, from which it obtains all the "reachable authorities" which the user is assigned.
+Spring Security の `RoleVoter` を継承した `RoleHierarchyVoter` は RoleHierarchy で構成されている。
+それはユーザーがアサインした到達可能なすべての権限を含む。
+
+> A typical configuration might look like this:
+一般的な設定は次のようになる。
+
+```xml
+<bean id="roleVoter" class="org.springframework.security.access.vote.RoleHierarchyVoter">
+    <constructor-arg ref="roleHierarchy" />
+</bean>
+<bean id="roleHierarchy"
+        class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+    <property name="hierarchy">
+        <value>
+            ROLE_ADMIN > ROLE_STAFF
+            ROLE_STAFF > ROLE_USER
+            ROLE_USER > ROLE_GUEST
+        </value>
+    </property>
+</bean>
+```
+
+> Here we have four roles in a hierarchy ROLE_ADMIN ⇒ ROLE_STAFF ⇒ ROLE_USER ⇒ ROLE_GUEST.
+４つのロールによる階層があります。
+ROLE_ADMIN > ROLE_STAFF > ROLE_USER > ROLE_GUEST
+
+> A user who is authenticated with ROLE_ADMIN, will behave as if they have all four roles when security constraints are evaluated against an AccessDecisionManager cconfigured with the above RoleHierarchyVoter.
+ROLE_ADMIN によって認証されたユーザーは、全てのロールを持つものとして処理される。
+
+> The > symbol can be thought of as meaning "includes".
+`>` シンボルは、「含む」の意味を表している。
+ROLE_ADMIN は ROLE_STAFF を含む。
+
+> Role hierarchies offer a convenient means of simplifying the access-control configuration data for your application and/or reducing the number of authorities which you need to assign to a user.
+ロール階層は、あなたのアプリケーションに単純にアクセス制御を設定する便利な手段を提供します。
+そして、もしくは、ユーザーに設定しなければならない権限の数を減らします。
+
+> For more complex requirements you may wish to define a logical mapping between the specific access-rights your application requires and the roles that are assigned to users, translating between the two when loading the user information.
+より複雑で、特定のアクセス権に関する論理的なマッピングを定義したい場合は、あなたのアプリケーションはユーザーに適用するロール（ユーザー情報をロードするときに２つを変換する）を必要とする。
+
+ユーザーに割り当てられた権限を、事前にマッピング定義された他の権限に割り当てなおすようなことで、より複雑な権限の制御が可能になる。みたいな話。
 
