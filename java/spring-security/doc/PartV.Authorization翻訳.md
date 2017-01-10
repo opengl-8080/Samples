@@ -264,3 +264,266 @@ ROLE_ADMIN は ROLE_STAFF を含む。
 
 ユーザーに割り当てられた権限を、事前にマッピング定義された他の権限に割り当てなおすようなことで、より複雑な権限の制御が可能になる。みたいな話。
 
+> 26. Expression-Based Access Control
+
+アクセスコントロールを単一の boolean 式で表すことができる。
+Spring EL を利用している。
+
+ルートオブジェクトとして、 `SecurityExpressionRoot` が使用される。
+
+hasPermission(Object target, Object permission) で、特定のオブジェクトへのアクセス権限を判定できる？
+
+> 26.2 Web Security Expressions
+> To use expressions to secure individual URLs, you would first need to set the use-expressions attribute in the <http> element to true.
+個々の URL をセキュアにするために式を使用する。
+<http> 要素のuse-expressions 属性に true を設定する必要がある。
+
+> Spring Security will then expect the access attributes of the <intercept-url> elements to contain Spring EL expressions.
+Spring Security は <intercept-url> 要素の access 属性に Spring EL 式を求める。
+
+> The expressions should evaluate to a Boolean, defining whether access should be allowed or not. For example:
+式は boolean として評価されなければならない。
+アクセスが許可されるか否かを定義する。
+
+> Here we have defined that the "admin" area of an application (defined by the URL pattern) should only be available to users who have the granted authority "admin" and whose IP address matches a local subnet.
+ここに、アプリケーションの admin 領域（URLパターンで定義）を定義します。
+この領域は、 admin 権限を付与された、ローカルサブネットのユーザーのみがアクセスできるようにします。
+
+> We’ve already seen the built-in hasRole expression in the previous section. The expression hasIpAddress is an additional built-in expression which is specific to web security.
+すでに hasRole 式は以前のセクションで見ています。
+hasIpAddress 式は、組み込みの式で、 Web セキュリティを指定するために追加されています。
+
+> It is defined by the WebSecurityExpressionRoot class, an instance of which is used as the expression root object when evaluation web-access expressions.
+それは、 WebSecurityExpressionRoot クラスに定義されています。
+このクラスのインスタンスは、式のルートオブジェクトとして使用されます。
+web アクセス式を評価するときに。
+
+> This object also directly exposed the HttpServletRequest object under the name request so you can invoke the request directly in an expression.
+このオブジェクトは、 "request" という名前で直接 HttpServletRequest を直接露出しています。
+そのため、あなたはリクエストオブジェクトに直接アクセスできます。
+
+> If expressions are being used, a WebExpressionVoter will be added to the AccessDecisionManager which is used by the namespace.
+式が使用されると、 WebExpressionVoter が AccessDecisionManager に追加され、名前空間として使用されます。？？？
+
+> So if you aren’t using the namespace and want to use expressions, you will have to add one of these to your configuration.
+そのためもしあなたが名前空間を使用していない場合で、式を使いたい場合は、設定に追加しなければなりません。
+
+> 26.2.1 Referring to Beans in Web Security Expressions
+> If you wish to extend the expressions that are available, you can easily refer to any Spring Bean you expose.
+式を拡張したい場合は、簡単に Spring Bean を参照に追加することができます。
+
+> For example, assuming you have a Bean with the name of webSecurity that contains the following method signature:
+たとえば、 "webSecurity" という名前の Bean が次のようなメソッドを持つ場合、
+
+```java
+public class WebSecurity {
+        public boolean check(Authentication authentication, HttpServletRequest request) {
+                ...
+        }
+}
+```
+
+> You could refer to the method using:
+メソッドを次のように参照できる
+
+```xml
+<http>
+    <intercept-url pattern="/user/**"
+        access="@webSecurity.check(authentication,request)"/>
+    ...
+</http>
+```
+
+要は `@ビーン名` で Spring Bean を参照できる。
+
+> 26.2.2 Path Variables in Web Security Expressions
+> At times it is nice to be able to refer to path variables within a URL.
+URL のパス変数を参照するためのナイスな方法がある。
+
+> For example, consider a RESTful application that looks up a user by id from the URL path in the format /user/{userId}.
+例えば、 RESTful アプリケーションについて考えてください。
+URL パスからユーザーの id を取得するようなフォーマットです。
+
+/user/{userId}
+
+```xml
+<http>
+    <intercept-url pattern="/user/{userId}/**"
+        access="@webSecurity.checkUserId(authentication,#userId)"/>
+    ...
+</http>
+```
+
+> 26.3 Method Security Expressions
+> Method security is a bit more complicated than a simple allow or deny rule.
+メソッドセキュリティはすこし複雑です。
+単純な許可・不許可のルールと比較すると。
+
+> Spring Security 3.0 introduced some new annotations in order to allow comprehensive support for the use of expressions.
+Spring Security 3.0 が式を使用するための包括的なサポートを許可する手段としていくつかの新しいアノテーションを導入した。
+
+> 26.3.1 @Pre and @Post Annotations
+> There are four annotations which support expression attributes to allow pre and post-invocation authorization checks and also to support filtering of submitted collection arguments or return values.
+４つのアノテーションは、
+事前と事後の認証チェックと、サブミットされた引数のコレクションや値の戻り値をフィルターするための実行を許可するための式属性をサポートする
+
+> They are @PreAuthorize, @PreFilter, @PostAuthorize and @PostFilter. Their use is enabled through the global-method-security namespace element:
+@PreAuthorize
+@PreFilter
+@PostAuthorize
+@PostFilter
+がある
+
+`<global-method-security>` 要素で有効にできる。
+
+> Access Control using @PreAuthorize and @PostAuthorize
+> The most obviously useful annotation is @PreAuthorize which decides whether a method can actually be invoked or not.
+最も明確で使いやすいアノテーションは `@PreAuthorize` です。
+それは、メソッドを実際に実行するかどうかを決定します。
+
+> For example (from the"Contacts" sample application)
+例
+
+```java
+@PreAuthorize("hasRole('USER')")
+public void create(Contact contact);
+```
+
+> which means that access will only be allowed for users with the role "ROLE_USER".
+この意味は、 "ROLE_USER" ロールを持つユーザーのみがアクセスできる、という意味です。
+
+> Obviously the same thing could easily be achieved using a traditional configuration and a simple configuration attribute for the required role.
+明らかに、同じことが伝統的な設定とシンプルなロールを要求する属性の設定で簡単に行うことができる。
+
+> But what about:
+しかし、これについて、
+
+```java
+@PreAuthorize("hasPermission(#contact, 'admin')")
+public void deletePermission(Contact contact, Sid recipient, Permission permission);
+```
+
+> Here we’re actually using a method argument as part of the expression to decide whether the current user has the "admin"permission for the given contact.
+これは、私たちは実際にメソッドの引数を式の一部として使用でき、現在のユーザーが admin 認可を与えられた contact に対して持っているか検証することができる。
+
+> The built-in hasPermission() expression is linked into the Spring Security ACL module through the application context, as we’llsee below.
+組み込みの hasPermission() 式は、 Spring Security の ACL モジュールとアプリケーション古典期ストを通じてリンクしており、以下のように見ることができる。
+
+> You can access any of the method arguments by name as expression variables.
+あなたは式の変数として任意の引数を名前で参照することができる。
+
+> There are a number of ways in which Spring Security can resolve the method arguments.
+Spring Security がメソッド引数を解決する方法はいくつかある。
+
+> Spring Security uses DefaultSecurityParameterNameDiscoverer to discover the parameter names.
+Spring Security は、 `DefaultSecurityParameterNameDiscoverer` をパラメータ名を見つけるために使用する。
+
+> By default, the following options are tried for a method as a whole.
+デフォルトでは、以下のオプションがメソッド全体に対して試される。
+
+> If Spring Security’s @P annotation is present on a single argument to the method, the value will be used.
+もし Spring Security の `@P` アノテーションがメソッドの単一の引数に対して適用されている場合は、値が使用できます。
+
+> This is useful for interfaces compiled with a JDK prior to JDK 8 which do not contain any information about the parameter names. For example:
+これは、 JDK8 以上でコンパイルされたインターフェースに対して便利です。
+パラメータ名につちえの情報を含んでいない
+たとえば、
+
+```java
+import org.springframework.security.access.method.P;
+
+...
+
+@PreAuthorize("#c.name == authentication.name")
+public void doSomething(@P("c") Contact contact);
+```
+
+> Behind the scenes this use implemented using AnnotationParameterNameDiscoverer which can be customized to support the value attribute of any specified annotation.
+この背後では、 `AnnotationParameterNameDiscoverer` が使用されている。
+このクラスは指定されたアノテーションの value 属性をサポートするように拡張できる。
+
+> If Spring Data’s @Param annotation is present on at least one parameter for the method, the value will be used.
+Spring Data の `@Param` アノテーションが少なくとも１つのメソッドパラメータに指定されている場合、値を使用できます。
+
+> This is useful for interfaces compiled with a JDK prior to JDK 8 which do not contain any information about the parameter names. For example:
+
+> If JDK 8 was used to compile the source with the -parameters argument and Spring 4+ is being used, then the standard JDK reflection API is used to discover the parameter names.
+もし JDK8 で `-parameters` 引数とともにソースのコンパイルに使用されている場合で、 Spring 4 以上を使用している場合、一般の JDK のリフレクション API はパラメータ名を発見することができる。
+
+> This works on both classes and interfaces.
+この機能は、クラスとインターフェース両方で使える。
+
+> Last, if the code was compiled with the debug symbols, the parameter names will be discovered using the debug symbols.
+最後に、もしコードがデバッグ記号とともにコンパイルされている場合、パラメータ名はデバッグシンボルを使用して発見される。
+
+> This will not work for interfaces since they do not have debug information about the parameter names.
+これは、インターフェースでは機能しない。
+なぜなら、それらはパラメータ名についてのデバッグ情報を保持していないため。
+
+> For interfaces, annotations or the JDK 8 approach must be used.
+インターフェースには、アノテーションか JDK8 によるアプローチが必要になる。
+
+> Any Spring-EL functionality is available within the expression, so you can also access properties on the arguments.
+いくつかの Spring EL 機能は、式の中で使用できる。
+よって、あなたは引数のプロパティにアクセスすることもできる。
+
+> For example, if you wanted a particular method to only allow access to a user whose username matched that of the contact, you could write
+たとえば、特定のメソッドを contact のユーザー名と一致するユーザーにだけアクセスをゆるようにしたい場合、以下のよう書ける。
+
+```java
+@PreAuthorize("#contact.name == authentication.name")
+public void doSomething(Contact contact);
+```
+
+> Here we are accessing another built-in expression, authentication, which is the Authentication stored in the security context.
+ここで、セキュリティコンテキストに保存された `Authentication` オブジェクトや他の組み込み式にアクセスしている。
+
+> You can also access its "principal" property directly, using the expression principal.
+`principal` にも直接アクセスできる。
+
+> The value will often be a UserDetails instance, so you might use an expression like principal.username or principal.enabled.
+値が `UserDetails` インスタンスになることが多いので、 `principal.username` や `principal.enabled` というふうにアクセスすることもできる。
+
+> Less commonly, you may wish to perform an access-control check after the method has been invoked.
+あまり一般的ではないが、アクセスコントロールのチェックをメソッドの実行後にしたいこともある。
+
+> This can be achieved using the @PostAuthorize annotation.
+これは、 `@PostAuthorize` アノテーションで実現できる。
+
+> To access the return value from a method, use the built-in name returnObject in the expression.
+return された値は、 `returnObject` という名前で式の中で参照することができる。
+
+> Filtering using @PreFilter and @PostFilter
+> As you may already be aware, Spring Security supports filtering of collections and arrays and this can now be achieved using expressions.
+すでにご存じのように、 Spring Security はコレクションと配列のフィルターをサポートしていて、式で使用できる。
+
+> This is most commonly performed on the return value of a method. For example:
+これは、もっとも一般的に、戻り値の値でも使用できる。
+
+```java
+@PreAuthorize("hasRole('USER')")
+@PostFilter("hasPermission(filterObject, 'read') or hasPermission(filterObject, 'admin')")
+public List<Contact> getAll();
+```
+
+> When using the @PostFilter annotation, Spring Security iterates through the returned collection and removes any elements for which the supplied expression is false.
+`@PostFilter` アノテーションを使用するとき、 Spring Security は返却されたコレクションを反復し、式が false になった要素を削除します。
+
+> The name filterObject refers to the current object in the collection.
+`filterObject` という名前は現在のコレクションのオブジェクトを参照する。
+
+> You can also filter before the method call, using @PreFilter, though this is a less common requirement. 
+メソッドの呼び出し前でもフィルターすることができます。
+`@PreFilter` を使うことで。
+しかし、あまり一般的ではない。
+
+> The syntax is just the same, but if there is more than one argument which is a collection type then you have to select one by name using the filterTarget property of this annotation.
+シンタックスは同じです。
+しかし、コレクション型の引数が２つ以上ある場合、 `filterTarget` 属性で引数の名前を指定する必要がある。
+
+> Note that filtering is obviously not a substitute for tuning your data retrieval queries.
+注意として、フィルタリングは明らかにデータ取得クエリのチューニングに使用するためのものではありません。
+
+> If you are filtering large collections and removing many of the entries then this is likely to be inefficient.
+もし巨大なコレクションをフィルタ氏、多くのエントリを削除する場合、非効率である可能性があります。
+
