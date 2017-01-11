@@ -527,3 +527,179 @@ public List<Contact> getAll();
 > If you are filtering large collections and removing many of the entries then this is likely to be inefficient.
 もし巨大なコレクションをフィルタ氏、多くのエントリを削除する場合、非効率である可能性があります。
 
+> The PermissionEvaluator interface
+`hasPermission()` は、 `PermissionEvaluator` インターフェースを実装して作成する。
+
+次のメソッドを定義する。
+
+```java
+boolean hasPermission(Authentication authentication, Object targetDomainObject,
+                            Object permission);
+
+boolean hasPermission(Authentication authentication, Serializable targetId,
+                            String targetType, Object permission);
+```
+
+更新対象となるドメインオブジェクトに対して、現在アクセスしているユーザーがパーミッションを持つ場合、 true を返すように実装する。
+
+前者はドメインオブジェクトがロードされている場合に使用する。
+後者はドメインオブジェクト自体はまだロードされていないが、検索のためのキーが分かっている場合に使用する。
+
+`hasPermission()` 式を使用する場合は、 `PermissionEvaluator` を実装した Bean を定義して、式を評価するハンドラーに設定する必要がある。
+
+デフォルト実装？として `AclPermissionEvaluator` というのがあるらしい。
+
+詳細はサンプル実装の "Contacts" を参照。
+
+> Method Security Meta Annotations
+同じ設定のアノテーションを何度も使うのはメンテナンス性が落ちるので、メタアノテーションを定義して使いまわすことができる。
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@PreAuthorize("#contact.name == authentication.name")
+public @interface ContactPermission {}
+```
+
+> Part VI. Additional Topics
+> 27. Domain Object Security (ACLs)
+> 27.1 Overview
+複雑なアプリケーションでは、 URL やメソッドレベルでのアクセスコントロールでは足りない。
+ドメインオブジェクトごとに、アクセス可能かコントロールできなければならないことが多い。
+
+例えばあるペットショップのアプリを作ることを考える。
+アプリには２種類のユーザーがいて、スタッフと客に分かれる。
+
+スタッフは全てのデータにアクセスできるが、客は自分のデータにしかアクセスできない。
+（場合によっては、他の客に対して閲覧を許可できるようにする必要があるかもしれない）
+
+- 実現しないといけないこと
+    - スタッフは全ての顧客レコードを参照できる
+    - 顧客は自分のレコードしか見れない
+    - ただし、他の顧客に参照の許可を与えることができる
+
+３つのアプローチが考えられる。
+
+1. ビジネスロジック内に、認可のロジックを書く
+現在のユーザーについては ThreadLocal から Authentication オブジェクトを取得できる。
+
+## 問題点
+- ビジネスロジックと認可のロジックが密結合になり、テストがしづらくなる
+- 認可処理の使いまわしが難しくなる
+
+2. ある顧客レコードにアクセス可能であることを GrantedAuthority で表現し、 AccessDecisionVoter で判断させる
+現在のユーザーには、アクセス可能な顧客を示す GrantedAuthority が全て設定されていることになる。
+
+## 問題点
+- アクセス可能な顧客が何千にも上る場合、メモリ消費がバカにならない
+- GrantedAuthority インスタンスの生成だけでも、 CPU 資源の無駄遣いになる
+
+3. AccessDecisionVoter を実装し、直接 Customer にアクセスして判断する
+AccessDecisionVoter が DAO を使って Customer を検索し、参照を許可しているユーザーの一覧を取得し、現在のユーザーがアクセス可能かどうかを判定する。
+
+## 問題点
+- AccessDecisionVoter とビジネスロジックとで、同じ Customer が二度、同じ DAO 経由でロードされる
+- １回の処理で、毎回２度同じ検索が走るのは明らかに非効率
+
+## 全体通しても問題点
+- どのアプローチでも、 ACL の保存やロジックをゼロから構築しないといけない点で微妙
+
+> Write your business methods to enforce the security.
+セキュリティを強化するビジネスロジックを書きます。
+
+> You could consult a collection within the Customer domain object instance to determine which users have access.
+顧客のドメインオブジェクトインスタンスのコレクションを見て、ユーザーのアクセスを決定することができます。
+
+> By using the SecurityContextHolder.getContext().getAuthentication(), you’ll be able to access the Authentication object.
+`SecurityContextHolder.getContext().getAuthentication()` を使うことで、 `Authentication` オブジェクトにアクセスすることができます。
+
+> Write an AccessDecisionVoter to enforce the security from the GrantedAuthority[] s stored in the Authentication object.
+`AccessDecisionVoter` を作成し、`Authentication` オブジェクトに保存された `GrantedAuthority[]` 達のセキュリティを強化します。
+
+> This would mean your AuthenticationManager would need to populate the Authentication with custom GrantedAuthority[]s representing each of the Customer domain object instances the principal has access to.
+これは、AuthenticationManagerが、プリンシパルがアクセスできる各Customerドメインオブジェクトインスタンスを表すカスタムGrantedAuthority []で認証を設定する必要があることを意味します。
+
+> Write an AccessDecisionVoter to enforce the security and open the target Customer domain object directly.
+`AccessDecisionVoter` を書きセキュリティを強化し、対象となる顧客ドメインオブジェクトを直接触るための道を開きます。
+
+> This would mean your voter needs access to a DAO that allows it to retrieve the Customer object.
+このことは、 voter が DAO にアクセスしなければならないことを意味します。
+顧客オブジェクトを検索するために。
+
+> It would then access the Customer object’s collection of approved users and make the appropriate decision.
+その後、Customerオブジェクトの承認済みユーザーのコレクションにアクセスし、適切な決定を行います。
+
+> Each one of these approaches is perfectly legitimate.
+これらのアプローチは、どれも完全に正しいです。
+
+> However, the first couples your authorization checking to your business code.
+しかし、最初のアプローチは、認証とビジネスロジックのコードが密に結合されます。
+
+> The main problems with this include the enhanced difficulty of unit testing and the fact it would be more difficult to reuse the Customer authorization logic elsewhere.
+これは、ユニットテストを難しくするという問題をはらんでいます。
+そして、実際に、顧客の認証ロジックを別の場所で再利用するのが困難になります。
+
+> Obtaining the GrantedAuthority[] s from the Authentication object is also fine, but will not scale to large numbers of Customers.
+`Authentication` オブジェクトから `GrantedAuthority[]` を取得する方法も同じく正しい。
+しかし、顧客の数が増えたときにスケールしない。
+
+> If a user might be able to access 5,000 Customer s (unlikely in this case, but imagine if it were a popular vet for a large Pony Club!) the amount of memory consumed and time required to construct the Authentication object would be undesirable.
+もしユーザーが 5000 人の顧客にアクセスすることができたとすると、非常に多くのメモリが消費され、 `Authentication` オブジェクトの生成に時間が必要となる。
+
+> The final method, opening the Customer directly from external code, is probably the best of the three.
+最後のアプローチ（外部のコードから直接顧客を見れるようにする）は、３つの中ではおそらく最も良い。
+
+> It achieves separation of concerns, and doesn’t misuse memory or CPU cycles, but it is still inefficient in that both the AccessDecisionVoter and the eventual business method itself will perform a call to the DAO responsible for retrieving the Customer object.
+この方法はビジネスロジックと認可の関係を分離している。
+メモリや CPU サイクルを無駄に使用しない。
+しかし、まだ非効率だ。
+AccessDecisionVoterと最終的なビジネスメソッド自体がCustomerオブジェクトの取得を担当するDAOを呼び出すという点ではまだ効率的ではありません。
+
+> Two accesses per method invocation is clearly undesirable.
+メソッドごとに２つのアクセスがあるというのは、明らかに望ましくない。
+
+> In addition, with every approach listed you’ll need to write your own access control list (ACL) persistence and business logic from scratch.
+加えて、全てのアプローチはあなた自身に ACL の永続化手段とビジネスロジックをスクラッチで書くことを必要とさせる。
+
+
+> Fortunately, there is another alternative, which we’ll talk about below.
+幸運なことに、他の代替手段があります。
+以下でそれについて説明します。
+
+> 27.2 Key Concepts
+> Spring Security’s ACL services are shipped in the spring-security-acl-xxx.jar.
+Spring Security の ACL 機能は、 spring-security-acl-xxx.jar によって提供されます。
+
+> You will need to add this JAR to your classpath to use Spring Security’s domain object instance security capabilities.
+この jar をクラスパスに追加することで、ドメインオブジェクトインスタンスでセキュリティ機能を使うことができるようになります。
+
+> Spring Security’s domain object instance security capabilities centre on the concept of an access control list (ACL).
+Spring Security のドメインオブジェクトインスタンスセキュリティ機能は、 ACL のコンセプトのに基づいています。
+
+> Every domain object instance in your system has its own ACL, and the ACL records details of who can and can’t work with that domain object.
+全てのドメインオブジェクトインスタンスは、それ自身の ACL を持ちます。
+そして、 ACL は誰がドメインオブジェクトを処理できて、誰が処理できないかについて詳細を記録しています。
+
+> With this in mind, Spring Security delivers three main ACL-related capabilities to your application:
+この考えに基づき、 Spring Security は３つの主な ACL に関係した機能をあなたのアプリケーションに提供します。
+
+> A way of efficiently retrieving ACL entries for all of your domain objects (and modifying those ACLs)
+すべてのドメインオブジェクトの ACL を効率的にアクセスし、変更する手段を提供します。
+
+> A way of ensuring a given principal is permitted to work with your objects, before methods are called
+指定されたプリンシパルがメソッドを呼び出す前にオブジェクトで作業することを許可する方法
+
+> A way of ensuring a given principal is permitted to work with your objects (or something they return), after methods are called
+特定のプリンシパルを確実にする方法は、メソッドが呼び出された後でオブジェクト（またはそれらが返すもの）を処理することが許可されています
+
+> As indicated by the first bullet point, one of the main capabilities of the Spring Security ACL module is providing a high-performance way of retrieving ACLs.
+最初の箇条書きで示されているように、Spring Security ACLモジュールの主な機能の1つは、ACLを検索する高性能な方法を提供することです。
+
+> This ACL repository capability is extremely important, because every domain object instance in your system might have several access control entries, and each ACL might inherit from other ACLs in a tree-like structure (this is supported out-of-the-box by Spring Security, and is very commonly used).
+この ACL リポジトリ機能は、非常に重要です。
+なぜなら、全てのドメインオブジェクトインスタンスは、個々のアクセス制御エントリを持ち、それぞれの ACL は他の ACL を継承するツリーのような構造を持つからです。
+これは、 out-of-the-box でサポートされ、非常に一般的に利用されています。
+
+> Spring Security’s ACL capability has been carefully designed to provide high performance retrieval of ACLs, together with pluggable caching, deadlock-minimizing database updates, independence from ORM frameworks (we use JDBC directly), proper encapsulation, and transparent database updating.
+Spring Security の ACL 機能は、慎重に設計されています。
+ACL の取得をハイ・パフォーマンスに行えるように。
+プラグイン可能なキャッシュ化、データベース更新のデッドロックの最小化、 ORM への非依存（私たちは JDBC を直接使用している）、正当なカプセル化、そして等価的なデータベース更新も考慮して設計している。
