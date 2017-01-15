@@ -240,3 +240,296 @@ GrantedAuthority オブジェクトは普通 UserDetailsService によってロ�
 そのような目的には、ドメインオブジェクトセキュリティの機能を代わりに使用してください。
 
 ### 9.2.4 Summary
+> Just to recap, the major building blocks of Spring Security that we’ve seen so far are:
+要約すると、 Spring Security を構成する主要なブロックは次のようなものです。
+
+- SecurityContextHolder, to provide access to the SecurityContext.
+SecurityContextHolder は、 SecurityContext へのアクセスを提供します。
+
+- SecurityContext, to hold the Authentication and possibly request-specific security information.
+SecurityContext は、 Authentication を保持し、特定のセキュリティ情報への要求を可能とします。
+
+- Authentication, to represent the principal in a Spring Security-specific manner.
+Authentication は、Springセキュリティ固有の方法でプリンシパルを表します。
+
+- GrantedAuthority, to reflect the application-wide permissions granted to a principal.
+GrantedAuthority は、アプリケーション全体を通してプリンシパルに与えられた権限を反映します。
+
+- UserDetails, to provide the necessary information to build an Authentication object from your application’s DAOs or other source of security data.
+UserDetails は、アプリケーションの DAO や他のセキュリティデータソースから、 Authentication を構築するために必要となる情報を提供します。
+
+- UserDetailsService, to create a UserDetails when passed in a String-based username (or certificate ID or the like).
+UserDetailsService は、 String ベースのユーザー名（もしくは証明となる ID やそれに準じる何か）を受け取り UserDetails を生成します。
+
+> Now that you’ve gained an understanding of these repeatedly-used components, let’s take a closer look at the process of authentication.
+これで、あなたたちは繰り返し使われるこれらのコンポーネントについて理解しました。
+次は認証プロセスについてみてみましょう。
+
+## 9.3 Authentication
+> Spring Security can participate in many different authentication environments.
+Spring Security は多くの異なる認証環境で使用できます。
+
+> While we recommend people use Spring Security for authentication and not integrate with existing Container Managed Authentication, it is nevertheless supported - as is integrating with your own proprietary authentication system.
+コンテナ管理の既存の認証と統合するのではなく、 Spring Security を使用することを推奨します。
+独自認証システムとの統合がサポートされていたとしても。
+
+### 9.3.1 What is authentication in Spring Security?
+> Let’s consider a standard authentication scenario that everyone is familiar with.
+基本的な認証のシナリオについて考えてみましょう。
+
+1. A user is prompted to log in with a username and password.
+ユーザー名とパスワードをログインで求められます。
+
+2. The system (successfully) verifies that the password is correct for the username.
+システムは、パスワードとユーザー名が正しいことを検証します。
+
+3. The context information for that user is obtained (their list of roles and so on).
+ユーザーについてのコンテキスト情報（権限のリストやその他）が取得されます。
+
+4. A security context is established for the user
+セキュリティコンテキストがユーザーのために作成されます。
+
+5. The user proceeds, potentially to perform some operation which is potentially protected by an access control mechanism which checks the required permissions for the operation against the current security context information.
+アクセス制御が必要かもしれない処理を行う。
+
+> The first three items constitute the authentication process so we’ll take a look at how these take place within Spring Security.
+最初の３つは、認証のプロセスを構成します。
+そのため、これらが Spring Security でどのように実現されているかについてみていきます。
+
+1. The username and password are obtained and combined into an instance of UsernamePasswordAuthenticationToken (an instance of the Authentication interface, which we saw earlier).
+ユーザー名とパスワードは UsernamePasswordAuthenticationToken にまとめられます。
+(以前紹介した Authentication インターフェースを実装しています)
+
+2. The token is passed to an instance of AuthenticationManager for validation.
+トークンは AuthenticationManager の検証を通ります
+
+3. The AuthenticationManager returns a fully populated Authentication instance on successful authentication.
+AuthenticationManager は認証に成功すると、完全に構成された Authentication インスタンスを返します
+
+4. The security context is established by calling SecurityContextHolder.getContext().setAuthentication(…​), passing in the returned authentication object.
+セキュリティコンテキストは SecurityContextHolder.getContext().setAuthentication(...) を呼び、返された認証オブジェクトを通して構築されます。
+
+> From that point on, the user is considered to be authenticated. Let’s look at some code as an example.
+この時点から、ユーザーは認証されているとみなされます。
+例を見てみましょう。
+
+```java
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+public class AuthenticationExample {
+    private static AuthenticationManager am = new SampleAuthenticationManager();
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+        while(true) {
+            System.out.println("Please enter your username:");
+            String name = in.readLine();
+            System.out.println("Please enter your password:");
+            String password = in.readLine();
+            try {
+                Authentication request = new UsernamePasswordAuthenticationToken(name, password);
+                Authentication result = am.authenticate(request);
+                SecurityContextHolder.getContext().setAuthentication(result);
+                break;
+            } catch(AuthenticationException e) {
+                System.out.println("Authentication failed: " + e.getMessage());
+            }
+        }
+        System.out.println("Successfully authenticated. Security context contains: " +
+                SecurityContextHolder.getContext().getAuthentication());
+    }
+}
+
+class SampleAuthenticationManager implements AuthenticationManager {
+    static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
+
+    static {
+        AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    public Authentication authenticate(Authentication auth) throws AuthenticationException {
+        if (auth.getName().equals(auth.getCredentials())) {
+            return new UsernamePasswordAuthenticationToken(auth.getName(),
+                auth.getCredentials(), AUTHORITIES);
+        }
+        throw new BadCredentialsException("Bad Credentials");
+    }
+}
+```
+
+> Here we have written a little program that asks the user to enter a username and password and performs the above sequence.
+ここで、私たちは小さなプログラムを書きました。
+それはあなたにユーザー名とパスワードの入力を尋ね、上述のシーケンスを実行するものです。
+
+> The AuthenticationManager which we’ve implemented here will authenticate any user whose username and password are the same.
+ここで実装している AuthenticationManager は、ユーザー名とパスワードが一致する任意のユーザーを認証するものです。
+
+> It assigns a single role to every user.
+全てのユーザーに、１つのロールを割り当てます。
+
+> The output from the above will be something like:
+上記の出力は、次のようになります。
+
+```
+Please enter your username:
+bob
+Please enter your password:
+password
+Authentication failed: Bad Credentials
+Please enter your username:
+bob
+Please enter your password:
+bob
+Successfully authenticated. Security context contains: \
+org.springframework.security.authentication.UsernamePasswordAuthenticationToken@441d0230: \
+Principal: bob; Password: [PROTECTED]; \
+Authenticated: true; Details: null; \
+Granted Authorities: ROLE_USER
+```
+
+> Note that you don’t normally need to write any code like this.
+通常は、このようなコードは書かないようにしてください。
+
+> The process will normally occur internally, in a web authentication filter for example.
+普通、これらは内部的に行われます。例えば、 Web 認証のフィルター内部などです。
+
+> We’ve just included the code here to show that the question of what actually constitutes authentication in Spring Security has quite a simple answer.
+私たちがこのコードで示したことは、 Spring Security の内部の認証処理というのが実際どのようなことをしているのかという疑問に対する、シンプルな回答です。
+
+> A user is authenticated when the SecurityContextHolder contains a fully populated Authentication object.
+SecurityContextHolder が完全に構成された Authentication オブジェクトを含んだとき、ユーザーは認証されたものとなります。
+
+### 9.3.2 Setting the SecurityContextHolder Contents Directly
+> In fact, Spring Security doesn’t mind how you put the Authentication object inside the SecurityContextHolder.
+実際、 Spring Security は SecurityContextHolder の内部の Authentication がどのように設定されたかについては気にしません。
+
+> The only critical requirement is that the SecurityContextHolder contains an Authentication which represents a principal before the AbstractSecurityInterceptor (which we’ll see more about later) needs to authorize a user operation.
+唯一の重要な要求は、ユーザーの認証処理をする必要が発生する前までに、 SecurityContextHolder がプリンシパルを表現する Authentication を持つことです。
+
+> You can (and many users do) write their own filters or MVC controllers to provide interoperability with authentication systems that are not based on Spring Security.
+あなたや、そして多くのユーザーは独自のフィルターや MVC コントローラをSpring Security ベースではない認証システムとの相互運用性を提供するために作成することができます。
+
+> For example, you might be using Container-Managed Authentication which makes the current user available from a ThreadLocal or JNDI location.
+例えば、現在のユーザーを ThreadLocal や JNDI に保持しているようなコンテナ管理の認証を使用しているとします。
+
+> Or you might work for a company that has a legacy proprietary authentication system, which is a corporate "standard" over which you have little control.
+もしくは、レガシーで独自の認証システムを持った会社で働き、それが社内標準であなたには少しの決定権しかないような場合です。
+
+> In situations like this it’s quite easy to get Spring Security to work, and still provide authorization capabilities.
+このような状況でも、 Spring Security は簡単に使うことができ、認証機能を提供することができます。
+
+> All you need to do is write a filter (or equivalent) that reads the third-party user information from a location, build a Spring Security-specific Authentication object, and put it into the SecurityContextHolder.
+あなたに必要なことは、サードパーティーのユーザー情報を取得するフィルターを記述し、 Spring Security が指定する Authentication オブジェクトを作り、 SecurityContextHolder に保存することです。
+
+> In this case you also need to think about things which are normally taken care of automatically by the built-in authentication infrastructure.
+この場合、あなたは組み込みの認証基盤によって自動的に処理されることについても考える必要があります。
+
+> For example, you might need to pre-emptively create an HTTP session to cache the context between requests, before you write the response to the client footnote:[It isn’t possible to create a session once the response has been committed.
+たとえば、クライアントの脚注に応答を書き込む前に、事前にHTTPセッションを作成して要求間のコンテキストをキャッシュする必要があります。[応答がコミットされるとセッションを作成することはできません。
+
+> If you’re wondering how the AuthenticationManager is implemented in a real world example, we’ll look at that in the core services chapter.
+もしあなたがどのようにして AuthenticationManager が実際の世界で実装されているのかについて疑問に思ったとしたら、コアのサービスの章で説明します。
+
+## 9.4 Authentication in a Web Application
+> Now let’s explore the situation where you are using Spring Security in a web application (without web.xml security enabled).
+次は Web アプリケーションで Spring Security を使う場合のことについて見ていきましょう。
+（web.xml のセキュリティは除外します）
+
+> How is a user authenticated and the security context established?
+どのようにしてユーザーの認証が行われ、セキュリティコンテキストが構築されるのでしょう？
+
+> Consider a typical web application’s authentication process:
+典型的な Web アプリケーションの認証プロセスについて考えます。
+
+1. You visit the home page, and click on a link.
+リンクをクリックして、ホームページにアクセスします。
+
+2. A request goes to the server, and the server decides that you’ve asked for a protected resource.
+サーバーにリクエストが飛び、サーバーはリソースへのアクセスが保護されるべきか決定します。
+
+3. As you’re not presently authenticated, the server sends back a response indicating that you must authenticate. The response will either be an HTTP response code, or a redirect to a particular web page.
+あなたが認証されていない場合、サーバーは認証されなければならないことを示すレスポンスを返します。
+レスポンスは HTTP ステータスコードか特定の Web ページにリダイレクトするかのいずれかになります。
+
+4. Depending on the authentication mechanism, your browser will either redirect to the specific web page so that you can fill out the form, or the browser will somehow retrieve your identity (via a BASIC authentication dialogue box, a cookie, a X.509 certificate etc.).
+認証メカニズムによって、ブラウザは特定の Web ページにリダイレクトしてフォームを埋めるか、それ以外にあなたの識別の入力を要求してきます
+（BASIC 認証ならダイアログボックスや、 Cookie、 x.599 など）
+
+5. The browser will send back a response to the server. This will either be an HTTP POST containing the contents of the form that you filled out, or an HTTP header containing your authentication details.
+ブラウザはサーバーに返事を返します。これは、あなたが form で入力した情報を持った HTTP POST か、 HTTP ヘッダーに認証情報の詳細を持ちます。
+
+6. Next the server will decide whether or not the presented credentials are valid. If they’re valid, the next step will happen. If they’re invalid, usually your browser will be asked to try again (so you return to step two above).
+次に、サーバーは提供された資格情報が有効かどうかを決定します。
+もし有効なら、次のステップに進みます。
+もし無効なら、通常はブラウザは再入力を促します。
+（そのため、２つ前のステップに戻ります）
+
+7. The original request that you made to cause the authentication process will be retried. Hopefully you’ve authenticated with sufficient granted authorities to access the protected resource. If you have sufficient access, the request will be successful. Otherwise, you’ll receive back an HTTP error code 403, which means "forbidden".
+認証処理の発端となった最初のリクエストが再実行されます。
+うまくいけば、あなたは認証に成功し、リソースにアクセスするための十分な権限を与えられています。
+もしアクセスが可能なら、リクエストは成功します。
+そうでないなら、 403 のエラーコードが返されます。それは「禁止である」ことを意味します。
+
+> Spring Security has distinct classes responsible for most of the steps described above.
+Spring Security には上記ステップのほとんどを実行する責務をもつクラスがあります。
+
+> The main participants (in the order that they are used) are the ExceptionTranslationFilter, an AuthenticationEntryPoint and an "authentication mechanism", which is responsible for calling the AuthenticationManager which we saw in the previous section.
+主な参加者は、呼び出される順番で ExceptionTranslationFilter, AuthenticationEntryPoint, そして前章で紹介した AuthenticationManager を呼び出す認証メカニズムと呼ばれるものです。
+
+### 9.4.1 ExceptionTranslationFilter
+> ExceptionTranslationFilter is a Spring Security filter that has responsibility for detecting any Spring Security exceptions that are thrown.
+ExceptionTranslationFilter は Spring Security のフィルターで、 Spring Security がスローした例外を検出する責務を持ちます。
+
+> Such exceptions will generally be thrown by an AbstractSecurityInterceptor, which is the main provider of authorization services.
+そのような例外は、通常 AbstractSecurityInterceptor によってスローされます。
+これ（AbstractSecurityInterceptor）は、認証サービスのメインとなるプロバイダーです。
+
+> We will discuss AbstractSecurityInterceptor in the next section, but for now we just need to know that it produces Java exceptions and knows nothing about HTTP or how to go about authenticating a principal.
+AbstractSecurityInterceptor については次の節で説明します。
+現在のところ、Java例外を生成し、HTTPやプリンシパルの認証方法については何も知りません。
+
+> Instead the ExceptionTranslationFilter offers this service, with specific responsibility for either returning error code 403 (if the principal has been authenticated and therefore simply lacks sufficient access - as per step seven above), or launching an AuthenticationEntryPoint (if the principal has not been authenticated and therefore we need to go commence step three).
+代わりに ExceptionTranslationFilter はこのサービスを提供します。
+そのサービスとは、 403 のエラーコードを返すか(もし、プリンシパルが認証されており、アクセスのための十分な権限を持たない場合)、もしくは、 AuthenticationEntryPoint を実行するか（もしプリンシパルが認証されていない場合）どうかを特定する責務です。
+
+
+### 9.4.2 AuthenticationEntryPoint
+> The AuthenticationEntryPoint is responsible for step three in the above list.
+AuthenticationEntryPoint は、上記リストの３番目を実行する責務を持ちます。
+
+> As you can imagine, each web application will have a default authentication strategy (well, this can be configured like nearly everything else in Spring Security, but let’s keep it simple for now).
+ご想像の通り、個々の Web アプリケーションはデフォルトの認証戦略を持ちます。
+
+> Each major authentication system will have its own AuthenticationEntryPoint implementation, which typically performs one of the actions described in step 3.
+個々の主要な認証システムは、独自の AuthenticationEntryPoint の実装を持ちます。
+典型的なふるまいは、ステップ３の１つを実行します。
+
+### 9.4.3 Authentication Mechanism
+> Once your browser submits your authentication credentials (either as an HTTP form post or HTTP header) there needs to be something on the server that "collects" these authentication details.
+認証の資格情報をブラウザがサブミットすると、サーバーでは認証の詳細が正しいことを確認する必要があります。
+
+> By now we’re at step six in the above list.
+今、我々は上述のリストの６番目に居ます。
+
+> In Spring Security we have a special name for the function of collecting authentication details from a user agent (usually a web browser), referring to it as the "authentication mechanism".
+Spring Security では、ユーザーエージェント（通常は Web ブラウザ）から認証の詳細を収集する機能に特別な名前を持たせています。
+それを "authentication mechanism" と呼んでいます。
+
+> Examples are form-base login and Basic authentication.
+例には、 form ベースのログインと Basic 認証があります。
+
+> Once the authentication details have been collected from the user agent, an Authentication "request" object is built and then presented to the AuthenticationManager.
+ユーザーエージェントから渡された認証の詳細が正しい場合、 Authentication のリクエストオブジェクトが作成され、 AuthenticationManager に提供されます。
+
+> After the authentication mechanism receives back the fully-populated Authentication object, it will deem the request valid, put the Authentication into the SecurityContextHolder, and cause the original request to be retried (step seven above).
+認証メカニズムが完全に構築された Authentication オブジェクトを返した後で、リクエストが正しいか考えます。
+SecurityContextHolder に Authentication が設定され、元のリクエストが再実行されます。
+
+> If, on the other hand, the AuthenticationManager rejected the request, the authentication mechanism will ask the user agent to retry (step two above).
+もし、一方で、 AuthenticationManager がリクエストを拒否した場合、認証メカニズムはユーザーエージェントに尋ねなおします。
+
+
