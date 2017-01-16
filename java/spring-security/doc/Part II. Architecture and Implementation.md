@@ -532,4 +532,296 @@ SecurityContextHolder に Authentication が設定され、元のリクエスト
 > If, on the other hand, the AuthenticationManager rejected the request, the authentication mechanism will ask the user agent to retry (step two above).
 もし、一方で、 AuthenticationManager がリクエストを拒否した場合、認証メカニズムはユーザーエージェントに尋ねなおします。
 
+### 9.4.4 Storing the SecurityContext between requests
+> Depending on the type of application, there may need to be a strategy in place to store the security context between user operations.
+アプリケーションの種類によっては、ユーザー処理を跨ってセキュリティコンテキストを記録する戦略が必要になるかもしれません。
 
+> In a typical web application, a user logs in once and is subsequently identified by their session Id.
+典型的な Web アプリケーションでは、ユーザーが一度ログインすると、その後はセッションIDによって識別されるようになります。
+
+> The server caches the principal information for the duration session.
+サーバーは、プリンシパルの情報をセッションが維持される間、キャッシュします。
+
+> In Spring Security, the responsibility for storing the SecurityContext between requests falls to the SecurityContextPersistenceFilter, which by default stores the context as an HttpSession attribute between HTTP requests.
+Spring Security では、 SecurityContext をリクエストの間保存しておく役割を SecurityContextPersistenceFilter が担っています。
+デフォルトでは、コンテキストは HttpSession の属性として保存されます。
+
+> It restores the context to the SecurityContextHolder for each request and, crucially, clears the SecurityContextHolder when the request completes.
+リクエストごとに SecurityContextHolder にコンテキストを保存しなおし、リクエストごとに完全に SecurityContextHolder をクリアします。
+
+> You shouldn’t interact directly with the HttpSession for security purposes.
+セキュリティを考慮すると、 HttpSession に直接アクセスすべきではありません。
+
+> There is simply no justification for doing so - always use the SecurityContextHolder instead.
+それを正当化する理由はありません。代わりに、常に SecurityContextHolder を使用してください。
+
+> Many other types of application (for example, a stateless RESTful web service) do not use HTTP sessions and will re-authenticate on every request.
+多くの他のアプリケーション（例えば、ステートレスな RESTful Web サービス）は、 Http セッションを使わず、リクエストのたびに認証を繰り返します。
+
+> However, it is still important that the SecurityContextPersistenceFilter is included in the chain to make sure that the SecurityContextHolder is cleared after each request.
+しかしながら、それでも SecurityContextPersistenceFilter は依然重要で、リクエストの後に毎回 SecurityContextHolder を作成します。
+
+> In an application which receives concurrent requests in a single session, the same SecurityContext instance will be shared between threads.
+単一のセッションで同時にリクエストを受け取るようなアプリケーションの場合、同じ SecurityContext インスタンスがスレッド間で共有されます。
+
+> Even though a ThreadLocal is being used, it is the same instance that is retrieved from the HttpSession for each thread.
+ThreadLocal が使用されていたとしても、それぞれのスレッドで HttpSession から取得したインスタンスは同じになります。
+
+> This has implications if you wish to temporarily change the context under which a thread is running.
+これは、もし必要であればスレッド上からコンテキストを変更できるということを意味しています。
+
+> If you just use SecurityContextHolder.getContext(), and call setAuthentication(anAuthentication) on the returned context object, then the Authentication object will change in all concurrent threads which share the same SecurityContext instance.
+もし、 SecurityContextHolder.getContext() を使用し、 setAuthentication(anAuthentication) を実行した場合、 Authentication オブジェクトは SecurityContext インスタンスを共有している同時実行されている全てのスレッドで変更されます。
+
+> You can customize the behaviour of SecurityContextPersistenceFilter to create a completely new SecurityContext for each request, preventing changes in one thread from affecting another.
+あるスレッドでの変更が他のスレッドに影響を与えないように、それぞれのリクエストごとに新しい SecurityContext を作成するよう SecurityContextPersistenceFilter のふるまいをカスタマイズすることが可能です。
+
+> Alternatively you can create a new instance just at the point where you temporarily change the context.
+他の手段として、コンテキストが一時的に変更されるポイントで新しいインスタンスを生成することができます。
+
+> The method SecurityContextHolder.createEmptyContext() always returns a new context instance.
+SecurityContextHolder.createEmptyContext() メソッドは、常に新しいコンテキストインスタンスを返します。
+
+## 9.5 Access-Control (Authorization) in Spring Security
+> The main interface responsible for making access-control decisions in Spring Security is the AccessDecisionManager.
+Spring Security でアクセス制御を行う責務を持つ主要なインターフェースは、 AccessDecisionManager です。
+
+> It has a decide method which takes an Authentication object representing the principal requesting access, a "secure object" (see below) and a list of security metadata attributes which apply for the object (such as a list of roles which are required for access to be granted).
+これは、 Authentication オブジェクトを受け取り、その Authentication が表すプリンシパルに対してリクエストへのアクセスを決定するメソッドを持ちます。
+セキュリティオブジェクトとセキュリティメタデータ属性のリクエストをオブジェクト（アクセスに必要なロールのリスト）に対して適用します。
+
+### 9.5.1 Security and AOP Advice
+> If you’re familiar with AOP, you’d be aware there are different types of advice available: before, after, throws and around.
+もし AOP を知っているなら、利用可能なアドバイスは before, after, throws, そして around であることに気付くでしょう。
+
+> An around advice is very useful, because an advisor can elect whether or not to proceed with a method invocation, whether or not to modify the response, and whether or not to throw an exception.
+around アドバイスはとても便利です。
+なぜなら、アドバイザーはメソッドの実行を続けるかどうか、レスポンスを書き換えるかどうか、そして例外をスローするかどうかを選択できるからです。
+
+> Spring Security provides an around advice for method invocations as well as web requests.
+Spring Security は、 web リクエストに around アドバイスをメソッド実行に提供しています。
+
+> We achieve an around advice for method invocations using Spring’s standard AOP support and we achieve an around advice for web requests using a standard Filter.
+Spring 標準の AOP でメソッドに対して around アドバイスを適用しています。
+そして、標準の Filter を使用して Web リクエストに対して around アドバイスを実現しています。
+
+> For those not familiar with AOP, the key point to understand is that Spring Security can help you protect method invocations as well as web requests.
+AOP を知らない場合、理解のためのキーポイントは、 Spring Security は Web リクエストと同様にメソッド実行を守ることができるということです。
+
+> Most people are interested in securing method invocations on their services layer.
+ほとんどの人は、サービスレイヤでのメソッド実行のセキュリティについて興味があります。
+
+> This is because the services layer is where most business logic resides in current-generation Java EE applications.
+なぜなら、サービスレイヤは、現代の Java EE アプリケーションで最もビジネスロジックを含んでいるからです。
+
+> If you just need to secure method invocations in the services layer, Spring’s standard AOP will be adequate.
+もしサービスレイヤでセキュアなメソッド実行が必要であれば、 Spring の標準 AOP が適切です。
+
+> If you need to secure domain objects directly, you will likely find that AspectJ is worth considering.
+ドメインオブジェクトに直接セキュリティを必要とする場合は、 AspectJ を検討する価値はあるでしょう。
+
+> You can elect to perform method authorization using AspectJ or Spring AOP, or you can elect to perform web request authorization using filters.
+AspectJ か Spring AOP のどちらをメソッド認証に使用するか、また Web リクエストの認証にフィルターを使うかどうかは選択できます。
+
+> You can use zero, one, two or three of these approaches together.
+これらのアプローチをまったく使わないか、もしくは２つ、３つと組み合わせることも可能です。
+
+> The mainstream usage pattern is to perform some web request authorization, coupled with some Spring AOP method invocation authorization on the services layer.
+主流なのは、 Web リクエスト認証とサービスレイヤに Spring AOP を適用する組み合わせです。
+
+### 9.5.2 Secure Objects and the AbstractSecurityInterceptor
+> So what is a "secure object" anyway? Spring Security uses the term to refer to any object that can have security (such as an authorization decision) applied to it.
+ところで、セキュアオブジェクトは何を指しているのでしょう？
+Spring Security は、セキュリティを適用するあらゆるオブジェクトを言及するのにこの用語を使用しています。
+たとえば、認証の決定などです。
+
+> The most common examples are method invocations and web requests.
+最も一般的な例は、メソッド実行と、 Web のリクエストです。
+
+> Each supported secure object type has its own interceptor class, which is a subclass of AbstractSecurityInterceptor.
+それぞれのサポートされたセキュアオブジェクト型は、それ自身のインターセプタクラスを持ちます。
+それは、 AbstractSecurityInterceptor のサブクラスになります。
+
+> Importantly, by the time the AbstractSecurityInterceptor is called, the SecurityContextHolder will contain a valid Authentication if the principal has been authenticated.
+重要なことは、 AbstractSecurityInterceptor が呼び出されるときには、プリンシパルが認証済みであれば SecurityContextHolder に有効な Authentication が格納されるということです。
+
+> AbstractSecurityInterceptor provides a consistent workflow for handling secure object requests, typically:
+AbstractSecurityInterceptor は、一貫性のあるセキュアオブジェクトのリクエストをハンドリングするワークフローを提供します。
+典型的な例は、
+
+1. Look up the "configuration attributes" associated with the present request
+現在のリクエストに関連付けられた "設定属性" を見つける。
+
+2. Submitting the secure object, current Authentication and configuration attributes to the AccessDecisionManager for an authorization decision
+セキュアオブジェクトを、現在の Authentication と設定属性を認証決定のために AccessDecisionManager に提供する。
+
+3. Optionally change the Authentication under which the invocation takes place
+実行される場所に合わせて任意に Authentication を変更する
+
+4. Allow the secure object invocation to proceed (assuming access was granted)
+セキュアオブジェジェクトの実行を許可する（アクセスが付与されていると判断できる場合は）
+
+5. Call the AfterInvocationManager if configured, once the invocation has returned. If the invocation raised an exception, the AfterInvocationManager will not be invoked.
+AfterInvocationManagerが設定されている場合は、呼び出しが返された後にAfterInvocationManagerを呼び出します。
+呼び出しによって例外が発生した場合、AfterInvocationManagerは呼び出されません。
+
+#### What are Configuration Attributes?
+> A "configuration attribute" can be thought of as a String that has special meaning to the classes used by AbstractSecurityInterceptor.
+"設定属性" は、 AbstractSecurityInterceptor で使用されるクラスを意味する特別な文字列と考えることができます。
+
+> They are represented by the interface ConfigAttribute within the framework.
+それらはフレームワークに含まれる ConfigAttribute インターフェースを実装したものです。
+
+> They may be simple role names or have more complex meaning, depending on the how sophisticated the AccessDecisionManager implementation is.
+それらは単純なロール名やより複雑な意味を持ちます。
+どちらになるかは、 AccessDecisionManager の実装がどの程度洗練されているかに依存します。
+
+> The AbstractSecurityInterceptor is configured with a SecurityMetadataSource which it uses to look up the attributes for a secure object.
+AbstractSecurityInterceptor は、セキュアオブジェクトの属性を見つけるために使用される SecurityMetadataSource によって構成されます。
+
+> Usually this configuration will be hidden from the user.
+通常、この設定はユーザーからは隠されます。
+
+> Configuration attributes will be entered as annotations on secured methods or as access attributes on secured URLs.
+設定属性は、セキュアメソッド上のアノテーションか、セキュアな URL の属性として宣言されます。
+
+> For example, when we saw something like <intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/> in the namespace introduction, this is saying that the configuration attributes ROLE_A and ROLE_B apply to web requests matching the given pattern.
+たとえば、 namespace の紹介で `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` というものを見ました。
+これは、 ROLE_A と ROLE_B を指定されたパターンにマッチする Web リクエストに適用するという設定属性です。
+
+> In practice, with the default AccessDecisionManager configuration, this means that anyone who has a GrantedAuthority matching either of these two attributes will be allowed access.
+実際には、デフォルトの AccessDecisionManager の設定では、この設定が意味するのは、２つの属性（ROLE_A, ROLE_B）のいずれかにマッチする GrantedAuthority を持つ人であればだれでも、アクセスが許可される、というものです。
+
+> Strictly speaking though, they are just attributes and the interpretation is dependent on the AccessDecisionManager implementation.
+厳密に言うと、それらはただの属性であり、どう解釈されるかは AccessDecisionManager に依存します。
+
+> The use of the prefix ROLE_ is a marker to indicate that these attributes are roles and should be consumed by Spring Security’s RoleVoter.
+プレフィックスとして ROLE_ が使用されるのは、これらの属性がロールであり、 Spring Security の RoleVoter によって処理されることを意図した印です。
+
+> This is only relevant when a voter-based AccessDecisionManager is in use.
+これは、投票ベースの AccessDecisionManager を使っているときだけ関係することです。
+
+> We’ll see how the AccessDecisionManager is implemented in the authorization chapter.
+AccessDecisionManager をどのように実装するかについては、認証の章で説明します。
+
+#### RunAsManager
+> Assuming AccessDecisionManager decides to allow the request, the AbstractSecurityInterceptor will normally just proceed with the request.
+AccessDecisionManager がリクエストの許可を決定すると、 AbstractSecurityInterceptor は普通、リクエストを処理するだけです。
+
+> Having said that, on rare occasions users may want to replace the Authentication inside the SecurityContext with a different Authentication, which is handled by the AccessDecisionManager calling a RunAsManager.
+しかし、まれに、SecurityContext内のAuthenticationを、RunAsManagerを呼び出すAccessDecisionManagerによって処理される別のAuthenticationに置き換えたい場合があります。
+
+> This might be useful in reasonably unusual situations, such as if a services layer method needs to call a remote system and present a different identity.
+これは、サービスレイヤメソッドがリモートシステムを呼び出して別のアイデンティティーを提示する必要があるような、珍しい状況では有益です。
+
+> Because Spring Security automatically propagates security identity from one server to another (assuming you’re using a properly-configured RMI or HttpInvoker remoting protocol client), this may be useful.
+このため、 Spring Security は自動的に他のサーバーからのセキュリティアイデンティティを伝播するので便利です。
+（RMI か HttpInvoker のリモートクライアントを設定している場合は）
+
+#### AfterInvocationManager
+> Following the secure object invocation proceeding and then returning - which may mean a method invocation completing or a filter chain proceeding - the AbstractSecurityInterceptor gets one final chance to handle the invocation.
+セキュリティ保護されたオブジェクト呼び出しの処理が完了した後、メソッド呼び出しの完了またはフィルタチェーンの進行を意味する戻り値に続いて、AbstractSecurityInterceptorは呼び出しを処理する最後のチャンスを得ます。
+
+> At this stage the AbstractSecurityInterceptor is interested in possibly modifying the return object.
+この段階で、 AbstractSecurityInterceptor は戻り値を変更する可能性があります。
+
+> We might want this to happen because an authorization decision couldn’t be made "on the way in" to a secure object invocation.
+セキュアオブジェクトの実行中に認証の決定ができない場合に、この問題が発生するかもしれません。
+
+> Being highly pluggable, AbstractSecurityInterceptor will pass control to an AfterInvocationManager to actually modify the object if needed.
+高度にプラガブルなので、AbstractSecurityInterceptorはAfterInvocationManagerに制御を渡し、必要に応じて実際にオブジェクトを変更します。
+
+> This class can even entirely replace the object, or throw an exception, or not change it in any way as it chooses.
+このクラスは、オブジェクトを完全に置き換えることも、例外をスローすることもできますし、選択したとおりに変更させないようにすることもできます。
+
+> The after-invocation checks will only be executed if the invocation is successful.
+実行後のチェックは、実行が成功したときにだけ行われます。
+
+> If an exception occurs, the additional checks will be skipped.
+例外が発生した場合は、後続のチェックはスキップされます。
+
+> AbstractSecurityInterceptor and its related objects are shown in Figure 9.1, “Security interceptors and the "secure object" model”
+AbstractSecurityInterceptor とそれに関連するオブジェクトは、図 9.1 で見れます。
+
+http://docs.spring.io/spring-security/site/docs/4.2.1.RELEASE/reference/htmlsingle/#abstract-security-interceptor
+
+#### Extending the Secure Object Model
+> Only developers contemplating an entirely new way of intercepting and authorizing requests would need to use secure objects directly.
+リクエストをインターセプトして新規に認証を追加する方法について考えている開発者に限り、セキュアオブジェクトを直接使う必要があるかもしれません。
+
+> For example, it would be possible to build a new secure object to secure calls to a messaging system.
+例えば、メッセージングシステムを呼ぶ新しいセキュアオブジェクトを作ることが可能です。
+
+> Anything that requires security and also provides a way of intercepting a call (like the AOP around advice semantics) is capable of being made into a secure object.
+セキュリティを必要とし、 AOP の around のようにインターセプトする方法を提供するものは全て、セキュアオブジェクトにすることができます。
+
+> Having said that, most Spring applications will simply use the three currently supported secure object types (AOP Alliance MethodInvocation, AspectJ JoinPoint and web request FilterInvocation) with complete transparency.
+しかし、ほとんどの Spring アプリケーションは３つの単純なセキュアオブジェクトの種類を完全に透過的に使用します。
+AOP Alliance MethodInvocation, AspectJ JoinPoint, そして Web リクエストの FilterInvocation
+
+## 9.6 Localization
+> Spring Security supports localization of exception messages that end users are likely to see.
+Spring Security は、エンドユーザーが見るような例外のメッセージのローカライズをサポートしています。
+
+> If your application is designed for English-speaking users, you don’t need to do anything as by default all Security messages are in English.
+もしアプリケーションが英語話者のために設計されているならば、全てのメッセージはデフォルトで英語なので何もする必要はありません。
+
+> If you need to support other locales, everything you need to know is contained in this section.
+もしあなたが他のロケールをサポートしなければならないなら、このセクションで記載されていることをすべて理解しなければなりません。
+
+> All exception messages can be localized, including messages related to authentication failures and access being denied (authorization failures).
+全ての例外メッセージはローカライズできます。
+例外メッセージは、認証エラーとアクセス拒否に関連しています。
+
+> Exceptions and logging messages that are focused on developers or system deployers (including incorrect attributes, interface contract violations, using incorrect constructors, startup time validation, debug-level logging) are not localized and instead are hard-coded in English within Spring Security’s code.
+開発者かシステム管理者にフォーカスした例外とロギングメッセージ(不正な属性、インターフェースの規約違反、間違ったコンストラクタの使用、起動時の検証、デバッグレベルのロギング)は、ローカライズされていません。
+Spring Security のコードでは、代わりに英語をハードコードしています。
+
+> Shipping in the spring-security-core-xx.jar you will find an org.springframework.security package that in turn contains a messages.properties file, as well as localized versions for some common languages.
+spring-security-core-xx.jar の中で org.springframework.security パッケージを見ることができます。
+そこには messages.property ファイルや他の共通言語バージョンのローカライズファイルがあります。
+
+> This should be referred to by your ApplicationContext, as Spring Security classes implement Spring’s MessageSourceAware interface and expect the message resolver to be dependency injected at application context startup time.
+このファイルは ApplicationContext から参照される。
+Spring Security のクラス達は、 Spring の MessageSourceAware を実装します。
+アプリケーションコンテキストが起動するときに、依存関係を注入するメッセージ resolver が期待される。
+
+> Usually all you need to do is register a bean inside your application context to refer to the messages.
+通常、メッセージを参照するためにアプリケーションコンテキストに Bean を登録する必要があります。
+
+> An example is shown below:
+例は以下のような感じです
+
+```xml
+<bean id="messageSource"
+    class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="classpath:org/springframework/security/messages"/>
+</bean>
+```
+
+> The messages.properties is named in accordance with standard resource bundles and represents the default language supported by Spring Security messages.
+message.properties は標準のリソースバンドルと Spring Security メッセージによるデフォルトの言語サポートに従って名前付けされている。
+
+> This default file is in English.
+デフォルトは英語です。
+
+> If you wish to customize the messages.properties file, or support other languages, you should copy the file, rename it accordingly, and register it inside the above bean definition.
+もし messages.properties ファイルをカスタマイズしたり、他の言語をサポートしたいのであれば、ファイルをコピーし、適切な名前にリネームし、 Bean 定義に登録してください。
+
+> There are not a large number of message keys inside this file, so localization should not be considered a major initiative.
+このファイルには多くのメッセージはありません。
+よって、ローカライゼーションは
+
+> If you do perform localization of this file, please consider sharing your work with the community by logging a JIRA task and attaching your appropriately-named localized version of messages.properties.
+
+> Spring Security relies on Spring’s localization support in order to actually lookup the appropriate message.
+
+> In order for this to work, you have to make sure that the locale from the incoming request is stored in Spring’s org.springframework.context.i18n.LocaleContextHolder.
+
+> Spring MVC’s DispatcherServlet does this for your application automatically, but since Spring Security’s filters are invoked before this, the LocaleContextHolder needs to be set up to contain the correct Locale before the filters are called.
+
+> You can either do this in a filter yourself (which must come before the Spring Security filters in web.xml) or you can use Spring’s RequestContextFilter.
+
+> Please refer to the Spring Framework documentation for further details on using localization with Spring.
+
+> The "contacts" sample application is set up to use localized messages.
