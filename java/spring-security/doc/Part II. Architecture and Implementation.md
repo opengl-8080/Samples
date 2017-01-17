@@ -810,18 +810,28 @@ message.properties は標準のリソースバンドルと Spring Security メ�
 
 > There are not a large number of message keys inside this file, so localization should not be considered a major initiative.
 このファイルには多くのメッセージはありません。
-よって、ローカライゼーションは
+よって、ローカライズは主要なイニシアチブと考えてはいけません。
 
 > If you do perform localization of this file, please consider sharing your work with the community by logging a JIRA task and attaching your appropriately-named localized version of messages.properties.
+もしこのファイルのローカライズをしたい場合、 JIRA タスクで記録しているコミュニティに参加を検討してください。
+あなたが適切に名前付けしローカライズされたバージョンの messages.properties とともに。
 
 > Spring Security relies on Spring’s localization support in order to actually lookup the appropriate message.
+Spring Security は、適切なメッセージを探し出すために Spring のローカライズサポートを信頼しています。
 
 > In order for this to work, you have to make sure that the locale from the incoming request is stored in Spring’s org.springframework.context.i18n.LocaleContextHolder.
+このため、あなたはやってきたリクエストから取得し、 Spring の LocaleContextHolder に保存されたロケールを確認できます。
 
 > Spring MVC’s DispatcherServlet does this for your application automatically, but since Spring Security’s filters are invoked before this, the LocaleContextHolder needs to be set up to contain the correct Locale before the filters are called.
+Spring MVC の DispatcherServlet は、自動的にこれをします。
+しかし、 Spring Security のフィルターは、この処理(DispatcherServlet の処理)の前に実行されるので、 LocaleContextHolder はフィルターが呼び出されるまえに正しくセットアップされている必要があります。
 
 > You can either do this in a filter yourself (which must come before the Spring Security filters in web.xml) or you can use Spring’s RequestContextFilter.
+自作のフィルターを用意して実現する（web.xml で Spring Security のフィルターより前にくるように定義する必要がある）か、 Spring の RequestContextFilter を使うことで実現できます。
 
 > Please refer to the Spring Framework documentation for further details on using localization with Spring.
+Spring Framework のドキュメントを参照し、 Spring でローカライズをどうするか詳細について参照してください。
 
 > The "contacts" sample application is set up to use localized messages.
+"contacts" サンプルアプリケーションは、ローカライズされたメッセージを使用しています。
+
