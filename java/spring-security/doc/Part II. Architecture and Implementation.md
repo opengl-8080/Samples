@@ -835,3 +835,179 @@ Spring Framework のドキュメントを参照し、 Spring でローカライ�
 > The "contacts" sample application is set up to use localized messages.
 "contacts" サンプルアプリケーションは、ローカライズされたメッセージを使用しています。
 
+## 10. Core Services
+> Now that we have a high-level overview of the Spring Security architecture and its core classes, let’s take a closer look at one or two of the core interfaces and their implementations, in particular the AuthenticationManager, UserDetailsService and the AccessDecisionManager.
+私たちはハイレベルな Spring Security のアーキテクチャとコアクラスについて見ました。
+次はさらに詳細に踏み込み、それらのインターフェースの実装をいくつか見ていきましょう。
+例えば AuthenticationManager や UserDetailsService そして AccessDecisionManager です。
+
+> These crop up regularly throughout the remainder of this document so it’s important you know how they are configured and how they operate.
+これらは、この文書の残りの部分で定期的にまとめられていますので、設定方法と動作方法を理解することが重要です。
+
+### 10.1 The AuthenticationManager, ProviderManager and AuthenticationProvider
+> The AuthenticationManager is just an interface, so the implementation can be anything we choose, but how does it work in practice? 
+AuthenticationManager はただのインターフェースです。
+なので、実装はなんでも選択できます。
+しかし、それはどのようにして働くのでしょうか？
+
+> What if we need to check multiple authentication databases or a combination of different authentication services such as a database and an LDAP server?
+複数の認証データベースや異なる認証サービス（例えばデータベースと LDAP サーバー）の組み合わせのチェックでは、何をしなければならないでしょうか？
+
+> The default implementation in Spring Security is called ProviderManager and rather than handling the authentication request itself, it delegates to a list of configured AuthenticationProvider s, each of which is queried in turn to see if it can perform the authentication.
+デフォルトの Spring Security の実装は、 ProviderManager と呼ばれ、認証処理自体を制御するのではなく、設定された AuthenticationProvider のリストに委譲し、それらに認証ができるか問い合わせます。
+
+> Each provider will either throw an exception or return a fully populated Authentication object.
+それぞれのプロバイダは、例外をスローするか、完全に構築された Authentication オブジェクトを返します。
+
+> Remember our good friends, UserDetails and UserDetailsService? If not, head back to the previous chapter and refresh your memory.
+友よ、 UserDetails と UserDetailsService について覚えていますか？
+もし覚えてないなあら、前節に戻って記憶をリフレッシュしてください。
+
+> The most common approach to verifying an authentication request is to load the corresponding UserDetails and check the loaded password against the one that has been entered by the user.
+認証リクエストの検証のための多くの一般的なアプローチは、対応する UserDetails を読み込み、ロードされたパスワードとユーザーによって入力されたパスワードをチェックすることです。
+
+> This is the approach used by the DaoAuthenticationProvider (see below).
+これは DaoAuthenticationProvider によって使用されるアプローチです（以下をご覧ください）。
+
+> The loaded UserDetails object - and particularly the GrantedAuthority s it contains - will be used when building the fully populated Authentication object which is returned from a successful authentication and stored in the SecurityContext.
+ロードされた UserDetails オブジェクト（個々の GrantedAuthority を含む）は、完全に構築された Authentication オブジェクトを構築する際に使用され、認証に成功すると return され、 SecurityContext に保存される。
+
+> If you are using the namespace, an instance of ProviderManager is created and maintained internally, and you add providers to it by using the namespace authentication provider elements (see the namespace chapter).
+もし namespace を使用しているなら、 ProviderManager のインスタンスは内部的に作成され維持される。
+namespace の authentication provider タグを使ってプロバイダを追加できる（namespace の章を見てください）。
+
+> In this case, you should not declare a ProviderManager bean in your application context.
+この場合、あなたは ProviderManager Bean をアプリケーションコンテキスト内で宣言する必要はありません。
+
+> However, if you are not using the namespace then you would declare it like so:
+しかしながら、もしあなたが namespace を使用していない場合は、次のように宣言しなければなりません。
+
+```xml
+<bean id="authenticationManager"
+        class="org.springframework.security.authentication.ProviderManager">
+    <constructor-arg>
+        <list>
+            <ref local="daoAuthenticationProvider"/>
+            <ref local="anonymousAuthenticationProvider"/>
+            <ref local="ldapAuthenticationProvider"/>
+        </list>
+    </constructor-arg>
+</bean>
+```
+
+> In the above example we have three providers.
+上記例には３つのプロバイダがいます。
+
+> They are tried in the order shown (which is implied by the use of a List), with each provider able to attempt authentication, or skip authentication by simply returning null.
+それらはまたままの順序で実行され、それぞれのプロバイダが認証可能か、シンプルな null を返してスキップするかを試みます。
+
+> If all implementations return null, the ProviderManager will throw a ProviderNotFoundException.
+もしすべての実装が null を返した場合、 ProviderManager は ProviderNotFoundException をスローします。
+
+> If you’re interested in learning more about chaining providers, please refer to the ProviderManager Javadoc.
+プロバイダの連結についてもっと知りたい場合は、 ProviderManager の Javadoc を参照してください。
+
+> Authentication mechanisms such as a web form-login processing filter are injected with a reference to the ProviderManager and will call it to handle their authentication requests.
+Web の form ログインを処理するのフィルターような認証メカニズムは、 ProviderManager への参照とともにインジェクションされ、認証リクエストによってハンドリングできます。
+
+> The providers you require will sometimes be interchangeable with the authentication mechanisms, while at other times they will depend on a specific authentication mechanism.
+あなたが求めるプロバイダは、ときどき認証メカニズムとともに取り換えが可能です。
+それは他の場合は特定の認証メカニズムに依存します。
+
+> For example, DaoAuthenticationProvider and LdapAuthenticationProvider are compatible with any mechanism which submits a simple username/password authentication request and so will work with form-based logins or HTTP Basic authentication.
+たとえば、 DaoAuthenticationProvider と LdapAuthenticationProvider は、任意のメカニズムで交換可能です。
+それら（メカニズム）は、単純にユーザー名とパスワードの認証リクエストで、 form ベースのログインが HTTP Basic 認証で動作します。
+
+> On the other hand, some authentication mechanisms create an authentication request object which can only be interpreted by a single type of AuthenticationProvider.
+言い換えると、いくつかの認証メカニズムは、単一の AuthenticationProvider の実装型にだけ解釈可能な認証リクエストオブジェクトを作ります。
+
+> An example of this would be JA-SIG CAS, which uses the notion of a service ticket and so can therefore only be authenticated by a CasAuthenticationProvider.
+例えば、 JA-SIG CAS です。
+これは、サービスチケットという概念を使うので、 CasAuthenticationProvider にだけ認証が可能です。
+
+> You needn’t be too concerned about this, because if you forget to register a suitable provider, you’ll simply receive a ProviderNotFoundException when an attempt to authenticate is made.
+これについて考える必要はありません。
+なぜなら、適用可能なプロバイダを登録することを忘れていたなら、単に認証のときに ProviderNotFoundException を受け取るからです。
+
+#### 10.1.1 Erasing Credentials on Successful Authentication
+> By default (from Spring Security 3.1 onwards) the ProviderManager will attempt to clear any sensitive credentials information from the Authentication object which is returned by a successful authentication request.
+Spring Security 3.1 以降のデフォルトの ProviderManager は、慎重に扱わなければならに資格情報は、認証に成功したリクエストから返された Authentication オブジェクトからクリアするようになっています。
+
+> This prevents information like passwords being retained longer than necessary.
+この保護される情報は、例えばパスワードです。
+これはそれ以上の間持っている必要がありません。
+
+> This may cause issues when you are using a cache of user objects, for example, to improve performance in a stateless application.
+これは、ユーザーオブジェクトのキャッシュを使っているときに問題になります。
+たとえば、ステートレスなアプリケーションのパフォーマンスを改善するときなどです。
+
+> If the Authentication contains a reference to an object in the cache (such as a UserDetails instance) and this has its credentials removed, then it will no longer be possible to authenticate against the cached value.
+もし Authentication がキャッシュされたオブジェクト（例えば UserDetails）への参照を持つ場合、そしてそれが削除される資格情報を持つ場合、キャッシュされた値に対する認証はもうできない。
+
+> You need to take this into account if you are using a cache.
+キャッシュを使用しているなら、これを考慮する必要がある、。
+
+> An obvious solution is to make a copy of the object first, either in the cache implementation or in the AuthenticationProvider which creates the returned Authentication object.
+明らかな解決策は、キャッシュの実装か、返されたAuthenticationオブジェクトを作成するAuthenticationProviderのどちらかでオブジェクトのコピーを作成することです。
+
+> Alternatively, you can disable the eraseCredentialsAfterAuthentication property on ProviderManager. See the Javadoc for more information.
+もしくは、 ProviderManager の eraseCredentialsAfterAuthentication プロパティを無効にすることです。
+さらに情報が欲しい場合は Javadoc を参照してください。
+
+### 10.1.2 DaoAuthenticationProvider
+> The simplest AuthenticationProvider implemented by Spring Security is DaoAuthenticationProvider, which is also one of the earliest supported by the framework.
+最も単純な AuthenticationProvider は、 Spring Security によって実装された DaoAuthenticationProvider です。
+それはフレームワークによって最も最初期にサポートされたものでもあります。
+
+> It leverages a UserDetailsService (as a DAO) in order to lookup the username, password and GrantedAuthority s.
+それは UserDetailsService を ユーザー名とパスワード、そして GrantedAuthority を検索するための DAO として力点をおいています。
+
+> It authenticates the user simply by comparing the password submitted in a UsernamePasswordAuthenticationToken against the one loaded by the UserDetailsService.
+それは UserDetailsService によってロードされたユーザーを UsernamePasswordAuthenticationToken でサブミットされた単純なパスワードの比較で認証します。
+
+> Configuring the provider is quite simple:
+プロバイダの設定はシンプルです。
+
+```xml
+<bean id="daoAuthenticationProvider"
+    class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <property name="userDetailsService" ref="inMemoryDaoImpl"/>
+    <property name="passwordEncoder" ref="passwordEncoder"/>
+</bean>
+```
+
+> The PasswordEncoder is optional.
+PasswordEncoder はオプションです。
+
+> A PasswordEncoder provides encoding and decoding of passwords presented in the UserDetails object that is returned from the configured UserDetailsService.
+PasswordEncoder は、設定された UserDetailsService によって返された UserDetails のパスワードのエンコードとデコードを提供します。
+
+> This will be discussed in more detail below.
+これは、次で詳細について議論します。
+
+### 10.2 UserDetailsService Implementations
+> As mentioned in the earlier in this reference guide, most authentication providers take advantage of the UserDetails and UserDetailsService interfaces.
+
+> Recall that the contract for UserDetailsService is a single method:
+
+```java
+UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+```
+
+> The returned UserDetails is an interface that provides getters that guarantee non-null provision of authentication information such as the username, password, granted authorities and whether the user account is enabled or disabled.
+返された UserDetails は、ユーザー名、パスワード、与えられた権限、そしてユーザーのアカウントが有効か無効かなど、 null ではない認証のための情報を提供するゲッターを定義したインターフェースです。
+
+> Most authentication providers will use a UserDetailsService, even if the username and password are not actually used as part of the authentication decision.
+ほとんどの認証プロバイダは、 UserDetailsService を使用します。
+たとえ、ユーザー名とパスワードを認証の決定の一部で実際には使っていなかったとしてもです。
+
+> They may use the returned UserDetails object just for its GrantedAuthority information, because some other system (like LDAP or X.509 or CAS etc) has undertaken the responsibility of actually validating the credentials.
+UserDetailsService は GrantedAuthority のために返された UserDetails を使用することがあります。
+なぜなら、他のシステム（例えば LDAP や X.509, CAS など）が資格情報の検証を行うための責任を持つためです。
+
+> Given UserDetailsService is so simple to implement, it should be easy for users to retrieve authentication information using a persistence strategy of their choice.
+与えられた UserDetailsService はシンプルな実装です。
+選択した永続化の戦略を使用してユーザーについての認証情報を検索することは単純であるべきです。
+
+> Having said that, Spring Security does include a couple of useful base implementations, which we’ll look at below.
+つまり、Spring Securityにはいくつかの便利な基本実装が含まれています。
