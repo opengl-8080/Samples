@@ -987,8 +987,10 @@ PasswordEncoder は、設定された UserDetailsService によって返され�
 
 ### 10.2 UserDetailsService Implementations
 > As mentioned in the earlier in this reference guide, most authentication providers take advantage of the UserDetails and UserDetailsService interfaces.
+以前このリファレンスガイドで言及したとおり、ほとんどの認証プロバイダは UserDetails と UserDetailsService インターフェースを利用しています。
 
 > Recall that the contract for UserDetailsService is a single method:
+UserDetailsService は１つのメソッドで構成されていることを思い出してください。
 
 ```java
 UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
@@ -1002,7 +1004,7 @@ UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
 たとえ、ユーザー名とパスワードを認証の決定の一部で実際には使っていなかったとしてもです。
 
 > They may use the returned UserDetails object just for its GrantedAuthority information, because some other system (like LDAP or X.509 or CAS etc) has undertaken the responsibility of actually validating the credentials.
-UserDetailsService は GrantedAuthority のために返された UserDetails を使用することがあります。
+認証プロバイダは GrantedAuthority のために返された UserDetails を使用することがあります。
 なぜなら、他のシステム（例えば LDAP や X.509, CAS など）が資格情報の検証を行うための責任を持つためです。
 
 > Given UserDetailsService is so simple to implement, it should be easy for users to retrieve authentication information using a persistence strategy of their choice.
@@ -1011,3 +1013,274 @@ UserDetailsService は GrantedAuthority のために返された UserDetails を
 
 > Having said that, Spring Security does include a couple of useful base implementations, which we’ll look at below.
 つまり、Spring Securityにはいくつかの便利な基本実装が含まれています。
+
+#### 10.2.1 In-Memory Authentication
+> Is easy to use create a custom UserDetailsService implementation that extracts information from a persistence engine of choice, but many applications do not require such complexity.
+使いやすい永続化エンジンから情報を抽出するカスタムの UserDetailsService の実装を作りますが、
+多くのアプリケーションはそのようなそのような複雑なものを必要としません。
+
+> This is particularly true if you’re building a prototype application or just starting integrating Spring Security, when you don’t really want to spend time configuring databases or writing UserDetailsService implementations.
+これは、特にあたがプロトタイプのアプリケーションや Spring Security を統合し始めたばかりのころは該当します。
+データベースの設定や UserDetailsService の実装を書くことに時間を費やしたくない場合。
+
+> For this sort of situation, a simple option is to use the user-service element from the security namespace:
+この種の解決策として、セキュリティ namespace の user-service 要素を使うシンプルなオプションがあります。
+
+```xml
+<user-service id="userDetailsService">
+    <user name="jimi" password="jimispassword" authorities="ROLE_USER, ROLE_ADMIN" />
+    <user name="bob" password="bobspassword" authorities="ROLE_USER" />
+</user-service>
+```
+
+> This also supports the use of an external properties file:
+これは、外部のプロパティファイルの使用もサポートします。
+
+```xml
+<user-service id="userDetailsService" properties="users.properties"/>
+```
+
+> The properties file should contain entries in the form
+プロパティファイルは form のエントリを含むべきです。
+
+```properties
+username=password,grantedAuthority[,grantedAuthority][,enabled|disabled]
+```
+
+> For example
+例えば
+
+```properties
+jimi=jimispassword,ROLE_USER,ROLE_ADMIN,enabled
+bob=bobspassword,ROLE_USER,enabled
+```
+
+#### 10.2.2 JdbcDaoImpl
+> Spring Security also includes a UserDetailsService that can obtain authentication information from a JDBC data source.
+Spring Security は、 JDBC データソースから認証の情報を取得できる UserDetailsService も含んでいます。
+
+> Internally Spring JDBC is used, so it avoids the complexity of a fully-featured object relational mapper (ORM) just to store user details.
+内部では Spring JDBC が使用されています。
+よって、この実装はユーザーの詳細について格納するだけの複雑で完全な ORM の機能を回避しています。
+
+> If your application does use an ORM tool, you might prefer to write a custom UserDetailsService to reuse the mapping files you’ve probably already created.
+もしあなたのアプリケーションが ORM ツールを使用している場合、おそらくすでに作成しているマッピングファイルを再利用することでカスタムの UserDetailsService を書くことをお勧めします。
+
+> Returning to JdbcDaoImpl, an example configuration is shown below:
+JdbcDaoImpl を返す、例となる設定は以下のようになります。
+
+```xml
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+    <property name="url" value="jdbc:hsqldb:hsql://localhost:9001"/>
+    <property name="username" value="sa"/>
+    <property name="password" value=""/>
+</bean>
+
+<bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+    <property name="dataSource" ref="dataSource"/>
+</bean>
+```
+
+> You can use different relational database management systems by modifying the DriverManagerDataSource shown above.
+上記 DriverManagerDataSource を変更することで、異なる RDBMS を使用することができます。
+
+> You can also use a global data source obtained from JNDI, as with any other Spring configuration.
+いくつかの Spring の設定をすることで、 JNDI からグローバルな情報を入手することもできます。
+
+##### Authority Groups
+> By default, JdbcDaoImpl loads the authorities for a single user with the assumption that the authorities are mapped directly to users (see the database schema appendix).
+デフォルトで、 JdbcDaoImpl はユーザーに直接権限がマップされていると仮定して１人のユーザーの権限をロードします。
+（付録のデータベーススキーマを見てください）
+
+```sql
+create table users(
+    username varchar_ignorecase(50) not null primary key,
+    password varchar_ignorecase(50) not null,
+    enabled boolean not null
+);
+
+create table authorities (
+    username varchar_ignorecase(50) not null,
+    authority varchar_ignorecase(50) not null,
+    constraint fk_authorities_users foreign key(username) references users(username)
+);
+create unique index ix_auth_username on authorities (username,authority);
+
+create table groups (
+    id bigint generated by default as identity(start with 0) primary key,
+    group_name varchar_ignorecase(50) not null
+);
+
+create table group_authorities (
+    group_id bigint not null,
+    authority varchar(50) not null,
+    constraint fk_group_authorities_group foreign key(group_id) references groups(id)
+);
+
+create table group_members (
+    id bigint generated by default as identity(start with 0) primary key,
+    username varchar(50) not null,
+    group_id bigint not null,
+    constraint fk_group_members_group foreign key(group_id) references groups(id)
+);
+```
+
+> An alternative approach is to partition the authorities into groups and assign groups to the user.
+他の手段としては、グループに権限を振り分け、ユーザーをグループにアサインする方法があります。
+
+> Some people prefer this approach as a means of administering user rights.
+いくつかの人々は、ユーザーの権限管理という意味だと捉えます。
+
+> See the JdbcDaoImpl Javadoc for more information on how to enable the use of group authorities.
+より多くの情報については JdbcDaoImpl の Javadoc を見てください。
+グループの認証をどのようにして有効にするか書いています。
+
+> The group schema is also included in the appendix.
+グループのスキーマも付録に含まれています。
+
+#### 10.3 Password Encoding
+> Spring Security’s PasswordEncoder interface is used to support the use of passwords which are encoded in some way in persistent storage.
+Spring Security の PasswordEncoder インターフェースは、何らかの手段でエンコードされ永続化ストレージに保存されたパスワードを扱うするために使用されます。
+
+> You should never store passwords in plain text.
+決して平文でパスワードを保存すべきではありません。
+
+> Always use a one-way password hashing algorithm such as bcrypt which uses a built-in salt value which is different for each stored password.
+常に、パスワードハッシュ化アルゴリズム、例えば bcrypt のようなパスワード毎に異なるソルトを埋め込んむようなものを使用してください。
+
+> Do not use a plain hash function such as MD5 or SHA, or even a salted version.
+プレーンなハッシュ関数（例えば MD5, SHA）もしくはソルトバージョンを使用しないでください。
+
+> Bcrypt is deliberately designed to be slow and to hinder offline password cracking, whereas standard hash algorithms are fast and can easily be used to test thousands of passwords in parallel on custom hardware.
+Bcrypt はオフラインでのパスワードのクラッキングを防ぐため、故意に遅くなるように設計されています。
+一方で、標準的なハッシュアルゴリズムは高速で動作するため、カスタムされたハードウェア上でパラレルに処理することで数千のパスワードを簡単に使用できます。
+
+> You might think this doesn’t apply to you since your password database is secure and offline attacks aren’t a risk.
+あなたは、あなたのパスアワードのデータベースはセキュアでオフライン攻撃もリスクでないため適用されないと考えるかもしれない。
+
+> If so, do some research and read up on all the high-profile sites which have been compromised in this way and have been pilloried for storing their passwords insecurely.
+もしそうなら、そのような妥協をした結果セキュアではないパスワードを漏洩させた有名なサイトについて調べてください。
+
+> It’s best to be on the safe side.
+安全策に倒れるのがベストです。
+
+> Using org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" is a good choice for security.
+`BCryptPasswordEncoder` を使うのが、セキュリティにとって良い選択です。
+
+> There are also compatible implementations in other common programming languages so it a good choice for interoperability too.
+これは一般的な他の言語とも切り替え可能な実装なので、相互運用性の面でも良い選択です。
+
+> If you are using a legacy system which already has hashed passwords, then you will need to use an encoder which matches your current algorithm, at least until you can migrate your users to a more secure scheme (usually this will involve asking the user to set a new password, since hashes are irreversible).
+もしあなたが、すでにパスワードのハッシュ化をしているレガシーなシステムを使用している場合、現在のアルゴリズムに一致するエンコーダーを使用する必要があるでしょう。
+少なくとも、よりセキュアな状態に移行するまでは（通常、それはユーザーに新しいユーザーの入力を促すことになります。なぜならハッシュは非可逆だからです）。
+
+> Spring Security has a package containing legacy password encoding implementation, namely, org.springframework.security.authentication.encoding.
+Spring Security はレガシーなパスワードエンコーディングの実装を含んでいます。
+パッケージは `org.springframework.security.authentication.encoding` です。
+
+> The DaoAuthenticationProvider can be injected with either the new or legacy PasswordEncoder types.
+DaoAuthenticationProvider は、新旧いずれかの PasswordEncoder の型をインジェクションすることができます。
+
+##### 10.3.1 What is a hash?
+> Password hashing is not unique to Spring Security but is a common source of confusion for users who are not familiar with the concept.
+パスワードハッシュ化は、 Spring Security に固有なものではありません。
+しかし、ハッシュ化のコンセプトについて理解していないと混乱のもとになります。
+
+> A hash (or digest) algorithm is a one-way function which produces a piece of fixed-length output data (the hash) from some input data, such as a password.
+ハッシュ（もしくはダイジェスト）アルゴリズムは、パスワードのような入力データをもとに固定長の断片を生成する一方通行な関数です。
+
+> As an example, the MD5 hash of the string "password" (in hexadecimal) is
+例えば、 MD5 ハッシュで "password" という文字列を 16 新数でハッシュかすると
+
+```
+5f4dcc3b5aa765d61d8327deb882cf99
+```
+
+になります。
+
+> A hash is "one-way" in the sense that it is very difficult (effectively impossible) to obtain the original input given the hash value, or indeed any possible input which would produce that hash value.
+ハッシュ値が与えられれば元の入力を得ることは非常に難しい（事実上不可能）という意味でハッシュ値は「一方向」である。
+
+> This property makes hash values very useful for authentication purposes.
+このプロパティは認証という目的では非常に便利なハッシュ値を生成します。
+
+> They can be stored in your user database as an alternative to plaintext passwords and even if the values are compromised they do not immediately reveal a password which can be used to login.
+それらは、平文の代わりにデータベースに登録できます。
+パスワードが漏洩しても、直ちにそれらがログインで使用することはできません。
+
+> Note that this also means you have no way of recovering the password once it is encoded.
+一度エンコードされたパスワードを複合することはできないことを意味しています。
+
+##### 10.3.2 Adding Salt to a Hash
+> One potential problem with the use of password hashes that it is relatively easy to get round the one-way property of the hash if a common word is used for the input.
+パスワードハッシュを使用している場合の１つの問題として、一般的な単語を入力で使用していると、簡単に一方通行のプロパティを比較的簡単に得ることができます。
+
+> People tend to choose similar passwords and huge dictionaries of these from previously hacked sites are available online.
+人々は同じようなパスワードを使用する傾向があるため、あらかじめハッシュ化された値を提供する巨大な辞書が存在し、オンラインで参照可能です。
+
+> For example, if you search for the hash value 5f4dcc3b5aa765d61d8327deb882cf99 using google, you will quickly find the original word "password".
+例えば、ハッシュ値として 5f4dcc3b5aa765d61d8327deb882cf99 を Google で検索した場合、オリジナルの値が "password" であることをすぐに見つけられるでしょう。
+
+> In a similar way, an attacker can build a dictionary of hashes from a standard word list and use this to lookup the original password.
+似たような話で、攻撃者は標準的な単語リストからハッシュのディクショナリを作り、オリジナルのパスワードを見つけるために使用しています。
+
+> One way to help prevent this is to have a suitably strong password policy to try to prevent common words from being used.
+これを防ぐには、パスワードに一般的なワードは避け、セキュアなパスワードのポリシーをセットします。
+
+> Another is to use a "salt" when calculating the hashes.
+他にはソルトをハッシュ化のときに使用します。
+
+> This is an additional string of known data for each user which is combined with the password before calculating the hash.
+これは追加の文字列で、ハッシュを計算する前にパスワードと組み合わされます。
+
+> Ideally the data should be as random as possible, but in practice any salt value is usually preferable to none.
+理想的には、データはできるだけランダムでなければならないが、実際には、塩の値は通常はいずれにもあてはまりません。
+
+> Using a salt means that an attacker has to build a separate dictionary of hashes for each salt value, making the attack more complicated (but not impossible).
+ソルトを使用するということは、攻撃者がそれぞれのソルトの値もハッシュ化した辞書を作る処理を必要とすることです。
+辞書作りはとても大変ですが、不可能というわけではありません。
+
+> Bcrypt automatically generates a random salt value for each password when it is encoded, and stores it in the bcrypt string in a standard format.
+Bcrypt はエンコード時に自動的にランダムなソルト値をパスワードごとに生成し、 bcrypt の標準的なフォーマットに従って文字列中に保存します。
+
+> The legacy approach to handling salt was to inject a SaltSource into the DaoAuthenticationProvider, which would obtain a salt value for a particular user and pass it to the PasswordEncoder.
+ソルトを制御するレガシーなアプローチとしては SaltSource を DaoAuthenticationProvider にインジェクションし、 PasswordEncoder のためにユーザーごとにソルトの値を取得する方法がある。
+
+> Using bcrypt means you don’t have worry about the details of salt handling (such as where the value is stored), as it is all done internally.
+bcrypt を使うと、ソルトの詳細について考える必要はなくなります（値がどこに保存されているか、とか）。
+それは全て内部的に行われます。
+
+> So we’d strongly recommend you use bcrypt unless you already have a system in place which stores the salt separately.
+そのため、システムがまだソルトを分離して保存しているというのであれば、 bcrypt の利用を強く推奨します。
+
+##### 10.3.3 Hashing and Authentication
+> When an authentication provider (such as Spring Security’s DaoAuthenticationProvider) needs to check the password in a submitted authentication request against the known value for a user, and the stored password is encoded in some way, then the submitted value must be encoded using exactly the same algorithm.
+認証プロバイダ（例えば Spring Security の DaoAuthenticationProvider）は、ユーザーの値を知るために認証リクエストがサブミットされたときにパスワードをチェックする必要があります。
+そして、保存されたパスワードは何らかの手段でエンコードされています。
+そのためサブミットされた値は同じアルゴリズムでエンコードされる必要があります。
+
+> It’s up to you to check that these are compatible as Spring Security has no control over the persistent values.
+Spring Security は永続化された値の制御はできないので、互換性があるか検証する必要があります。
+
+> If you add password hashing to your authentication configuration in Spring Security, and your database contains plaintext passwords, then there is no way authentication can succeed.
+もし Spring Security の認証設定でパスワードハッシュ化を追加していて、データベースが平文のパスワードを持っていた場合、認証が成功する術はありません。
+
+> Even if you are aware that your database is using MD5 to encode the passwords, for example, and your application is configured to use Spring Security’s Md5PasswordEncoder, there are still things that can go wrong.
+データベースのパスワードが MD5 でハッシュ化されている場合、例えばアプリケーションが Spring Security の MD5 アルゴリズムで設定されてる場合、まだ可能です。
+
+> The database may have the passwords encoded in Base 64, for example while the encoder is using hexadecimal strings (the default).
+16進数の文字列を使用するエンコーダーを使用している場合、Base64 でデータベースがパスワードを持つかもしれません。
+
+> Alternatively your database may be using upper-case while the output from the encoder is lower-case.
+代わりに、エンコーダの出力が小文字である間に、データベースで大文字を使用している可能性があります。
+
+> Make sure you write a test to check the output from your configured password encoder with a known password and salt combination and check that it matches the database value before going further and attempting to authenticate through your application.
+知っているパスワードとソルトの組み合わせを、設定したパスワードエンコーダで変換した値をチェックして確認してください。
+データベースの値が一致することを確認してください。
+
+> Using a standard like bcrypt will avoid these issues.
+bcrypt のような標準を使用するとこれらの問題を回避できます。
+
+> If you want to generate encoded passwords directly in Java for storage in your user database, then you can use the encode method on the PasswordEncoder.
+もしデータベースストレージから Java に読み込んで、直接パスワードエンコーダーを生成する場合、 PasswordEncoder のエンコードメソッドを使用してください。
