@@ -481,3 +481,292 @@ namespace シンタックスによって作成された SecurityMetadataSource �
 もし逆だと、 `/secure/` パターンが常に評価されるため、 `/secure/super` パターンは決して評価されません。
 
 #### 14.2 ExceptionTranslationFilter
+> The ExceptionTranslationFilter sits above the FilterSecurityInterceptor in the security filter stack.
+ExceptionTranslationFilter はセキュリティフィルタのスタックの FilterSecurityInterceptor の前にセットされます。
+
+> It doesn’t do any actual security enforcement itself, but handles exceptions thrown by the security interceptors and provides suitable and HTTP responses.
+これはセキュリティについて特に何もしません。
+代わりに、セキュリティインターセプタとプロバイダが例外をスローしたときに、適切な HTTP レスポンスを返します。
+
+```xml
+<bean id="exceptionTranslationFilter"
+      class="org.springframework.security.web.access.ExceptionTranslationFilter">
+    <property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+    <property name="accessDeniedHandler" ref="accessDeniedHandler"/>
+</bean>
+
+<bean id="authenticationEntryPoint"
+      class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    <property name="loginFormUrl" value="/login.jsp"/>
+</bean>
+
+<bean id="accessDeniedHandler"
+      class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+    <property name="errorPage" value="/accessDenied.htm"/>
+</bean>
+```
+
+#### 14.2.1 AuthenticationEntryPoint
+> The AuthenticationEntryPoint will be called if the user requests a secure HTTP resource but they are not authenticated.
+AuthenticationEntryPoint は、ユーザーが保護された HTTP リソースにアクセスしたが、権限を持たない場合に呼び出されます。
+
+> An appropriate AuthenticationException or AccessDeniedException will be thrown by a security interceptor further down the call stack, triggering the commence method on the entry point.
+適切な AuthenticationException か AccessDeniedException が下位層のセキュリティインターセプタによってスローされると、エントリポイントの commence メソッドが実行されます。
+
+> This does the job of presenting the appropriate response to the user so that authentication can begin.
+これにより、ユーザーに適切な応答を提示して認証を開始できるようになります。
+
+> The one we’ve used here is LoginUrlAuthenticationEntryPoint, which redirects the request to a different URL (typically a login page).
+ここで使用されるものの１つは LoginUrlAuthenticationEntryPoint です。
+これはリクエストを異なる URL （典型的なものはログインページ）にリダイレクトします。
+
+> The actual implementation used will depend on the authentication mechanism you want to be used in your application.
+実際の実装が使われるかは、アプリケーションで必要とする認証メカニズムに依存します。
+
+#### 14.2.2 AccessDeniedHandler
+> What happens if a user is already authenticated and they try to access a protected resource?
+認証済みのユーザーが保護されたリソースにアクセスすると、何が起こるのでしょうか？
+
+> In normal usage, this shouldn’t happen because the application workflow should be restricted to operations to which a user has access.
+通常の利用では、これは起こるべきではありません。
+なぜなら、アプリケーションのフローはユーザーがアクセスできる制御だけに制限すべきだからです。
+
+> For example, an HTML link to an administration page might be hidden from users who do not have an admin role.
+たとえば、管理画面への HTML リンクは管理者権限を持たないユーザーには見えないようにします。
+
+> You can’t rely on hiding links for security though, as there’s always a possibility that a user will just enter the URL directly in an attempt to bypass the restrictions.
+セキュリティのためにリンクを隠すだけで信頼することはできません。
+ユーザーが制限をバイパスするために、URLを直接入力することは常にありえます。
+
+> Or they might modify a RESTful URL to change some of the argument values.
+もしくは、 RESTful URL の引数の値を変更するかもしれません。
+
+> Your application must be protected against these scenarios or it will definitely be insecure.
+アプリケーションはこれらのシナリオに対して防御しなければなりません。
+そうしないと、完全に安全でないものになります。
+
+> You will typically use simple web layer security to apply constraints to basic URLs and use more specific method-based security on your service layer interfaces to really nail down what is permissible.
+通常、単純なWebレイヤセキュリティを使用して基本URLに制約を適用し、サービスレイヤインターフェイスでより具体的なメソッドベースのセキュリティを使用して、実際に許可されているものを特定します。
+
+> If an AccessDeniedException is thrown and a user has already been authenticated, then this means that an operation has been attempted for which they don’t have enough permissions.
+もし AccessDeniedException がスローされてユーザーが認証されている場合は、その処理に対してユーザーに十分な許可が許されていないということを意味します。
+
+> In this case, ExceptionTranslationFilter will invoke a second strategy, the AccessDeniedHandler.
+この場合、 ExceptionTranslationFilter は２つ目の戦略を実行します。
+それは AccessDeniedHandler です。
+
+> By default, an AccessDeniedHandlerImpl is used, which just sends a 403 (Forbidden) response to the client.
+デフォルトでは、 AccessDeniedHandler が使用されると、単純に 403 レスポンスをクライアントに返します。
+
+> Alternatively you can configure an instance explicitly (as in the above example) and set an error page URL which it will forwards the request to [11].
+代わりに、インスタンスを明示的に設定することもできます。
+そして、エラーページの URL を指定します。
+
+> This can be a simple "access denied" page, such as a JSP, or it could be a more complex handler such as an MVC controller.
+シンプルな "アクセス拒否" ページにすることができます。
+JSP や、より複雑な制御をする MVC コントローラなどを指定できます。
+
+> And of course, you can implement the interface yourself and use your own implementation.
+そしてもちろん、インターフェースを自分で実装することもできます。
+
+> It’s also possible to supply a custom AccessDeniedHandler when you’re using the namespace to configure your application.
+カスタムの AccessDeniedHandler を供給することも可能です。
+namespace で設定している場合でも。
+
+> See the namespace appendix for more details.
+namespace の付録を見てください。
+
+##### 14.2.3 SavedRequest s and the RequestCache Interface
+> Another responsibility of ExceptionTranslationFilter responsibilities is to save the current request before invoking the AuthenticationEntryPoint.
+ExceptionTranslationFilter の別の責務として、 AuthenticationEntryPoint が実行される前に現在のリクエストを保存する機能があります。
+
+> This allows the request to be restored after the use has authenticated (see previous overview of web authentication).
+これは認証が終わった後に、リクエストを復元することができます。
+
+> A typical example would be where the user logs in with a form, and is then redirected to the original URL by the default SavedRequestAwareAuthenticationSuccessHandler (see below).
+典型的な例としては、ユーザーがフォームログインしたあとで、デフォルトの SavedRequestAwareAuthenticationSuccessHandler を使ってオリジナルの URL にリダイレクトします。
+
+> The RequestCache encapsulates the functionality required for storing and retrieving HttpServletRequest instances.
+RequestCache は HttpServletRequest インスタンスの保存と検索を必要とする機能をカプセル化します。
+
+> By default the HttpSessionRequestCache is used, which stores the request in the HttpSession.
+デフォルトでは、 HttpSessionRequestCache が使われて、リクエストを HttpSession に保存します。
+
+> The RequestCacheFilter has the job of actually restoring the saved request from the cache when the user is redirected to the original URL.
+RequestCacheFilter は、ユーザーがオリジナルの URL にリダイレクトするときに、実際に保存されたリクエストをキャッシュから復元する仕事を持ちます。
+
+> Under normal circumstances, you shouldn’t need to modify any of this functionality, but the saved-request handling is a "best-effort" approach and there may be situations which the default configuration isn’t able to handle.
+通常の状況では、この機能を変更する必要はありませんが、保存された要求の処理は「ベストエフォート型」のアプローチであり、デフォルト構成では処理できない状況があります。
+
+> The use of these interfaces makes it fully pluggable from Spring Security 3.0 onwards.
+Spring Security 3.0 からは、これらのインターフェースを使うと、完全にプラガブルになります。
+
+### 14.3 SecurityContextPersistenceFilter
+> We covered the purpose of this all-important filter in the Technical Overview chapter so you might want to re-read that section at this point.
+私たちは Technical Overview の章のすべての重要なフィルタの目的をカバーしました。
+よって、あなたはここで節を見直したくなるかもしれません。
+
+> Let’s first take a look at how you would configure it for use with a FilterChainProxy.
+まずは、どのようにして FilterChainProxy を使うように設定するか見てみましょう。
+
+> A basic configuration only requires the bean itself
+基本的な設定は、唯一 Bean だけを要求します。
+
+```xml
+<bean id="securityContextPersistenceFilter"
+class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
+```
+
+> As we saw previously, this filter has two main tasks.
+以前見た通り、このフィルタは２つの主要なタスクを持ちます。
+
+> It is responsible for storage of the SecurityContext contents between HTTP requests and for clearing the SecurityContextHolder when a request is completed.
+それは、 HTTP リクエストの間の SecurityContext の内容を保存する責務と、リクエストが完了したときに SecurityContextHolder をクリアする責務です。
+
+> Clearing the ThreadLocal in which the context is stored is essential, as it might otherwise be possible for a thread to be replaced into the servlet container’s thread pool, with the security context for a particular user still attached.
+コンテキストが保存された ThreadLocal をクリアすることは必要不可欠です。
+さもないと、 Servlet コンテナのスレッドプールに保存され、特定のユーザーの Security Context が紐づいたスレッドに置き換えられることが可能になるかもしれません。
+
+> This thread might then be used at a later stage, performing operations with the wrong credentials.
+このスレッドは、後の段階で、間違った資格情報として処理に使われるかもしれません。
+
+#### 14.3.1 SecurityContextRepository
+> From Spring Security 3.0, the job of loading and storing the security context is now delegated to a separate strategy interface:
+Spring Security 3.0 からは、 Security Context の読み込みと保存の仕事は、インターフェースに切り分けられました。
+
+```java
+public interface SecurityContextRepository {
+
+SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder);
+
+void saveContext(SecurityContext context, HttpServletRequest request,
+        HttpServletResponse response);
+}
+```
+
+> The HttpRequestResponseHolder is simply a container for the incoming request and response objects, allowing the implementation to replace these with wrapper classes.
+HttpRequestResponseHolder は、やってきたリクエストとレスポンスの単純なコンテナです。
+ラッパークラスに置き換えることができます。
+
+> The returned contents will be passed to the filter chain.
+返された内容は、フィルタ連鎖を通過したものになります。
+
+> The default implementation is HttpSessionSecurityContextRepository, which stores the security context as an HttpSession attribute [12].
+デフォルトの実装は HttpSessionSecurityContextRepository です。
+これは Security Context を HttpSession の attribute として保存します。
+
+> The most important configuration parameter for this implementation is the allowSessionCreation property, which defaults to true, thus allowing the class to create a session if it needs one to store the security context for an authenticated user (it won’t create one unless authentication has taken place and the contents of the security context have changed).
+この実装で最も重要な設定パラメータは、 `allowSessionCreation` プロパティです。
+このプロパティは、デフォルトで true です。
+これは、クラスが、 Security Context を認証されたユーザーのために保存する必要であればセッションを作成することを許可します。
+（認証が行われ、セキュリティコンテキストの内容が変更されない限り、セキュリティコンテキストを作成しません）
+
+> If you don’t want a session to be created, then you can set this property to false:
+もしセッションを作成してほしくない場合は、このプロパティに false を設定することができます。
+
+```xml
+<bean id="securityContextPersistenceFilter"
+    class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+<property name='securityContextRepository'>
+    <bean class='org.springframework.security.web.context.HttpSessionSecurityContextRepository'>
+    <property name='allowSessionCreation' value='false' />
+    </bean>
+</property>
+</bean>
+```
+
+> Alternatively you could provide an instance of NullSecurityContextRepository, a null object implementation, which will prevent the security context from being stored, even if a session has already been created during the request.
+他には、 NullSecurityContextRepository のインスタンスを提供することもできます。
+null オブジェクトの実装、これは Security Context が保存されることを防ぎます。
+たとえセッションが既に作られていてもです。
+
+### 14.4 UsernamePasswordAuthenticationFilter
+> We’ve now seen the three main filters which are always present in a Spring Security web configuration.
+私たちは今、３つの主要なフィルタを見ました。
+それらは常に Spring Security の Web 設定で存在します。
+
+> These are also the three which are automatically created by the namespace <http> element and cannot be substituted with alternatives.
+これら３つは、 `<http>` 要素によって自動的に作られます。
+別の手段で置換することはできません。
+
+> The only thing that’s missing now is an actual authentication mechanism, something that will allow a user to authenticate.
+まだ説明していない唯一のことは、実際の認証メカニズムです。
+ユーザーをどのように認証できるようにするかです。
+
+> This filter is the most commonly used authentication filter and the one that is most often customized [13].
+このフィルタは、認証フィルタによって最も共通的に利用されます。
+そして、これはもっともよくカスタマイズされものでもあります。
+
+> It also provides the implementation used by the <form-login> element from the namespace.
+それは、 namespace の `<form-login>` 要素による実装も提供します。
+
+> There are three stages required to configure it.
+そこには３つの設定を必要とする段階があります。
+
+- Configure a LoginUrlAuthenticationEntryPoint with the URL of the login page, just as we did above, and set it on the ExceptionTranslationFilter.
+ログインページの URL で LoginUrlAuthenticationEntryPoint を設定します。
+ちょうど、私たちは以前それをしました。
+そして、 ExceptionTranslationFilter をセットします。
+
+- Implement the login page (using a JSP or MVC controller).
+ログインページを実装します。（JSP か MVC コントローラを使って）
+
+- Configure an instance of UsernamePasswordAuthenticationFilter in the application context
+アプリケーションコンテキストの UsernamePasswordAuthenticationFilter のインスタンスを設定します。
+
+- Add the filter bean to your filter chain proxy (making sure you pay attention to the order).
+フィルタ Bean を FilterChainProxy に追加します。（順番に注意してください）
+
+> The login form simply contains username and password input fields, and posts to the URL that is monitored by the filter (by default this is /login).
+ログインフォームは単純に `username` と `password` の入力フィールドを含み、フィルタによって関しされた URL にポストします。
+（デフォルトは `/login` です）
+
+> The basic filter configuration looks something like this:
+基本的なフィルタの設定は、このようになります。
+
+```xml
+<bean id="authenticationFilter" class=
+"org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+<property name="authenticationManager" ref="authenticationManager"/>
+</bean>
+```
+
+#### 14.4.1 Application Flow on Authentication Success and Failure
+> The filter calls the configured AuthenticationManager to process each authentication request.
+フィルタは設定された AuthenticationManager を、それぞれの認証リクエストプロセスで呼びます。
+
+> The destination following a successful authentication or an authentication failure is controlled by the AuthenticationSuccessHandler and AuthenticationFailureHandler strategy interfaces, respectively.
+認証の成功か失敗のあとの目的地は、 AuthenticationSuccessHandler か AuthenticationFailureHandler の戦略インターフェースによってそれぞれ制御されます。
+
+> The filter has properties which allow you to set these so you can customize the behaviour completely [14].
+フィルタは、あなたにこれらの振る舞いを完全にカスタマイズできる設定を許可するプロパティを持ちます。
+
+> Some standard implementations are supplied such as SimpleUrlAuthenticationSuccessHandler, SavedRequestAwareAuthenticationSuccessHandler, SimpleUrlAuthenticationFailureHandler, ExceptionMappingAuthenticationFailureHandler and DelegatingAuthenticationFailureHandler.
+いくつかの標準的な実装が提供されています。
+たとえば、 SimpleUrlAuthenticationSuccessHandler, SavedRequestAwareAuthenticationSuccessHandler, SimpleUrlAuthenticationFailureHandler, ExceptionMappingAuthenticationFailureHandler, そして DelegatingAuthenticationFailureHandler です。
+
+> Have a look at the Javadoc for these classes and also for AbstractAuthenticationProcessingFilter to get an overview of how they work and the supported features.
+これらのクラスについては Javadoc を見てください。そして、また AbstractAuthenticationProcessingFilter についてもどのように働き、機能をサポートするかの概要を知るために見てください。
+
+> If authentication is successful, the resulting Authentication object will be placed into the SecurityContextHolder.
+もし認証が成功すると、戻された Authentication オブジェクトが SecurityContextHolder に配置される。
+
+> The configured AuthenticationSuccessHandler will then be called to either redirect or forward the user to the appropriate destination.
+設定された AuthenticationSuccessHandler は、ユーザーをそれぞれ適切な目的地にリダイレクトかフォワードするために呼び出されるだろう。
+
+> By default a SavedRequestAwareAuthenticationSuccessHandler is used, which means that the user will be redirected to the original destination they requested before they were asked to login.
+デフォルトでは、 SavedRequestAwareAuthenticationSuccessHandler が使用されます。
+これは、ユーザーは、彼らがログインする前にリクエストしたオリジナルの目的地にリダイレクトされることを意味します。
+
+> The ExceptionTranslationFilter caches the original request a user makes.
+ExceptionTranslationFilter は、ユーザーが作成したオリジナルのリクエストをキャッシュします。
+
+> When the user authenticates, the request handler makes use of this cached request to obtain the original URL and redirect to it.
+ユーザーを認証するとき、リクエストのハンドラは、オリジナルの URL を取得してリダイレクトするためにこのキャッシュされたリクエストを使用します。
+
+> The original request is then rebuilt and used as an alternative.
+オリジナルのリクエストは再構築され、代替として利用されます。
+
+> If authentication fails, the configured AuthenticationFailureHandler will be invoked.
+もし認証が失敗すると、設定された AuthenticationFailureHandler が実行されます。
+
