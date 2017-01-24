@@ -1,27 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-             xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="
-                http://www.springframework.org/schema/beans
-                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:sec="http://www.springframework.org/schema/security"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util-4.3.xsd
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <http>
-        <intercept-url pattern="/login.jsp" access="permitAll" />
-        <intercept-url pattern="/admin.html" access="hasRole('admin')" />
-        <intercept-url pattern="/**" access="isAuthenticated()" />
-        <form-login login-page="/login.jsp" />
-        <logout />
-    </http>
+    <bean id="secureRandom" class="java.security.SecureRandom" />
+
+    <bean name="anonymousKey" class="java.lang.Long" factory-method="toString">
+        <constructor-arg>
+            <bean factory-bean="secureRandom" factory-method="nextLong" />
+        </constructor-arg>
+    </bean>
     
-    <authentication-manager>
-        <authentication-provider user-service-ref="myUserDetailsService">
-            <password-encoder ref="bcryptEncoder" />
-        </authentication-provider>
-    </authentication-manager>
+    <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
+                    <constructor-arg ref="anonymousKey" />
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+            </list>
+        </constructor-arg>
+    </bean>
     
-    <beans:bean id="myUserDetailsService" class="sample.spring.security.MyUserDetailsService" />
-    <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-</beans:beans>
+    <bean id="securityFilterChain" class="org.springframework.security.web.DefaultSecurityFilterChain">
+        <constructor-arg index="0">
+            <bean class="org.springframework.security.web.util.matcher.AnyRequestMatcher" />
+        </constructor-arg>
+        
+        <constructor-arg index="1">
+            <list>
+                <bean class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+                
+                <bean class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+                    <property name="authenticationManager" ref="authenticationManager" />
+                </bean>
+                
+                <bean class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+                    <constructor-arg ref="anonymousKey" />
+                </bean>
+                
+                <bean class="org.springframework.security.web.access.ExceptionTranslationFilter">
+                    <constructor-arg>
+                        <bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+                            <constructor-arg value="/login.jsp" />
+                        </bean>
+                    </constructor-arg>
+                </bean>
+                
+                <bean class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+                    <property name="authenticationManager" ref="authenticationManager"/>
+                    <property name="accessDecisionManager" ref="accessDecisionManager"/>
+                    <property name="securityMetadataSource">
+                        <bean class="org.springframework.security.web.access.expression.ExpressionBasedFilterInvocationSecurityMetadataSource">
+                            <constructor-arg index="0">
+                                <util:map map-class="java.util.LinkedHashMap">
+                                    <entry>
+                                        <key>
+                                            <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+                                                <constructor-arg value="/login.jsp" />
+                                            </bean>
+                                        </key>
+                                        <bean class="org.springframework.security.access.SecurityConfig"
+                                              factory-method="createList">
+                                            <constructor-arg value="permitAll" />
+                                        </bean>
+                                    </entry>
+                                    <entry>
+                                        <key>
+                                            <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+                                                <constructor-arg value="/**" />
+                                            </bean>
+                                        </key>
+                                        <bean class="org.springframework.security.access.SecurityConfig"
+                                              factory-method="createList">
+                                            <constructor-arg value="isAuthenticated()" />
+                                        </bean>
+                                    </entry>
+                                </util:map>
+                            </constructor-arg>
+                            <constructor-arg index="1">
+                                <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+                            </constructor-arg>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+        <constructor-arg ref="securityFilterChain" />
+    </bean>
+    
+    <!--<sec:http>-->
+        <!--<sec:intercept-url pattern="/login.jsp" access="permitAll" />-->
+        <!--<sec:intercept-url pattern="/**" access="isAuthenticated()" />-->
+        <!--<sec:form-login login-page="/login.jsp" />-->
+    <!--</sec:http>-->
+
+    <!--<sec:authentication-manager />-->
+    <!--<http>-->
+        <!--<intercept-url pattern="/login.jsp" access="permitAll" />-->
+        <!--<intercept-url pattern="/admin.html" access="hasRole('admin')" />-->
+        <!--<intercept-url pattern="/**" access="isAuthenticated()" />-->
+        <!--<form-login login-page="/login.jsp" />-->
+        <!--<logout />-->
+    <!--</http>-->
+    <!---->
+    <!--<authentication-manager>-->
+        <!--<authentication-provider user-service-ref="myUserDetailsService">-->
+            <!--<password-encoder ref="bcryptEncoder" />-->
+        <!--</authentication-provider>-->
+    <!--</authentication-manager>-->
+    <!---->
+    <!--<bean id="myUserDetailsService" class="sample.spring.security.MyUserDetailsService" />-->
+    <!--<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>-->
+</beans>
