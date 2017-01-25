@@ -11,20 +11,31 @@
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <bean id="secureRandom" class="java.security.SecureRandom" />
-
-    <bean name="anonymousKey" class="java.lang.Long" factory-method="toString">
-        <constructor-arg>
-            <bean factory-bean="secureRandom" factory-method="nextLong" />
-        </constructor-arg>
+    <bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService">
+            <bean class="org.springframework.security.provisioning.InMemoryUserDetailsManager">
+                <constructor-arg>
+                    <list>
+                        <bean class="org.springframework.security.core.userdetails.User">
+                            <constructor-arg index="0" value="hoge" />
+                            <constructor-arg index="1" value="HOGE" />
+                            <constructor-arg index="2">
+                                <bean class="org.springframework.security.core.authority.AuthorityUtils"
+                                      factory-method="commaSeparatedStringToAuthorityList">
+                                    <constructor-arg value="ROLE_USER" />
+                                </bean>
+                            </constructor-arg>
+                        </bean>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </property>
     </bean>
     
     <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
         <constructor-arg>
             <list>
-                <bean class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-                    <constructor-arg ref="anonymousKey" />
-                </bean>
+                <ref bean="authenticationProvider" />
             </list>
         </constructor-arg>
     </bean>
@@ -34,6 +45,17 @@
             <list>
                 <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
             </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="usernamePasswordAuthenticationFilter"
+          class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
+    
+    <bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.LazyCsrfTokenRepository">
+        <constructor-arg>
+            <bean class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository" />
         </constructor-arg>
     </bean>
     
@@ -46,18 +68,33 @@
             <list>
                 <bean class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
                 
-                <bean class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-                    <property name="authenticationManager" ref="authenticationManager" />
+                <bean class="org.springframework.security.web.csrf.CsrfFilter">
+                    <constructor-arg ref="csrfTokenRepository" />
                 </bean>
                 
-                <bean class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-                    <constructor-arg ref="anonymousKey" />
+                <bean class="org.springframework.security.web.authentication.logout.LogoutFilter">
+                    <constructor-arg index="0" value="/login?logout" />
+                    <constructor-arg index="1">
+                        <list>
+                            <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+                            <bean class="org.springframework.security.web.csrf.CsrfLogoutHandler">
+                                <constructor-arg ref="csrfTokenRepository" />
+                            </bean>
+                        </list>
+                    </constructor-arg>
+                </bean>
+                
+                <ref bean="usernamePasswordAuthenticationFilter" />
+                
+                <bean class="org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter">
+                    <constructor-arg ref="usernamePasswordAuthenticationFilter" />
+                    <property name="authenticationUrl" value="/login" />
                 </bean>
                 
                 <bean class="org.springframework.security.web.access.ExceptionTranslationFilter">
                     <constructor-arg>
                         <bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-                            <constructor-arg value="/login.jsp" />
+                            <constructor-arg value="/login" />
                         </bean>
                     </constructor-arg>
                 </bean>
@@ -72,7 +109,7 @@
                                     <entry>
                                         <key>
                                             <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
-                                                <constructor-arg value="/login.jsp" />
+                                                <constructor-arg value="/login" />
                                             </bean>
                                         </key>
                                         <bean class="org.springframework.security.access.SecurityConfig"
@@ -107,13 +144,27 @@
         <constructor-arg ref="securityFilterChain" />
     </bean>
     
+    
+    
+    
     <!--<sec:http>-->
-        <!--<sec:intercept-url pattern="/login.jsp" access="permitAll" />-->
+        <!--<sec:intercept-url pattern="/login" access="permitAll" />-->
         <!--<sec:intercept-url pattern="/**" access="isAuthenticated()" />-->
-        <!--<sec:form-login login-page="/login.jsp" />-->
+        <!--<sec:form-login />-->
+        <!--<sec:logout />-->
     <!--</sec:http>-->
-
-    <!--<sec:authentication-manager />-->
+    <!---->
+    <!--<sec:authentication-manager>-->
+        <!--<sec:authentication-provider>-->
+            <!--<sec:user-service>-->
+                <!--<sec:user name="hoge" password="HOGE" authorities="ROLE_USER" />-->
+            <!--</sec:user-service>-->
+        <!--</sec:authentication-provider>-->
+    <!--</sec:authentication-manager>-->
+    
+    
+    
+    
     <!--<http>-->
         <!--<intercept-url pattern="/login.jsp" access="permitAll" />-->
         <!--<intercept-url pattern="/admin.html" access="hasRole('admin')" />-->
