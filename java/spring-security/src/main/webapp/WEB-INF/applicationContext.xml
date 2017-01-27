@@ -12,192 +12,199 @@
                 http://www.springframework.org/schema/security/spring-security.xsd">
 
 
-    <bean id="springSecurityFilterChain"
-          class="org.springframework.security.web.FilterChainProxy">
-        <constructor-arg ref="securityFilterChain" />
-    </bean>
+    <!--<bean id="springSecurityFilterChain"-->
+          <!--class="org.springframework.security.web.FilterChainProxy">-->
+        <!--<constructor-arg ref="securityFilterChain" />-->
+    <!--</bean>-->
 
-    <bean id="securityFilterChain"
-          class="org.springframework.security.web.DefaultSecurityFilterChain">
-        <constructor-arg index="0">
-            <bean class="org.springframework.security.web.util.matcher.AnyRequestMatcher" />
-        </constructor-arg>
+    <!--<bean id="securityFilterChain"-->
+          <!--class="org.springframework.security.web.DefaultSecurityFilterChain">-->
+        <!--<constructor-arg index="0">-->
+            <!--<bean class="org.springframework.security.web.util.matcher.AnyRequestMatcher" />-->
+        <!--</constructor-arg>-->
 
-        <constructor-arg index="1">
-            <list>
-                <ref bean="securityContextPersistenceFilter" />
-                <ref bean="csrfFilter" />
-                <ref bean="logoutFilter" />
-                <ref bean="usernamePasswordAuthenticationFilter" />
-                <ref bean="defaultLoginPageGeneratingFilter" />
-                <ref bean="exceptionTranslationFilter" />
-                <ref bean="filterSecurityInterceptor" />
-            </list>
-        </constructor-arg>
-    </bean>
+        <!--<constructor-arg index="1">-->
+            <!--<list>-->
+                <!--<ref bean="securityContextPersistenceFilter" />-->
+                <!--<ref bean="csrfFilter" />-->
+                <!--<ref bean="logoutFilter" />-->
+                <!--<ref bean="usernamePasswordAuthenticationFilter" />-->
+                <!--<ref bean="defaultLoginPageGeneratingFilter" />-->
+                <!--<ref bean="exceptionTranslationFilter" />-->
+                <!--<ref bean="filterSecurityInterceptor" />-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
 
-    <!-- SecurityContextHolder の初期化・クリア -->
-    <bean id="securityContextPersistenceFilter"
-          class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+    <!--&lt;!&ndash; SecurityContextHolder の初期化・クリア &ndash;&gt;-->
+    <!--<bean id="securityContextPersistenceFilter"-->
+          <!--class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />-->
 
-    <!-- CSRF -->
-    <bean id="csrfFilter"
-          class="org.springframework.security.web.csrf.CsrfFilter">
-        <constructor-arg ref="csrfTokenRepository" />
-    </bean>
+    <!--&lt;!&ndash; CSRF &ndash;&gt;-->
+    <!--<bean id="csrfFilter"-->
+          <!--class="org.springframework.security.web.csrf.CsrfFilter">-->
+        <!--<constructor-arg ref="csrfTokenRepository" />-->
+    <!--</bean>-->
 
-    <bean id="csrfTokenRepository"
-          class="org.springframework.security.web.csrf.LazyCsrfTokenRepository">
-        <constructor-arg>
-            <bean class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository" />
-        </constructor-arg>
-    </bean>
+    <!--<bean id="csrfTokenRepository"-->
+          <!--class="org.springframework.security.web.csrf.LazyCsrfTokenRepository">-->
+        <!--<constructor-arg>-->
+            <!--<bean class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository" />-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
 
-    <!-- ログアウト -->
-    <bean id="logoutFilter"
-          class="org.springframework.security.web.authentication.logout.LogoutFilter">
-        <constructor-arg index="0" value="/login?logout" />
-        <constructor-arg index="1">
-            <list>
-                <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
-                <bean class="org.springframework.security.web.csrf.CsrfLogoutHandler">
-                    <constructor-arg ref="csrfTokenRepository" />
-                </bean>
-            </list>
-        </constructor-arg>
-    </bean>
+    <!--&lt;!&ndash; ログアウト &ndash;&gt;-->
+    <!--<bean id="logoutFilter"-->
+          <!--class="org.springframework.security.web.authentication.logout.LogoutFilter">-->
+        <!--<constructor-arg index="0" value="/login?logout" />-->
+        <!--<constructor-arg index="1">-->
+            <!--<list>-->
+                <!--<bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />-->
+                <!--<bean class="org.springframework.security.web.csrf.CsrfLogoutHandler">-->
+                    <!--<constructor-arg ref="csrfTokenRepository" />-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
 
-    <!-- ログイン認証 -->
-    <bean id="usernamePasswordAuthenticationFilter"
-          class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-        <property name="authenticationManager" ref="authenticationManager" />
-        <property name="authenticationFailureHandler">
-            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-                <property name="defaultFailureUrl" value="/login?error" />
-            </bean>
-        </property>
-    </bean>
+    <!--&lt;!&ndash; ログイン認証 &ndash;&gt;-->
+    <!--<bean id="usernamePasswordAuthenticationFilter"-->
+          <!--class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">-->
+        <!--<property name="authenticationManager" ref="authenticationManager" />-->
+        <!--<property name="authenticationFailureHandler">-->
+            <!--<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">-->
+                <!--<property name="defaultFailureUrl" value="/login?error" />-->
+            <!--</bean>-->
+        <!--</property>-->
+    <!--</bean>-->
 
-    <!-- デフォルトのログインページ生成 -->
-    <bean id="defaultLoginPageGeneratingFilter"
-          class="org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter">
-        <constructor-arg ref="usernamePasswordAuthenticationFilter" />
-        <property name="authenticationUrl" value="/login" />
-    </bean>
+    <!--&lt;!&ndash; デフォルトのログインページ生成 &ndash;&gt;-->
+    <!--<bean id="defaultLoginPageGeneratingFilter"-->
+          <!--class="org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter">-->
+        <!--<constructor-arg ref="usernamePasswordAuthenticationFilter" />-->
+        <!--<property name="authenticationUrl" value="/login" />-->
+    <!--</bean>-->
 
-    <!-- 認証系の例外ハンドラ -->
-    <bean id="exceptionTranslationFilter"
-          class="org.springframework.security.web.access.ExceptionTranslationFilter">
-        <constructor-arg>
-            <bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-                <constructor-arg value="/login" />
-            </bean>
-        </constructor-arg>
-    </bean>
+    <!--&lt;!&ndash; 認証系の例外ハンドラ &ndash;&gt;-->
+    <!--<bean id="exceptionTranslationFilter"-->
+          <!--class="org.springframework.security.web.access.ExceptionTranslationFilter">-->
+        <!--<constructor-arg>-->
+            <!--<bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">-->
+                <!--<constructor-arg value="/login" />-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
 
-    <!-- 認証・認可処理 -->
-    <bean id="filterSecurityInterceptor"
-          class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-        <property name="authenticationManager" ref="authenticationManager"/>
-        <property name="accessDecisionManager" ref="accessDecisionManager"/>
-        <property name="securityMetadataSource" ref="securityMetadataSource" />
-    </bean>
-    
-    <!-- 認証処理本体 -->
-    <bean id="authenticationManager"
-          class="org.springframework.security.authentication.ProviderManager">
-        <constructor-arg>
-            <list>
-                <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-                    <property name="userDetailsService">
-                        <bean class="org.springframework.security.provisioning.InMemoryUserDetailsManager">
-                            <constructor-arg>
-                                <list>
-                                    <bean class="org.springframework.security.core.userdetails.User">
-                                        <constructor-arg index="0" value="hoge" />
-                                        <constructor-arg index="1" value="HOGE" />
-                                        <constructor-arg index="2">
-                                            <bean class="org.springframework.security.core.authority.AuthorityUtils"
-                                                  factory-method="commaSeparatedStringToAuthorityList">
-                                                <constructor-arg value="ROLE_USER" />
-                                            </bean>
-                                        </constructor-arg>
-                                    </bean>
-                                </list>
-                            </constructor-arg>
-                        </bean>
-                    </property>
-                </bean>
-            </list>
-        </constructor-arg>
-    </bean>
-
-    <!-- 認可処理本体 -->
-    <bean id="accessDecisionManager"
-          class="org.springframework.security.access.vote.AffirmativeBased">
-        <constructor-arg>
-            <list>
-                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
-            </list>
-        </constructor-arg>
-    </bean>
-
-    <!-- 認証が必要な URL と権限のマッピングなどの定義情報 -->
-    <bean id="securityMetadataSource"
-          class="org.springframework.security.web.access.expression.ExpressionBasedFilterInvocationSecurityMetadataSource">
-        <constructor-arg index="0">
-            <util:map id="requestMap" map-class="java.util.LinkedHashMap">
-                <entry>
-                    <key>
-                        <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
-                            <constructor-arg value="/login" />
-                        </bean>
-                    </key>
-                    <bean class="org.springframework.security.access.SecurityConfig"
-                          factory-method="createList">
-                        <constructor-arg value="permitAll" />
-                    </bean>
-                </entry>
-                <entry>
-                    <key>
-                        <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
-                            <constructor-arg value="/**" />
-                        </bean>
-                    </key>
-                    <bean class="org.springframework.security.access.SecurityConfig"
-                          factory-method="createList">
-                        <constructor-arg value="isAuthenticated()" />
-                    </bean>
-                </entry>
-            </util:map>
-        </constructor-arg>
-        <constructor-arg index="1">
-            <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
-        </constructor-arg>
-    </bean>
-
-
-    
-    
-    
-    
-    
-    
-    
-    <!--<sec:http>-->
-        <!--<sec:intercept-url pattern="/login" access="permitAll" />-->
-        <!--<sec:intercept-url pattern="/**" access="isAuthenticated()" />-->
-        <!--<sec:form-login />-->
-        <!--<sec:logout />-->
-    <!--</sec:http>-->
+    <!--&lt;!&ndash; 認証・認可処理 &ndash;&gt;-->
+    <!--<bean id="filterSecurityInterceptor"-->
+          <!--class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">-->
+        <!--<property name="authenticationManager" ref="authenticationManager"/>-->
+        <!--<property name="accessDecisionManager" ref="accessDecisionManager"/>-->
+        <!--<property name="securityMetadataSource" ref="securityMetadataSource" />-->
+    <!--</bean>-->
     <!---->
-    <!--<sec:authentication-manager>-->
-        <!--<sec:authentication-provider>-->
-            <!--<sec:user-service>-->
-                <!--<sec:user name="hoge" password="HOGE" authorities="ROLE_USER" />-->
-            <!--</sec:user-service>-->
-        <!--</sec:authentication-provider>-->
-    <!--</sec:authentication-manager>-->
+    <!--&lt;!&ndash; 認証処理本体 &ndash;&gt;-->
+    <!--<bean id="authenticationManager"-->
+          <!--class="org.springframework.security.authentication.ProviderManager">-->
+        <!--<constructor-arg>-->
+            <!--<list>-->
+                <!--<bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">-->
+                    <!--<property name="userDetailsService">-->
+                        <!--<bean class="org.springframework.security.provisioning.InMemoryUserDetailsManager">-->
+                            <!--<constructor-arg>-->
+                                <!--<list>-->
+                                    <!--<bean class="org.springframework.security.core.userdetails.User">-->
+                                        <!--<constructor-arg index="0" value="hoge" />-->
+                                        <!--<constructor-arg index="1" value="HOGE" />-->
+                                        <!--<constructor-arg index="2">-->
+                                            <!--<bean class="org.springframework.security.core.authority.AuthorityUtils"-->
+                                                  <!--factory-method="commaSeparatedStringToAuthorityList">-->
+                                                <!--<constructor-arg value="ROLE_USER" />-->
+                                            <!--</bean>-->
+                                        <!--</constructor-arg>-->
+                                    <!--</bean>-->
+                                <!--</list>-->
+                            <!--</constructor-arg>-->
+                        <!--</bean>-->
+                    <!--</property>-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 認可処理本体 &ndash;&gt;-->
+    <!--<bean id="accessDecisionManager"-->
+          <!--class="org.springframework.security.access.vote.AffirmativeBased">-->
+        <!--<constructor-arg>-->
+            <!--<list>-->
+                <!--<bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 認証が必要な URL と権限のマッピングなどの定義情報 &ndash;&gt;-->
+    <!--<bean id="securityMetadataSource"-->
+          <!--class="org.springframework.security.web.access.expression.ExpressionBasedFilterInvocationSecurityMetadataSource">-->
+        <!--<constructor-arg index="0">-->
+            <!--<util:map id="requestMap" map-class="java.util.LinkedHashMap">-->
+                <!--<entry>-->
+                    <!--<key>-->
+                        <!--<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">-->
+                            <!--<constructor-arg value="/login" />-->
+                        <!--</bean>-->
+                    <!--</key>-->
+                    <!--<bean class="org.springframework.security.access.SecurityConfig"-->
+                          <!--factory-method="createList">-->
+                        <!--<constructor-arg value="permitAll" />-->
+                    <!--</bean>-->
+                <!--</entry>-->
+                <!--<entry>-->
+                    <!--<key>-->
+                        <!--<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">-->
+                            <!--<constructor-arg value="/**" />-->
+                        <!--</bean>-->
+                    <!--</key>-->
+                    <!--<bean class="org.springframework.security.access.SecurityConfig"-->
+                          <!--factory-method="createList">-->
+                        <!--<constructor-arg value="isAuthenticated()" />-->
+                    <!--</bean>-->
+                <!--</entry>-->
+            <!--</util:map>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg index="1">-->
+            <!--<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+
+    
+    
+    
+    
+    
+    
+    
+    <sec:http pattern="/api/**">
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:form-login />
+        <sec:logout />
+    </sec:http>
+
+    <sec:http pattern="/**">
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:form-login />
+        <sec:logout />
+    </sec:http>
+
+    <sec:authentication-manager>
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user name="hoge" password="HOGE" authorities="ROLE_USER" />
+            </sec:user-service>
+        </sec:authentication-provider>
+    </sec:authentication-manager>
     
     
     
