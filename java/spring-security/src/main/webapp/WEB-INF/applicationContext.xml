@@ -198,9 +198,6 @@
         </sec:authentication-provider>
     </sec:authentication-manager>
     
-    <bean id="testService"
-          class="sample.spring.security.TestServlet" />
-    
     
     <!--<http>-->
         <!--<intercept-url pattern="/login.jsp" access="permitAll" />-->
