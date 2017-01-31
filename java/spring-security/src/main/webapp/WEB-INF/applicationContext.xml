@@ -198,6 +198,7 @@
         </sec:authentication-provider>
     </sec:authentication-manager>
     
+    <bean id="helloService" class="sample.spring.service.HelloService" />
     
     <!--<http>-->
         <!--<intercept-url pattern="/login.jsp" access="permitAll" />-->
