@@ -181,7 +181,7 @@
     
     
     
-    
+    <sec:global-method-security pre-post-annotations="enabled" />
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
@@ -198,7 +198,8 @@
         </sec:authentication-provider>
     </sec:authentication-manager>
     
-    
+    <bean id="testService"
+          class="sample.spring.security.TestServlet" />
     
     
     <!--<http>-->
