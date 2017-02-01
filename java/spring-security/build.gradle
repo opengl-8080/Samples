@@ -26,7 +26,7 @@ dependencies {
     compile 'javax.servlet:jstl:1.2'
     compile 'org.springframework.security:spring-security-web:4.2.1.RELEASE'
     compile 'org.springframework.security:spring-security-config:4.2.1.RELEASE'
-    compile 'org.springframework:spring-webmvc:4.3.6.RELEASE'
+//    compile 'org.springframework:spring-webmvc:4.3.6.RELEASE'
 }
 
 war.baseName = 'spring-security-sample'
