@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
 import java.util.Set;
 
-@HandlesTypes(MyInterface.class)
+@HandlesTypes({MyInterface.class, ConcreatClass.class, MyAnnotation.class})
 public class MyInitializer implements ServletContainerInitializer {
     
     @Override
