@@ -3,5 +3,7 @@ dependencies {
     compile 'javax.servlet:jstl:1.2'
     compile 'org.springframework.security:spring-security-web:4.2.1.RELEASE'
     compile 'org.springframework.security:spring-security-config:4.2.1.RELEASE'
+    compile 'org.springframework:spring-jdbc:4.3.6.RELEASE'
+    compile 'com.h2database:h2:1.4.193'
 }
 

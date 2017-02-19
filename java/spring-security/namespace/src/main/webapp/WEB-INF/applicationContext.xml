@@ -2,11 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:sec="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
-         http://www.springframework.org/schema/security/spring-security.xsd">
+         http://www.springframework.org/schema/security/spring-security.xsd
+         http://www.springframework.org/schema/jdbc
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
@@ -14,12 +17,17 @@
         <sec:form-login />
         <sec:logout />
     </sec:http>
-
+    
+    <jdbc:embedded-database id="dataSource" type="H2">
+        <jdbc:script location="classpath:/sql/create_database.sql" />
+    </jdbc:embedded-database>
+    
     <sec:authentication-manager>
         <sec:authentication-provider>
-            <sec:user-service>
-                <sec:user name="hoge" password="HOGE" authorities="ROLE_USER" />
-            </sec:user-service>
+            <sec:jdbc-user-service
+                data-source-ref="dataSource"
+                users-by-username-query="SELECT LOGIN_ID, PASSWORD, ENABLED FROM USERS WHERE LOGIN_ID=?"
+                authorities-by-username-query="SELECT LOGIN_ID, ROLE FROM AUTHORITIES WHERE LOGIN_ID=?" />
         </sec:authentication-provider>
     </sec:authentication-manager>
 </beans>
