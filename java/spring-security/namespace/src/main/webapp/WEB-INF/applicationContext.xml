@@ -12,15 +12,32 @@
          http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="sample.spring.security" />
+    <sec:global-method-security pre-post-annotations="enabled" />
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/hello" access="isAuthenticated() and hasRole('ADMIN')" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
     </sec:http>
     
     <sec:authentication-manager>
-        <sec:authentication-provider user-service-ref="myUserDetailsService" />
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user
+                    name="hoge"
+                    password="hoge"
+                    authorities="ROLE_USER, ROLE_ADMIN" />
+                <sec:user
+                    name="fuga"
+                    password="fuga"
+                    authorities="ROLE_USER" />
+                <sec:user
+                    name="piyo"
+                    password="piyo"
+                    authorities="ROLE_ADMIN" />
+            </sec:user-service>
+        </sec:authentication-provider>
     </sec:authentication-manager>
 </beans>
