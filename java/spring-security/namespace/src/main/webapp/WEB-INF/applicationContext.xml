@@ -16,8 +16,7 @@
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/hello" access="isAuthenticated() and hasRole('ADMIN')" />
-        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated() and hasAuthority('USER')" />
         <sec:form-login />
         <sec:logout />
     </sec:http>
@@ -28,15 +27,11 @@
                 <sec:user
                     name="hoge"
                     password="hoge"
-                    authorities="ROLE_USER, ROLE_ADMIN" />
+                    authorities="USER" />
                 <sec:user
                     name="fuga"
                     password="fuga"
-                    authorities="ROLE_USER" />
-                <sec:user
-                    name="piyo"
-                    password="piyo"
-                    authorities="ROLE_ADMIN" />
+                    authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
