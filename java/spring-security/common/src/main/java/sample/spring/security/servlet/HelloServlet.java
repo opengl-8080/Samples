@@ -2,9 +2,6 @@ package sample.spring.security.servlet;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import sample.spring.security.service.HelloService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +21,7 @@ public class HelloServlet extends HttpServlet {
         
         Thread thread = new Thread(this::printAuthentication);
         thread.setName("sub-thread");
+        thread.start();
 
         try {
             Thread.sleep(1000);
@@ -33,7 +31,13 @@ public class HelloServlet extends HttpServlet {
     }
     
     private void printAuthentication() {
+        String threadName = Thread.currentThread().getName();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.printf("[%s] auth.hash=%s%n", Thread.currentThread().getName(), auth.hashCode());
+
+        if (auth == null) {
+            System.out.printf("[%s] Authentication is null.%n", threadName);
+        } else {
+            System.out.printf("[%s] auth.hash = %s%n", threadName, auth.hashCode());
+        }
     }
 }
