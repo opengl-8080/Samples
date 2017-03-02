@@ -19,6 +19,7 @@
         <sec:intercept-url pattern="/**" access="isAuthenticated() and hasAuthority('USER')" />
         <sec:form-login />
         <sec:logout />
+        <sec:remember-me key="myKey" />
     </sec:http>
     
     <sec:authentication-manager>
