@@ -17,9 +17,11 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .anyRequest().access("isAuthenticated() and hasAuthority('USER')")
+                .anyRequest().access("isAuthenticated()")
                 .and()
-                .formLogin();
+                .formLogin()
+                .and()
+                .rememberMe();
     }
     
     @Autowired
@@ -27,10 +29,6 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
             .withUser("hoge")
             .password("hoge")
-            .authorities("USER")
-            .and()
-            .withUser("fuga")
-            .password("fuga")
             .authorities(Collections.emptyList());
     }
 }
