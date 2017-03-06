@@ -10,7 +10,7 @@
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:intercept-url pattern="/**" access="isFullyAuthenticated()" />
         <sec:form-login />
         <sec:logout />
         <sec:remember-me />
