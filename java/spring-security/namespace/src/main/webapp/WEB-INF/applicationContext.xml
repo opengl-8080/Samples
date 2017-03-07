@@ -7,13 +7,23 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
+    
+    <bean id="accessDecisionManager"
+          class="org.springframework.security.access.vote.AffirmativeBased">
+        <constructor-arg>
+            <list>
+                <bean class="sample.spring.security.voter.AcceptFugaVoter" />
+                <bean class="org.springframework.security.access.vote.RoleVoter" />
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+            </list>
+        </constructor-arg>
+    </bean>
 
-    <sec:http>
-        <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+    <sec:http use-expressions="false" access-decision-manager-ref="accessDecisionManager">
+        <sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <sec:intercept-url pattern="/**" access="ROLE_USER, acceptFuga" />
         <sec:form-login />
         <sec:logout />
-        <sec:remember-me />
     </sec:http>
     
     <sec:authentication-manager>
@@ -22,7 +32,15 @@
                 <sec:user
                     name="hoge"
                     password="hoge"
-                    authorities="" />
+                    authorities="ROLE_USER" />
+                <sec:user
+                    name="fuga"
+                    password="fuga"
+                    authorities="ROLE_FUGA" />
+                <sec:user
+                    name="piyo"
+                    password="piyo"
+                    authorities="ROLE_PIYO" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
