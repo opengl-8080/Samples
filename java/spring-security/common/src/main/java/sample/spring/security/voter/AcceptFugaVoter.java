@@ -10,7 +10,7 @@ import java.util.Collection;
 public class AcceptFugaVoter implements AccessDecisionVoter<Object> {
     @Override
     public boolean supports(ConfigAttribute attribute) {
-        return "acceptFuga".equals(attribute.getAttribute());
+        return true;
     }
 
     @Override
@@ -24,14 +24,8 @@ public class AcceptFugaVoter implements AccessDecisionVoter<Object> {
         if (!(principal instanceof UserDetails)) {
             return ACCESS_ABSTAIN;
         }
-        
-        for (ConfigAttribute attribute : attributes) {
-            if (this.supports(attribute)) {
-                String username = ((UserDetails)principal).getUsername();
-                return "fuga".equals(username) ? ACCESS_GRANTED : ACCESS_DENIED;
-            }
-        }
-        
-        return ACCESS_ABSTAIN;
+
+        String username = ((UserDetails)principal).getUsername();
+        return "fuga".equals(username) ? ACCESS_GRANTED : ACCESS_DENIED;
     }
 }

@@ -13,15 +13,14 @@
         <constructor-arg>
             <list>
                 <bean class="sample.spring.security.voter.AcceptFugaVoter" />
-                <bean class="org.springframework.security.access.vote.RoleVoter" />
-                <bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
             </list>
         </constructor-arg>
     </bean>
 
-    <sec:http use-expressions="false" access-decision-manager-ref="accessDecisionManager">
-        <sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <sec:intercept-url pattern="/**" access="ROLE_USER, acceptFuga" />
+    <sec:http access-decision-manager-ref="accessDecisionManager">
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="hasRole('USER')" />
         <sec:form-login />
         <sec:logout />
     </sec:http>
