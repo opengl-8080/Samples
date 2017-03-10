@@ -8,18 +8,12 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <bean id="accessDecisionManager"
-          class="org.springframework.security.access.vote.AffirmativeBased">
-        <constructor-arg>
-            <list>
-                <bean class="sample.spring.security.voter.AcceptFugaVoter" />
-                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
-            </list>
-        </constructor-arg>
-    </bean>
-
-    <sec:http access-decision-manager-ref="accessDecisionManager">
+    <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/has/role-user" access="hasRole('USER')" />
+        <sec:intercept-url pattern="/has/role-role_user" access="hasRole('ROLE_USER')" />
+        <sec:intercept-url pattern="/has/authority-user" access="hasAuthority('USER')" />
+        <sec:intercept-url pattern="/has/authority-role_user" access="hasAuthority('ROLE_USER')" />
         <sec:intercept-url pattern="/**" access="hasRole('USER')" />
         <sec:form-login />
         <sec:logout />
@@ -29,17 +23,13 @@
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user
-                    name="hoge"
-                    password="hoge"
+                    name="user"
+                    password="user"
+                    authorities="USER" />
+                <sec:user
+                    name="roleuser"
+                    password="roleuser"
                     authorities="ROLE_USER" />
-                <sec:user
-                    name="fuga"
-                    password="fuga"
-                    authorities="ROLE_FUGA" />
-                <sec:user
-                    name="piyo"
-                    password="piyo"
-                    authorities="ROLE_PIYO" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
