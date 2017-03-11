@@ -7,14 +7,28 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <bean id="roleHierarchy"
+          class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+        <property name="hierarchy">
+            <value>
+                ROLE_ADMIN > ROLE_USER
+            </value>
+        </property>
+    </bean>
+    
+    <bean id="expressionHandler"
+          class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+        <property name="roleHierarchy" ref="roleHierarchy" />
+    </bean>
     
     <sec:http>
+        <sec:expression-handler ref="expressionHandler" />
+        
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/has/role-user" access="hasRole('USER')" />
-        <sec:intercept-url pattern="/has/role-role_user" access="hasRole('ROLE_USER')" />
-        <sec:intercept-url pattern="/has/authority-user" access="hasAuthority('USER')" />
-        <sec:intercept-url pattern="/has/authority-role_user" access="hasAuthority('ROLE_USER')" />
-        <sec:intercept-url pattern="/**" access="hasRole('USER')" />
+        <sec:intercept-url pattern="/hierarchy/admin" access="hasRole('ADMIN')" />
+        <sec:intercept-url pattern="/hierarchy/user" access="hasRole('USER')" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
     </sec:http>
@@ -25,11 +39,11 @@
                 <sec:user
                     name="user"
                     password="user"
-                    authorities="USER" />
-                <sec:user
-                    name="roleuser"
-                    password="roleuser"
                     authorities="ROLE_USER" />
+                <sec:user
+                    name="admin"
+                    password="admin"
+                    authorities="ROLE_ADMIN" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
