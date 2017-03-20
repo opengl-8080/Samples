@@ -2,14 +2,17 @@ package sample.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.FilterInvocation;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
+import sample.spring.security.voter.AcceptFugaVoter;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @EnableWebSecurity
 @ComponentScan
@@ -18,36 +21,33 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .expressionHandler(this.createSecurityExpressionHandler())
+                .accessDecisionManager(this.createAccessDecisionManager())
                 .antMatchers("/login").permitAll()
-                .antMatchers("/hierarchy/user").hasRole("USER")
-                .antMatchers("/hierarchy/admin").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().hasAuthority("HOGE")
                 .and()
-                .formLogin()
-                .and()
-                .rememberMe();
+                .formLogin();
     }
     
-    private SecurityExpressionHandler<FilterInvocation> createSecurityExpressionHandler() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
-
-        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
-        expressionHandler.setRoleHierarchy(roleHierarchy);
-        
-        return expressionHandler;
+    private AccessDecisionManager createAccessDecisionManager() {
+        return new AffirmativeBased(Arrays.asList(
+            new WebExpressionVoter(),
+            new AcceptFugaVoter()
+        ));
     }
     
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser("user")
-            .password("user")
-            .roles("USER")
+            .withUser("hoge")
+            .password("hoge")
+            .authorities("HOGE")
         .and()
-            .withUser("admin")
-            .password("admin")
-            .roles("ADMIN");
+            .withUser("fuga")
+            .password("fuga")
+            .authorities(Collections.emptyList())
+        .and()
+            .withUser("piyo")
+            .password("piyo")
+            .authorities(Collections.emptyList());
     }
 }

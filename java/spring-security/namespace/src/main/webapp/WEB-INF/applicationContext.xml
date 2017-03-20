@@ -7,37 +7,20 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-
-    <bean id="roleHierarchy"
-          class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
-        <property name="hierarchy">
-            <value>
-                ROLE_ADMIN > ROLE_USER
-            </value>
-        </property>
-    </bean>
-    
-    <bean id="roleHierarchyVoter"
-          class="org.springframework.security.access.vote.RoleHierarchyVoter">
-        <constructor-arg ref="roleHierarchy" />
-    </bean>
     
     <bean id="accessDecisionManager"
           class="org.springframework.security.access.vote.AffirmativeBased">
         <constructor-arg>
             <list>
-                <bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
-                <ref bean="roleHierarchyVoter" />
+                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+                <bean class="sample.spring.security.voter.AcceptFugaVoter" />
             </list>
         </constructor-arg>
     </bean>
     
-    <sec:http use-expressions="false"
-              access-decision-manager-ref="accessDecisionManager">
-        <sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <sec:intercept-url pattern="/hierarchy/admin" access="ROLE_ADMIN" />
-        <sec:intercept-url pattern="/hierarchy/user" access="ROLE_USER" />
-        <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+    <sec:http access-decision-manager-ref="accessDecisionManager">
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="hasAuthority('HOGE')" />
         <sec:form-login />
         <sec:logout />
     </sec:http>
@@ -46,13 +29,17 @@
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user
-                    name="user"
-                    password="user"
-                    authorities="ROLE_USER" />
+                    name="hoge"
+                    password="hoge"
+                    authorities="HOGE" />
                 <sec:user
-                    name="admin"
-                    password="admin"
-                    authorities="ROLE_ADMIN" />
+                    name="fuga"
+                    password="fuga"
+                    authorities="" />
+                <sec:user
+                    name="piyo"
+                    password="piyo"
+                    authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
