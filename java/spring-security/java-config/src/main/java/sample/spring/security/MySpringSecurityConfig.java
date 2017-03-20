@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import java.util.Collections;
+
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 @EnableWebSecurity
 @ComponentScan
@@ -25,12 +27,12 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser("user")
-            .password("user")
-            .authorities("USER")
+            .withUser("hoge")
+            .password("hoge")
+            .authorities(Collections.emptyList())
         .and()
-            .withUser("admin")
-            .password("admin")
-            .authorities("ADMIN");
+            .withUser("fuga")
+            .password("fuga")
+            .authorities(Collections.emptyList());
     }
 }

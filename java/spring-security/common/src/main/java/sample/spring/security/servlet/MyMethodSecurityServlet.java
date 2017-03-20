@@ -1,6 +1,9 @@
 package sample.spring.security.servlet;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import sample.spring.security.service.MyMethodSecurityService;
@@ -20,10 +23,14 @@ public class MyMethodSecurityServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(req.getServletContext());
         MyMethodSecurityService service = context.getBean(MyMethodSecurityService.class);
-        
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+
         PrintWriter writer = resp.getWriter();
         try {
-            writer.println(service.getMessage());
+            writer.println(service.getMessage(username));
         } catch (AccessDeniedException e) {
             writer.println(e.getMessage());
         } finally {

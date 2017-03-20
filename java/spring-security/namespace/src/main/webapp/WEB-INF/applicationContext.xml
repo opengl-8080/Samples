@@ -26,13 +26,13 @@
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user
-                    name="user"
-                    password="user"
-                    authorities="USER" />
+                    name="hoge"
+                    password="hoge"
+                    authorities="" />
                 <sec:user
-                    name="admin"
-                    password="admin"
-                    authorities="ADMIN" />
+                    name="fuga"
+                    password="fuga"
+                    authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
