@@ -4,10 +4,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HelloService {
+public class MyMethodSecurityService {
     
-    @PreAuthorize("hasRole('USER')")
-    public void hello() {
-        System.out.println("Hello Service");
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String getMessage() {
+        return "Hello Method Security!!";
     }
 }

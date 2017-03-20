@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
-         http://www.springframework.org/schema/security/spring-security.xsd">
+         http://www.springframework.org/schema/security/spring-security.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd">
     
-    <bean id="accessDecisionManager"
-          class="org.springframework.security.access.vote.AffirmativeBased">
-        <constructor-arg>
-            <list>
-                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
-                <bean class="sample.spring.security.voter.AcceptFugaVoter" />
-            </list>
-        </constructor-arg>
-    </bean>
+    <context:component-scan base-package="sample.spring.security" />
     
-    <sec:http access-decision-manager-ref="accessDecisionManager">
+    <sec:global-method-security pre-post-annotations="enabled" />
+    
+    <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="hasAuthority('HOGE')" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
     </sec:http>
@@ -29,17 +26,13 @@
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user
-                    name="hoge"
-                    password="hoge"
-                    authorities="HOGE" />
+                    name="user"
+                    password="user"
+                    authorities="USER" />
                 <sec:user
-                    name="fuga"
-                    password="fuga"
-                    authorities="" />
-                <sec:user
-                    name="piyo"
-                    password="piyo"
-                    authorities="" />
+                    name="admin"
+                    password="admin"
+                    authorities="ADMIN" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
