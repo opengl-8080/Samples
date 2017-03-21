@@ -17,7 +17,7 @@
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:intercept-url pattern="/**" access="@myExpression.check(authentication)" />
         <sec:form-login />
         <sec:logout />
     </sec:http>

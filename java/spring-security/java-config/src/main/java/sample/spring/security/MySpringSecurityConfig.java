@@ -19,7 +19,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().access("@myExpression.check(authentication)")
                 .and()
                 .formLogin();
     }
