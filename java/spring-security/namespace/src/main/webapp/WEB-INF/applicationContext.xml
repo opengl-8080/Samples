@@ -20,6 +20,7 @@
         <sec:intercept-url pattern="/**" access="@myExpression.check(authentication)" />
         <sec:form-login />
         <sec:logout />
+        <sec:remember-me />
     </sec:http>
     
     <sec:authentication-manager>

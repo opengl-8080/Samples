@@ -770,3 +770,214 @@ ExceptionTranslationFilter は、ユーザーが作成したオリジナルの�
 > If authentication fails, the configured AuthenticationFailureHandler will be invoked.
 もし認証が失敗すると、設定された AuthenticationFailureHandler が実行されます。
 
+## 17. Remember-Me Authentication
+### 17.1 Overview
+> Remember-me or persistent-login authentication refers to web sites being able to remember the identity of a principal between sessions.
+Rmember-me もしくは永続ログイン認証は、セッションの間プリンシパルの身元を記録できることを示します。
+
+> This is typically accomplished by sending a cookie to the browser, with the cookie being detected during future sessions and causing automated login to take place.
+これは、典型的にはブラウザにクッキーを送信することで実現され、将来のセッションでクッキーが検出され、自動的にログインが実行されます。
+
+> Spring Security provides the necessary hooks for these operations to take place, and has two concrete remember-me implementations.
+Spring Security はこれらの処理を実行するのに必要となるフックを提供し、２つの Remember-me 実装を持ちます。
+
+> One uses hashing to preserve the security of cookie-based tokens and the other uses a database or other persistent storage mechanism to store the generated tokens.
+１つはハッシュ化を使用しクッキーベースでトークンを保存し、もう１つはデータベースかもしくはそれ以外の永続化ストレージメカニズムに生成されたトークンを保存します。
+
+> Note that both implementations require a UserDetailsService.
+注意として、両方の実装は `UserDetailsService` を必要とします。
+
+> If you are using an authentication provider which doesn’t use a UserDetailsService (for example, the LDAP provider) then it won’t work unless you also have a UserDetailsService bean in your application context.
+もしあなたが `UserDetailsService` を使わない認証プロバイダを使っている場合（例えば LDAP プロバイダ）、アプリケーションコンテキストに `UserDetailsService` Bean が無ければ動作しません。
+
+### 17.2 Simple Hash-Based Token Approach
+シンプルなハッシュベースのトークンアプローチ
+
+> This approach uses hashing to achieve a useful remember-me strategy.
+このアプローチは、ハッシュ化を利用し、便利な Remember-me 戦略を実現します。
+
+> In essence a cookie is sent to the browser upon successful interactive authentication, with the cookie being composed as follows:
+本質的には、クッキーは成功した対話型の認証を通じてブラウザに送信されます。
+クッキーには次のように構成されています。
+
+```
+base64(username + ":" + expirationTime + ":" +
+md5Hex(username + ":" + expirationTime + ":" password + ":" + key))
+
+username:          As identifiable to the UserDetailsService
+password:          That matches the one in the retrieved UserDetails
+expirationTime:    The date and time when the remember-me token expires, expressed in milliseconds
+key:               A private key to prevent modification of the remember-me token
+```
+
+> As such the remember-me token is valid only for the period specified, and provided that the username, password and key does not change.
+Remember-me トークンは、ユーザー名・パスワード・キーが変わらない限り、特定の期間だけ有効になります。
+
+> Notably, this has a potential security issue in that a captured remember-me token will be usable from any user agent until such time as the token expires.
+注目すべきなのは、期限切れになるまで任意のユーザーエージェントが利用可能な Remember-me トークンを盗まれることは、セキュリティの問題になりえるということです。
+
+> This is the same issue as with digest authentication.
+これは、ダイジェスト認証と同じ問題です。
+
+> If a principal is aware a token has been captured, they can easily change their password and immediately invalidate all remember-me tokens on issue.
+もしトークンを保有するプリンシパルが盗まれると、パスワードを簡単に変更され、即座に Remember-me のトークンが無効になります。
+
+> If more significant security is needed you should use the approach described in the next section.
+もしより重要なセキュリティが必要であれば、次のセクションで説明するアプローチを使ってください。
+
+> Alternatively remember-me services should simply not be used at all.
+もしくは、単純に Remember-me サービスを使わないでください。
+
+> If you are familiar with the topics discussed in the chapter on namespace configuration, you can enable remember-me authentication just by adding the <remember-me> element:
+もし、 namespace 設定の章で紹介した方法に慣れているのであれば、 Remember-me 認証は `<remember-me>` 要素を追加するだけで有効にすることができます。
+
+```xml
+<http>
+...
+<remember-me key="myAppKey"/>
+</http>
+```
+
+> The UserDetailsService will normally be selected automatically.
+`UserDetailsService` は、一般的に自動的に選択されます。
+
+> If you have more than one in your application context, you need to specify which one should be used with the user-service-ref attribute, where the value is the name of your UserDetailsService bean.
+もしあなたがより多くのアプリケーションコンテキストを持つ場合、どれを使うのか `user-service-ref` 属性で `UserDetailsService` Bean の名前を指定する必要があります。
+
+### 17.3 Persistent Token Approach
+トークンを永続化するアプローチ
+
+> This approach is based on the article http://jaspan.com/improved_persistent_login_cookie_best_practice with some minor modifications [16].
+このアプローチは `http://jaspan.com/improved_persistent_login_cookie_best_practice` の記事をベースとして、いくつかの修正を加えています。
+
+> To use the this approach with namespace configuration, you would supply a datasource reference:
+このアプローチを namespace 設定で使うには、データソースの参照を提供します。
+
+```xml
+<http>
+...
+<remember-me data-source-ref="someDataSource"/>
+</http>
+```
+
+> The database should contain a persistent_logins table, created using the following SQL (or equivalent):
+データベースは、次のような SQL を使って作られる `persistent_logins` テーブルを持たなければなりません。
+
+```sql
+create table persistent_logins (
+    username varchar(64) not null,
+    series varchar(64) primary key,
+    token varchar(64) not null,
+    last_used timestamp not null)
+```
+
+### 17.4 Remember-Me Interfaces and Implementations
+Remember-Me インターフェースと実装
+
+> Remember-me is used with UsernamePasswordAuthenticationFilter, and is implemented via hooks in the AbstractAuthenticationProcessingFilter superclass.
+Remember-me は `UsernamePasswordAuthenticationFilter` で使用されます。
+親クラスの `AbstractAuthenticationProcessingFilter` のフックを通じて実装されます。
+
+> It is also used within BasicAuthenticationFilter.
+`BasicAuthenticationFilter` でも使用されています。
+
+> The hooks will invoke a concrete RememberMeServices at the appropriate times.
+フックは、 `RememberMeServices` によって適切なタイミングで実行されます。
+
+> The interface looks like this:
+インターフェースは次のようになっています。
+
+```java
+Authentication autoLogin(HttpServletRequest request, HttpServletResponse response);
+
+void loginFail(HttpServletRequest request, HttpServletResponse response);
+
+void loginSuccess(HttpServletRequest request, HttpServletResponse response,
+    Authentication successfulAuthentication);
+```
+
+> Please refer to the Javadoc for a fuller discussion on what the methods do, although note at this stage that AbstractAuthenticationProcessingFilter only calls the loginFail() and loginSuccess() methods.
+メソッドが何をするかについての完全な情報は Javadoc を参照してください。
+ただし、このステージでは `AbstractAuthenticationProcessingFilter` は `loginFail()` と `loginSuccess()` メソッドだけを呼びます。
+
+> The autoLogin() method is called by RememberMeAuthenticationFilter whenever the SecurityContextHolder does not contain an Authentication.
+`SecurityContextHolder` が `Authentication` を持っていなかったとしても、 `autoLogin()` メソッドは `RememberMeAuthenticationFilter` によって呼ばれます。
+
+> This interface therefore provides the underlying remember-me implementation with sufficient notification of authentication-related events, and delegates to the implementation whenever a candidate web request might contain a cookie and wish to be remembered.
+このインターフェースは、認証に関係した十分なイベントの通知とともに Remember-me の実装の根底を提供します。
+そして、クッキーを含み、記憶してほしい候補となる Web リクエストの場合は常に実装を委譲します。
+
+> This design allows any number of remember-me implementation strategies.
+この設計は、複数の Remember-Me の戦略実装を許します。
+
+> We’ve seen above that Spring Security provides two implementations.
+Spring Security が提供する２つの実装を見ることができます。
+
+> We’ll look at these in turn.
+これらについてみていきましょう。
+
+### 17.4.1 TokenBasedRememberMeServices
+> This implementation supports the simpler approach described in Section 17.2, “Simple Hash-Based Token Approach”.
+この実装は、セクション17.2 "Simple Hash-Based Token Approach" で説明したシンプルなアプローチをサポートします。
+
+> TokenBasedRememberMeServices generates a RememberMeAuthenticationToken, which is processed by RememberMeAuthenticationProvider.
+`TokenBasedRememberMeServices` は、 `RememberMeAuthenticationProvider` が処理する `RememberMeAuthenticationToken` を生成します。
+
+> A key is shared between this authentication provider and the TokenBasedRememberMeServices.
+キーはこの認証プロバイダと `TokenBasedRememberMeServices` の間で共有されます。
+
+> In addition, TokenBasedRememberMeServices requires A UserDetailsService from which it can retrieve the username and password for signature comparison purposes, and generate the RememberMeAuthenticationToken to contain the correct GrantedAuthority s.
+加えて、 `TokenBasedRememberMeServices` は署名を比較するためにユーザー名とパスワードで検索が可能な `UserDetailsService` を必要とします。
+そして、正しい `GrantedAuthority` を持った `RememberMeAuthenticationToken` を生成します。
+
+> Some sort of logout command should be provided by the application that invalidates the cookie if the user requests this.
+ユーザがクッキーの無効化を要求した場合は、アプリケーションはある種のログアウトのコマンドを提供すべきです。
+
+> TokenBasedRememberMeServices also implements Spring Security’s LogoutHandler interface so can be used with LogoutFilter to have the cookie cleared automatically.
+`TokenBasedRememberMeServices` は、 Spring Security の `LogoutHandler` インターフェースも実装していて、 `LogoutFilter` とともに使うことができ、自動的にクッキーをクリアできます。
+
+> The beans required in an application context to enable remember-me services are as follows:
+Remember-Me サービスを有効にする場合にアプリケーションコンテキストで必要となる Bean は次のようになります。
+
+```xml
+<bean id="rememberMeFilter" class=
+"org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+    <property name="rememberMeServices" ref="rememberMeServices"/>
+    <property name="authenticationManager" ref="theAuthenticationManager" />
+</bean>
+
+<bean id="rememberMeServices" class=
+"org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+    <property name="userDetailsService" ref="myUserDetailsService"/>
+    <property name="key" value="springRocks"/>
+</bean>
+
+<bean id="rememberMeAuthenticationProvider" class=
+"org.springframework.security.authentication.RememberMeAuthenticationProvider">
+    <property name="key" value="springRocks"/>
+</bean>
+```
+
+> Don’t forget to add your RememberMeServices implementation to your UsernamePasswordAuthenticationFilter.setRememberMeServices() property, include the RememberMeAuthenticationProvider in your AuthenticationManager.setProviders() list, and add RememberMeAuthenticationFilter into your FilterChainProxy (typically immediately after your UsernamePasswordAuthenticationFilter).
+次のことを忘れないでください。
+
+- `RememberMeServices` の実装を `UsernamePasswordAuthenticationFilter` の `rememberMeServices` プロパティにセットすること
+- `RememberMeAuthenticationProvider` を `AuthenticationManager` の `providers` リストに含めること
+- `RememberMeAuthenticationFilter` を `FilterChainProxy` に追加すること（普通は `UsernamePasswordAuthenticationFilter` の直後）
+
+### 17.4.2 PersistentTokenBasedRememberMeServices
+> This class can be used in the same way as TokenBasedRememberMeServices, but it additionally needs to be configured with a PersistentTokenRepository to store the tokens.
+このクラスは `TokenBasedRememberMeServices` と同じ手段で動くことができます。
+しかし、トークンを保存するために `PersistentTokenRepository` を追加で設定する必要があります。
+
+> There are two standard implementations.
+２つの標準的な実装があります。
+
+- InMemoryTokenRepositoryImpl which is intended for testing only.
+    - `InMemoryTokenRepositoryImpl` はテストのためだけのものです
+- JdbcTokenRepositoryImpl which stores the tokens in a database.
+    - `JdbcTokenRepositoryImpl` はデータベースにトークンを保存します
+
+> The database schema is described above in Section 17.3, “Persistent Token Approach”.
+データベーススキーマはセクション 17.3 "Persistent Token Approach" で説明したものです。
+
