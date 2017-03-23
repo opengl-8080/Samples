@@ -17,10 +17,10 @@
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="@myExpression.check(authentication)" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:remember-me />
+        <sec:remember-me key="abcdefg" />
     </sec:http>
     
     <sec:authentication-manager>
