@@ -1,0 +1,21 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
+
+jar {
+    baseName = 'markdown-parser'
+    manifest {
+        attributes('Main-Class': 'Main')
+    }
+}
