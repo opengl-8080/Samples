@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public class MyVisitor implements NodeVisitor {
     private StringBuilder sb = new StringBuilder();
+    private int ulLevel;
 
     @Override
     public void head(Node node, int depth) {
@@ -29,8 +30,9 @@ public class MyVisitor implements NodeVisitor {
         } else if ("pre".equals(tagName)) {
             this.sb.append("pre\t" + element.text().replaceAll("\n", "\\\\n") + "\n");
         } else if ("ul".equals(tagName)) {
-            int size = element.select("li").size();
-            this.sb.append("ul\t" + size + "\t" + element.select("li").stream().map(Element::text).collect(Collectors.joining("\t")) + "\n");
+            this.ulLevel++;
+        } else if ("li".equals(tagName)) {
+            this.sb.append("li\t" + this.ulLevel + "\t" + element.ownText() + "\n");
         } else if ("p".equals(tagName)) {
             this.sb.append("p\t" + element.html().replaceAll("<br>", "\\\\n") + "\n");
         }
@@ -38,7 +40,15 @@ public class MyVisitor implements NodeVisitor {
 
     @Override
     public void tail(Node node, int depth) {
-
+        if (!(node instanceof Element)) {
+            return;
+        }
+        Element element = (Element) node;
+        String tagName = element.tagName();
+        
+        if ("ul".equals(tagName)) {
+            this.ulLevel--;
+        }
     }
 
     public String getText() {
