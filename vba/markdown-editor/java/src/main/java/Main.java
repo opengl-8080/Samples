@@ -34,7 +34,6 @@ public class Main {
                         if (newFile.toFile().getName().equals("source.md")) {
                             List<String> lines = Files.readAllLines(targetDir.resolve(newFile), Charset.forName("MS932"));
                             String tsv = markdownToTsv.toTsv(String.join("\n", lines));
-                            System.out.println("\n" + tsv + "\n");
                             List<String> tsvLines = Arrays.asList(tsv.split("\n"));
                             Files.write(targetDir.resolve("parsed.tsv"), tsvLines, Charset.forName("MS932"), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
 
