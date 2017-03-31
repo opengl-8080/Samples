@@ -850,6 +850,86 @@ Remember-me トークンは、ユーザー名・パスワード・キーが変�
 > This approach is based on the article http://jaspan.com/improved_persistent_login_cookie_best_practice with some minor modifications [16].
 このアプローチは `http://jaspan.com/improved_persistent_login_cookie_best_practice` の記事をベースとして、いくつかの修正を加えています。
 
+#### Improved Persistent Login Cookie Best Practice
+> 改善された永続化ログイン cookie のベストプラクティス
+
+> Charles Miller's article, "Persistent Login Cookie Best Practice,"[1] describes a relatively secure approach to implementing the familiar "Remember Me" option for web sites.
+Charles Miller の記事、 "Persistent Login Cookie Best Practice" は、 Web サイトのオプションとして有名な Remember Me のセキュアな実装アプローチについて説明しています。
+
+> In this article, I propose an improvement that retains all the benefits of that approach but also makes it possible to detect when a persistent login cookie has been stolen and used by an attacker.
+この記事では、このアプローチの持つメリットを残したまま、永続化されたログイン Cookie が攻撃者によって盗まれたものかどうかを検出できるよう改善することを目的とします。
+
+> To summarize Miller's design:
+Miller の設計を要約すると、
+
+> When the user successfully logs in with Remember Me checked, a login cookie is issued in addition to the standard session management cookie.[2]
+ユーザが Remember Me のチェックに成功しログインしたとき、ログイン Cookie は通常のセッション管理の Cookie に追加されて発行される.
+
+> The login cookie contains the user's username and a random number (the "token" from here on) from a suitably large space.
+ログイン Cookie は、ユーザ名と適切な大きさのランダムな数字（以後トークンと書く）で構成されている。
+
+> The username and token are stored as a pair in a database table.
+ユーザー名とトークンは、データベーステーブルにペアで保存される。
+
+> When a non-logged-in user visits the site and presents a login cookie, the username and token are looked up in the database.
+ログインしていないユーザがサイトに訪れ、ログインクッキーが提示された場合、ユーザー名とトークンはデータベースから検索される。
+
+> If the pair is present, the user is considered authenticated.
+ペアが存在する場合、ユーザーは認証されたものと考えられる。
+
+> The used token is removed from the database.
+使用されたトークンはデータベースから削除される。
+
+> A new token is generated, stored in database with the username, and issued to the user via a new login cookie.
+新しいトークンが生成され、データベースにユーザー名とともに保存され、そして新しいログイン Cookie が発行される。
+
+> If the pair is not present, the login cookie is ignored.
+もしペアが存在しない場合、ログインクッキーは無視される。
+
+> Users that are only authenticated via this mechanism are not permitted to access certain protected information or functions such as changing a password, viewing personally identifying information, or spending money.
+このメカニズムだけで認証されたユーザー達は、本当に守らなければならない情報や機能（例えばパスワードの変更や個人を特定する情報の参照）へのアクセスは許可しないようにする。
+
+> To perform those operations, the user must first successfully submit a normal username/password login form.
+これらの処理を行う場合、ユーザーは通常のユーザー名とパスワードによるフォームログインを最初に成功させなければならない。
+
+> Since this approach allows the user to have multiple remembered logins from different browsers or computers, a mechanism is provided for the user to erase all remembered logins in a single operation.
+このアプローチは異なるブラウザやコンピュータからのログインを記録することを許すため、単一の処理で全ての記録されたログインを消す機能が提供されている。
+
+##### The Problem
+問題点
+
+> Miller correctly describes the many advantages of this approach.
+Miller はこのアプローチの多くの有用性を正しく説明しています。
+
+> One disadvantage, however, is that if an attacker successfully steals a victim's login cookie and uses it before the victim next accesses the site, the cookie will work and the site will issue a new valid login cookie to the attacker (this disadvantage is far from unique to Miller's design).
+しかしながら、ある問題点は攻撃者が被害者のログインクッキーを盗むことに成功し、被害者がサイトに次のアクセスをする前に使用されると、クッキーは動作し、差異とは新しい有効なログインクッキーを攻撃者に対して発行してしまいます（この問題点は Miller の設計独自の問題ではありません）。
+
+> The attacker will be able to continue accessing the site as the victim until the remembered login session expires.
+攻撃者は被害者の記録されたログインのセッション期限がくるまでのあいだ、アクセスを続けることができます。
+
+> When the victim next accesses the site his remembered login will not work (because each token can only be used one time) but he's much more likely to think that "something broke" and just log in again than to realize that his credentials were stolen.
+被害者が次にサイトにアクセスすると、上手く動作しません（なぜなら、個々のトークンは一度しか使用できないからです）。
+彼は資格情報が盗まれたことには気づかず何かが壊れたとだけ思い再びログインを試すだけです。
+
+> Displaying a "last login time" may help the user notice the problem but, frequently, it will go undetected.
+最後にログインした時間の表示は、ユーザーに問題を気付かせる助けになるかもしれません。しかし、すぐに気付くことはないでしょう。
+
+> One possible solution to this problem is to treat the presentation of an invalid login cookie as evidence of a previously successful attack.
+この問題についてのひとつの解決策は、以前成功した攻撃の証拠として無効なログインクッキーを提示することです。
+
+> The site could then present an impossible to miss security warning and automatically invalidate all of the user's remembered login sessions.
+Web サイトはセキュリティの警告を無視することはできないので、自動的にユーザーの記録されたセッションを全て無効にします。
+
+> This approach would create a denial of service attack: since usernames are easy to come by or guess, an attacker could submit invalid login cookies for every user and thus disable the entire system.
+このアプローチは、サービス無効化攻撃を成立させてしまいます。
+ユーザー名が単純だったり推測可能だったりした場合、攻撃者は無効なログインクッキーを送信することで、簡単にユーザがシステムは入れないようにすることができてしまいます。
+
+> The Solution
+解決策
+
+> 
+
+
 > To use the this approach with namespace configuration, you would supply a datasource reference:
 このアプローチを namespace 設定で使うには、データソースの参照を提供します。
 
