@@ -927,8 +927,110 @@ Web サイトはセキュリティの警告を無視することはできない�
 > The Solution
 解決策
 
-> 
+> My solution to this problem is based on the observation that since each token can only be used once, a remembered login session actually consists of a series of such tokens.
+この問題に対する私の解決策は、個々のトークンは一度しか使用できないが、実際はそれぞれのトークンは連続しているという考察結果に基づいています。
 
+> When an attacker successfully steals and uses T_0 he is issued T_1, but the victim is still holding T_0.
+
+攻撃者がトークンを盗むことに成功すると、ユーザーのトークン０はトークン１を発行します。しかし、被害者はまだトークン０を持っています。
+
+> The database no longer has a copy of T_0 and thus cannot differentiate it from an arbitrary invalid token.
+
+データベースはもうトークン０のコピーを持っていません。
+よって、任意の無効なトークンと区別することはできません。
+
+> However, if the series of tokens is itself given an identity that must be presented along with the current token, the system can notice that the victim is presenting a valid series identifier along with an invalid token.
+
+しかしながら、もしトークンのシリーズが、現在のトークンに関係なくそれ自身を識別するものを提供する場合、システムは被害者によって提供された有効なシリーズの識別が無効なトークンとは区別し、気付くことができる。
+
+> Assuming that the series identifiers are as hard to guess as tokens, the only way a user could present a valid series identifier with an invalid token is if some other user previously presented the same valid series identifier with a valid token.
+
+シリーズ識別子がトークンとして推測するのが難しいと仮定すると、無効なトークンを持つ有効な一連の識別子を提示できる唯一の方法は、他のユーザーが以前に有効なトークンを持つ有効な一連の識別子を提示した場合です。
+
+> This requires that two different users held the same series and token pair at the same time and therefore indicates that a theft has occurred.
+
+この結果、二人の異なるユーザーに対して同時に同じトークンペアの異なるシリーズを持つ二人のユーザーを要求することになり、盗難が起こったことを見分けることができます。
+
+> The implementation is no more difficult and requires no more resources than Miller's design.
+
+実装に関して Miller の設計と比較して追加の複雑さやリソースは必要ありません。
+
+> From the summary above, only items 2 and 3 change:
+
+上記概要から、２，３か所変更するだけです。
+
+> When the user successfully logs in with Remember Me checked, a login cookie is issued in addition to the standard session management cookie.[2]
+
+ユーザーが Remember Me チェックによるログインに成功したとき、ログインクッキーが通常のセッション管理クッキーに加えて発行される。
+
+> The login cookie contains the user's username, a series identifier, and a token.
+
+ログインクッキーはユーザー名とシリーズの識別子、そしてトークンを含んでいる。
+
+> The series and token are unguessable random numbers from a suitably large space.
+
+シリーズとトークンは推測できない十分に大きなランダムな数字を使用します。
+
+> All three are stored together in a database table.
+
+３つの値は全てデータベースのテーブルに保存します。
+
+> When a non-logged-in user visits the site and presents a login cookie, the username, series, and token are looked up in the database.
+
+ログインしていないユーザがサイトに訪れログインクッキーを提示した場合、データベースからユーザー名、シリーズ、トークンが検索されます。
+
+> If the triplet is present, the user is considered authenticated.
+
+もし３つの組み合わせが存在した場合、ユーザは認証されていると認識される。
+
+> The used token is removed from the database.
+
+使用されたトークンはデータベースから削除される。
+
+> A new token is generated, stored in database with the username and the same series identifier, and a new login cookie containing all three is issued to the user.
+
+新しいトークンが生成され、ユーザー名とシリーズの識別子とともにデータベースに保存される。そして、３つの全ての情報を持った新しいログインクッキーがユーザーに発行される。
+
+> If the username and series are present but the token does not match, a theft is assumed.
+
+もしユーザー名とシリーズが存在しても、トークンが一致しない場合、盗まれたものと推測される。
+
+> The user receives a strongly worded warning and all of the user's remembered sessions are deleted.
+
+ユーザーは強調された警告を受け取り、全てのユーザーの記録されたセッションが削除されます。
+
+> If the username and series are not present, the login cookie is ignored.
+
+もしユーザー名とシリーズが存在しない場合、ログインクッキーが無視されます。
+
+> It is critical that the series identifier be reused for each token in a series.
+
+１つのシリーズで、それぞれのトークンに対してシリーズの識別子を使用することは重要です。
+
+> If the series identifier were instead simply another one time use random number, the system could not differentiate between a series/token pair that had been stolen and one that, for example, had simply expired and been erased from the database.
+
+シリーズ識別子が単なる別の1回の乱数を使用していた場合、システムは盗まれたシリーズとトークンのペアを区別できませんでした。例えば、期限切れでデータベースから消去されたシリーズ/トークンペア。
+
+#### Conclus
+結論
+
+> This system has all the advantages of Miller's original approach. Additionally:
+
+このシステムは Miller のオリジナルのアプローチのメリットをすべて持ち、加えて
+
+> An attacker is only able to use a stolen cookie until the victim next accesses the web site instead of for the full lifetime of the remembered session.
+
+攻撃者が盗んだクッキーを使えるのは、記録されたセッションの全ライフサイクル中ではなく、被害者が次にサイトにアクセスするまでです。
+
+> When the victim next accesses the web site, he will be informed that the theft occurred.
+
+被害者が次に Web サイトにアクセスすると、盗難が起こったことを通知します。
+
+> This system is used by the Persistent Login module for the Drupal content management system.
+
+このシステムは、 Drupal 管理システムの永続化ログインモジュールとして使用されている。
+
+---
 
 > To use the this approach with namespace configuration, you would supply a datasource reference:
 このアプローチを namespace 設定で使うには、データソースの参照を提供します。
