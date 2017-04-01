@@ -15,15 +15,16 @@
     
     <sec:global-method-security pre-post-annotations="enabled" />
     
-    <bean id="rememberMeTokenRepository"
-          class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl" />
+    <!--<bean id="rememberMeTokenRepository"-->
+          <!--class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl" />-->
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:remember-me token-repository-ref="rememberMeTokenRepository" />
+        <sec:remember-me use-secure-cookie="true" />
+        <!--<sec:remember-me token-repository-ref="rememberMeTokenRepository" />-->
     </sec:http>
     
     <sec:authentication-manager>
