@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
@@ -8,6 +9,8 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd
+         http://www.springframework.org/schema/jdbc
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
          http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context.xsd">
     
@@ -15,16 +18,17 @@
     
     <sec:global-method-security pre-post-annotations="enabled" />
     
-    <!--<bean id="rememberMeTokenRepository"-->
-          <!--class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl" />-->
+    <jdbc:embedded-database id="dataSource" type="H2">
+        <jdbc:script location="classpath:/sql/create_remember-me_tables.sql" />
+    </jdbc:embedded-database>
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/remember-me/high-level" access="isFullyAuthenticated()" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:remember-me use-secure-cookie="true" />
-        <!--<sec:remember-me token-repository-ref="rememberMeTokenRepository" />-->
+        <sec:remember-me data-source-ref="dataSource" />
     </sec:http>
     
     <sec:authentication-manager>

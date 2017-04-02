@@ -2,11 +2,16 @@ package sample.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 
 @EnableWebSecurity
@@ -22,7 +27,22 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .and()
                 .rememberMe()
-                .useSecureCookie(true);
+                .tokenRepository(this.createTokenRepository());
+    }
+    
+    public PersistentTokenRepository createTokenRepository() {
+        DataSource dataSource =
+                new EmbeddedDatabaseBuilder()
+                    .generateUniqueName(true)
+                    .setType(EmbeddedDatabaseType.H2)
+                    .setScriptEncoding("UTF-8")
+                    .addScript("/sql/create_remember-me_tables.sql")
+                    .build();
+
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        
+        return tokenRepository;
     }
     
     @Autowired
