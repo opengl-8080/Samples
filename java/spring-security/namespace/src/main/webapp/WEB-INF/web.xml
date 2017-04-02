@@ -18,4 +18,9 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    
+    <error-page>
+        <exception-type>org.springframework.security.web.authentication.rememberme.CookieTheftException</exception-type>
+        <location>/cookie-theft</location>
+    </error-page>
 </web-app>
