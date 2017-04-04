@@ -13,12 +13,14 @@
     
     <context:component-scan base-package="sample.spring.security" />
     
+    <bean id="myAccessDeniedHandler" class="sample.spring.security.handler.MyAccessDeniedHandler" />
+    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:access-denied-handler error-page="/access-denied.html" />
+        <sec:access-denied-handler ref="myAccessDeniedHandler" />
     </sec:http>
     
     <sec:authentication-manager>
