@@ -4,18 +4,12 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Hello Spring Security!!</title>
+        <title>CSRF First</title>
     </head>
     <body>
-        <h1>Hello Spring Security!!</h1>
+        <h1>CSRF First</h1>
         
-        <c:url var="logoutUrl" value="/logout" />
-        <form action="${logoutUrl}" method="post">
-            <input type="submit" value="logout" />
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        </form>
-        
-        <c:url var="csrfTest" value="/csrf/first" />
+        <c:url var="csrfTest" value="/csrf/second" />
         <form action="${csrfTest}" method="post">
             <input type="submit" value="csrf" />
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
