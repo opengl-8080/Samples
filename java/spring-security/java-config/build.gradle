@@ -3,3 +3,8 @@ dependencies {
 }
 
 war.baseName = 'java-config'
+
+task deploy(dependsOn: war, type: Copy) {
+    from war.archivePath
+    into deployDir
+}

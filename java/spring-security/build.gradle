@@ -8,4 +8,8 @@ subprojects {
     repositories {
         mavenCentral()
     }
+    
+    ext {
+        deployDir = "${System.getenv('TOMCAT_HOME')}/webapps"
+    }
 }
