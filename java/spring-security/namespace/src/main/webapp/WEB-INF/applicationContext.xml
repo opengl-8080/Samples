@@ -13,14 +13,17 @@
     
     <context:component-scan base-package="sample.spring.security" />
     
-    <bean id="myAccessDeniedHandler" class="sample.spring.security.handler.MyAccessDeniedHandler" />
+    <bean id="tokenRepository"
+          class="org.springframework.security.web.csrf.CookieCsrfTokenRepository">
+        <property name="cookieHttpOnly" value="false" />
+    </bean>
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:access-denied-handler ref="myAccessDeniedHandler" />
+        <sec:csrf token-repository-ref="tokenRepository" />
     </sec:http>
     
     <sec:authentication-manager>
@@ -31,9 +34,9 @@
                     password="hoge"
                     authorities="" />
                 <sec:user
-                    name="fuga"
-                    password="fuga"
-                    authorities="" />
+                        name="fuga"
+                        password="fuga"
+                        authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
