@@ -19,11 +19,13 @@
     </bean>
     
     <sec:http>
-        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/login.jsp" access="permitAll" />
+        <sec:intercept-url pattern="/js/**" access="permitAll" />
+        <sec:intercept-url pattern="/api/csrf-token" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login />
+        <sec:form-login login-page="/login.jsp" />
         <sec:logout />
-        <sec:csrf token-repository-ref="tokenRepository" />
+        <sec:csrf />
     </sec:http>
     
     <sec:authentication-manager>
