@@ -13,19 +13,14 @@
     
     <context:component-scan base-package="sample.spring.security" />
     
-    <bean id="tokenRepository"
-          class="org.springframework.security.web.csrf.CookieCsrfTokenRepository">
-        <property name="cookieHttpOnly" value="false" />
-    </bean>
-    
     <sec:http>
-        <sec:intercept-url pattern="/login.jsp" access="permitAll" />
-        <sec:intercept-url pattern="/js/**" access="permitAll" />
-        <sec:intercept-url pattern="/api/csrf-token" access="permitAll" />
+        <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login login-page="/login.jsp" />
+        <sec:form-login />
         <sec:logout />
-        <sec:csrf />
+        <sec:headers>
+            <sec:frame-options policy="DENY" />
+        </sec:headers>
     </sec:http>
     
     <sec:authentication-manager>

@@ -22,7 +22,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .and()
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .headers().frameOptions().sameOrigin();
     }
     
     @Autowired
