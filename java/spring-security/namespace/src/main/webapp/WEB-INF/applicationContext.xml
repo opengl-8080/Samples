@@ -19,8 +19,7 @@
         <sec:form-login />
         <sec:logout />
         <sec:headers>
-            <sec:hsts max-age-seconds="60"
-                      include-subdomains="false" />
+            <sec:frame-options policy="SAMEORIGIN" />
         </sec:headers>
     </sec:http>
     

@@ -22,9 +22,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .and()
                 .headers()
-                    .httpStrictTransportSecurity()
-                    .maxAgeInSeconds(60)
-                    .includeSubDomains(false);
+                    .frameOptions().sameOrigin();
     }
     
     @Autowired
