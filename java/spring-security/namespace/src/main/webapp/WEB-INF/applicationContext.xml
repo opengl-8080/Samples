@@ -20,6 +20,7 @@
         <sec:logout />
         <sec:headers>
             <sec:frame-options policy="SAMEORIGIN" />
+            <sec:hsts disabled="false" />
         </sec:headers>
     </sec:http>
     
