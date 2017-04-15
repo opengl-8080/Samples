@@ -19,7 +19,7 @@
         <sec:form-login />
         <sec:logout />
         <sec:headers>
-            <sec:frame-options policy="DENY" />
+            <sec:frame-options policy="SAMEORIGIN" />
         </sec:headers>
     </sec:http>
     
