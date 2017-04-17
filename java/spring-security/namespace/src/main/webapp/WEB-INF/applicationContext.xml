@@ -19,7 +19,7 @@
         <sec:form-login />
         <sec:logout />
         <sec:headers>
-            <sec:xss-protection disabled="true" />
+            <sec:content-security-policy policy-directives="script-src 'self' code.jquery.com" />
         </sec:headers>
     </sec:http>
     

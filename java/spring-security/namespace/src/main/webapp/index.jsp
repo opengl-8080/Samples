@@ -20,5 +20,13 @@
             <input type="submit" value="csrf" />
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>
+        
+        <script
+          src="https://code.jquery.com/jquery-3.2.1.min.js"
+          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+          crossorigin="anonymous"></script>
+          
+        <c:url var="jsDir" value="/js" />
+        <script src="${jsDir}/index.js"></script>
     </body>
 </html>
