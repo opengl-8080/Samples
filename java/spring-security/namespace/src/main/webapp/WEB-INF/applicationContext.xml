@@ -19,7 +19,7 @@
         <sec:form-login />
         <sec:logout />
         <sec:headers>
-            <sec:content-security-policy policy-directives="script-src 'self' code.jquery.com" />
+            <sec:referrer-policy policy="same-origin" />
         </sec:headers>
     </sec:http>
     
