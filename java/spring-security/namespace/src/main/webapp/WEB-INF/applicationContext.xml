@@ -19,7 +19,7 @@
         <sec:form-login />
         <sec:logout />
         <sec:headers>
-            <sec:referrer-policy policy="same-origin" />
+            <sec:header name="Hoge" value="fuga" />
         </sec:headers>
     </sec:http>
     
