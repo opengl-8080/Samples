@@ -19,9 +19,11 @@
         <sec:form-login />
         <sec:logout />
         <sec:headers>
-            <sec:header name="Hoge" value="fuga" />
+            <sec:header ref="myHeaderWriter" />
         </sec:headers>
     </sec:http>
+    
+    <bean id="myHeaderWriter" class="sample.spring.security.header.MyHeaderWriter" />
     
     <sec:authentication-manager>
         <sec:authentication-provider>
