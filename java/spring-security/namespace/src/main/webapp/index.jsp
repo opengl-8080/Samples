@@ -8,6 +8,14 @@
     </head>
     <body>
         <h1>Hello Spring Security!!</h1>
+        <%
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.UserDetails detauls =
+            (org.springframework.security.core.userdetails.UserDetails)auth.getPrincipal();
+            Object name = detauls.getUsername();
+        %>
+        
+        name = <%=name%>
         
         <c:url var="logoutUrl" value="/logout" />
         <form action="${logoutUrl}" method="post">
