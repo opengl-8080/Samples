@@ -17,7 +17,7 @@
         <sec:logout />
         
         <sec:session-management >
-            <sec:concurrency-control max-sessions="1" expired-session-strategy-ref="sies" />
+            <sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
         </sec:session-management>
     </sec:http>
     

@@ -22,7 +22,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                     .maximumSessions(1)
-                    .expiredSessionStrategy(new MySessionInformationExpiredStrategy());
+                    .maxSessionsPreventsLogin(true);
     }
     
     @Autowired
