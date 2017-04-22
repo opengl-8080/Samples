@@ -19,7 +19,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .and()
-                .sessionManagement().maximumSessions(1);
+                .sessionManagement().maximumSessions(1).expiredUrl("/login");
     }
     
     @Autowired

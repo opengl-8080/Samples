@@ -15,7 +15,7 @@
         <sec:logout />
         
         <sec:session-management >
-            <sec:concurrency-control max-sessions="1" />
+            <sec:concurrency-control max-sessions="1" expired-url="/login" />
         </sec:session-management>
     </sec:http>
     
