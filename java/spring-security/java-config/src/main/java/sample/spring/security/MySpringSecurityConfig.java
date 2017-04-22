@@ -1,17 +1,14 @@
 package sample.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import sample.spring.security.header.MyHeaderWriter;
 
 import java.util.Collections;
 
 @EnableWebSecurity
-@ComponentScan
 public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -22,8 +19,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .and()
-                .headers()
-                    .addHeaderWriter(new MyHeaderWriter());
+                .sessionManagement().maximumSessions(1);
     }
     
     @Autowired
@@ -31,10 +27,6 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
             .withUser("hoge")
             .password("hoge")
-            .authorities(Collections.emptyList())
-        .and()
-            .withUser("fuga")
-            .password("fuga")
             .authorities(Collections.emptyList());
     }
 }

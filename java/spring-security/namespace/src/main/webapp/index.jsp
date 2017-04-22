@@ -8,14 +8,17 @@
     </head>
     <body>
         <h1>Hello Spring Security!!</h1>
+        
+        <%@page import="org.springframework.security.core.context.SecurityContextHolder" %>
+        <%@page import="org.springframework.security.core.Authentication" %>
+        <%@page import="org.springframework.security.core.userdetails.UserDetails" %>
         <%
-        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-        org.springframework.security.core.userdetails.UserDetails detauls =
-            (org.springframework.security.core.userdetails.UserDetails)auth.getPrincipal();
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UserDetails detauls = (UserDetails)auth.getPrincipal();
             Object name = detauls.getUsername();
         %>
         
-        name = <%=name%>
+        username = <%=name%>
         
         <c:url var="logoutUrl" value="/logout" />
         <form action="${logoutUrl}" method="post">

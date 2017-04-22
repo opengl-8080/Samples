@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:sec="http://www.springframework.org/schema/security"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
-         http://www.springframework.org/schema/security/spring-security.xsd
-         http://www.springframework.org/schema/context
-         http://www.springframework.org/schema/context/spring-context.xsd">
-    
-    <context:component-scan base-package="sample.spring.security" />
+         http://www.springframework.org/schema/security/spring-security.xsd">
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:remember-me />
-        <sec:session-management>
-            <sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        
+        <sec:session-management >
+            <sec:concurrency-control max-sessions="1" />
         </sec:session-management>
     </sec:http>
-    
-    <bean id="myHeaderWriter" class="sample.spring.security.header.MyHeaderWriter" />
     
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user
-                        name="hoge"
-                        password="hoge"
-                        authorities="" />
-                <sec:user
-                        name="fuga"
-                        password="fuga"
-                        authorities="" />
+                <sec:user name="hoge" password="hoge" authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
