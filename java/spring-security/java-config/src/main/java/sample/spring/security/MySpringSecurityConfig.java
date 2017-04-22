@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import sample.spring.security.session.MySessionInformationExpiredStrategy;
 
 import java.util.Collections;
 
@@ -19,7 +20,9 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .and()
-                .sessionManagement().maximumSessions(1).expiredUrl("/login");
+                .sessionManagement()
+                    .maximumSessions(1)
+                    .expiredSessionStrategy(new MySessionInformationExpiredStrategy());
     }
     
     @Autowired

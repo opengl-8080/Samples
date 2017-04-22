@@ -8,6 +8,8 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
+    <bean id="sies" class="sample.spring.security.session.MySessionInformationExpiredStrategy" />
+    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
@@ -15,7 +17,7 @@
         <sec:logout />
         
         <sec:session-management >
-            <sec:concurrency-control max-sessions="1" expired-url="/login" />
+            <sec:concurrency-control max-sessions="1" expired-session-strategy-ref="sies" />
         </sec:session-management>
     </sec:http>
     
