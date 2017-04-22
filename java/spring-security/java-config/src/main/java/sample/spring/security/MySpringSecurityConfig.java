@@ -16,9 +16,11 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/max-session-error.jsp").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                    .failureUrl("/max-session-error.jsp")
                 .and()
                 .sessionManagement()
                     .maximumSessions(1)
