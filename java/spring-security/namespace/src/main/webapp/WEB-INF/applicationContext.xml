@@ -12,13 +12,14 @@
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/max-session-error.jsp" access="permitAll" />
+        <sec:intercept-url pattern="/my-login.jsp" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login authentication-failure-url="/max-session-error.jsp" />
+        <sec:form-login />
         <sec:logout />
+        <sec:remember-me />
         
-        <sec:session-management>
-            <sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        <sec:session-management session-authentication-error-url="/my-login.jsp">
+            <sec:concurrency-control max-sessions="1" />
         </sec:session-management>
     </sec:http>
     
