@@ -8,19 +8,11 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <bean id="sies" class="sample.spring.security.session.MySessionInformationExpiredStrategy" />
-    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/my-login.jsp" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:remember-me />
-        
-        <sec:session-management session-authentication-error-url="/my-login.jsp">
-            <sec:concurrency-control max-sessions="1" />
-        </sec:session-management>
     </sec:http>
     
     <sec:authentication-manager>
