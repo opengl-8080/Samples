@@ -7,9 +7,6 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-
-    <bean id="passwordEncoder"
-          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
@@ -17,14 +14,10 @@
         <sec:form-login />
         <sec:logout />
     </sec:http>
+
+    <bean id="myUserDetailsService" class="sample.spring.security.MyUserDetailsService" />
     
     <sec:authentication-manager>
-        <sec:authentication-provider>
-            <sec:user-service>
-                <sec:user name="hoge" password="$2a$08$CekzJRYhb5bzp5mx/eZmX.grG92fRXo267QVVyRs0IE.V.zeCIw8S" authorities="" />
-            </sec:user-service>
-
-            <sec:password-encoder ref="passwordEncoder" />
-        </sec:authentication-provider>
+        <sec:authentication-provider user-service-ref="myUserDetailsService" />
     </sec:authentication-manager>
 </beans>
