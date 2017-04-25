@@ -7,13 +7,12 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-
-    <bean id="myExpression" class="sample.spring.security.expression.MyExpression" />
     
     <sec:http>
-        <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="@myExpression.check(authentication)" />
-        <sec:form-login />
+        <sec:intercept-url pattern="/login" method="POST" access="permitAll" />
+        <sec:intercept-url pattern="/my-login.jsp" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:form-login login-page="/my-login.jsp" />
         <sec:logout />
     </sec:http>
 
@@ -23,10 +22,6 @@
                 <sec:user
                         name="hoge"
                         password="hoge"
-                        authorities="" />
-                <sec:user
-                        name="fuga"
-                        password="fuga"
                         authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
