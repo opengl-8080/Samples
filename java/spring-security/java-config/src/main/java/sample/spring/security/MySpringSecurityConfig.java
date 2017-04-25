@@ -1,7 +1,6 @@
 package sample.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,11 +14,14 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers("/do-login").permitAll()
                 .antMatchers("/my-login.jsp").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/my-login.jsp");
+                .formLogin().loginPage("/my-login.jsp")
+                    .loginProcessingUrl("/do-login")
+                    .usernameParameter("login-id")
+                    .passwordParameter("pass");
     }
 
     @Autowired

@@ -9,10 +9,13 @@
          http://www.springframework.org/schema/security/spring-security.xsd">
     
     <sec:http>
-        <sec:intercept-url pattern="/login" method="POST" access="permitAll" />
+        <sec:intercept-url pattern="/do-login" access="permitAll" />
         <sec:intercept-url pattern="/my-login.jsp" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login login-page="/my-login.jsp" />
+        <sec:form-login login-page="/my-login.jsp"
+                        login-processing-url="/do-login"
+                        username-parameter="login-id"
+                        password-parameter="pass" />
         <sec:logout />
     </sec:http>
 
