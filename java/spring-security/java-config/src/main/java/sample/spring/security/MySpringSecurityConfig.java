@@ -14,14 +14,10 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/do-login").permitAll()
-                .antMatchers("/my-login.jsp").permitAll()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/my-login.jsp")
-                    .loginProcessingUrl("/do-login")
-                    .usernameParameter("login-id")
-                    .passwordParameter("pass");
+                .formLogin().defaultSuccessUrl("/hello.html");
     }
 
     @Autowired
