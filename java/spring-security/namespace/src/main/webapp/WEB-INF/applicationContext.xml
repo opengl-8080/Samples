@@ -8,11 +8,14 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
+    <bean id="authenticationSuccessHandler"
+          class="sample.spring.security.handler.MyAuthenticationSuccessHandler" />
+    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login default-target-url="/hello.html"
-                        always-use-default-target="true" />
+        <sec:form-login authentication-success-handler-ref="authenticationSuccessHandler"
+                        default-target-url="/"/>
         <sec:logout />
     </sec:http>
 

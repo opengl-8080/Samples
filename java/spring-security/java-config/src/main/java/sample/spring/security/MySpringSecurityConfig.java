@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import sample.spring.security.handler.MyAuthenticationSuccessHandler;
 
 import java.util.Collections;
 
@@ -17,7 +18,10 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().defaultSuccessUrl("/hello.html", true);
+                .formLogin()
+                .defaultSuccessUrl("/")
+                    .successHandler(new MyAuthenticationSuccessHandler())
+        ;
     }
 
     @Autowired
