@@ -17,7 +17,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().defaultSuccessUrl("/hello.html");
+                .formLogin().defaultSuccessUrl("/hello.html", true);
     }
 
     @Autowired

@@ -11,7 +11,8 @@
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login default-target-url="/hello.html" />
+        <sec:form-login default-target-url="/hello.html"
+                        always-use-default-target="true" />
         <sec:logout />
     </sec:http>
 
