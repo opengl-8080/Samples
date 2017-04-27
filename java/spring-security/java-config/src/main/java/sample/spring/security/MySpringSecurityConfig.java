@@ -5,7 +5,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import sample.spring.security.handler.MyAuthenticationFailureHandler;
 
 import java.util.Collections;
 
@@ -19,7 +18,8 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                    .failureHandler(new MyAuthenticationFailureHandler());
+                .and()
+                .exceptionHandling().accessDeniedPage("/access-denied.html");
     }
 
     @Autowired

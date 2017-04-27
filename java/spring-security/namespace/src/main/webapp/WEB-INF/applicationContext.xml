@@ -8,23 +8,20 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <bean id="authenticationFailureHandler"
-          class="sample.spring.security.handler.MyAuthenticationFailureHandler" />
-
-    <bean id="userDetailsService"
-          class="sample.spring.security.service.MyUserDetailsService" />
-    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/hello.html" access="hasRole('TEST')" />
+        <sec:intercept-url pattern="/test" access="hasAuthority('HOGE')" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login authentication-failure-handler-ref="authenticationFailureHandler"/>
+        <sec:form-login />
         <sec:logout />
-        <sec:remember-me />
+        <sec:access-denied-handler error-page="/access-denied.html" />
     </sec:http>
 
     <sec:authentication-manager>
-        <sec:authentication-provider user-service-ref="userDetailsService">
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user name="hoge" password="hoge" authorities="" />
+            </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
 </beans>
