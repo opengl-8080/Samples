@@ -8,16 +8,19 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <bean id="accessDeniedHandler"
-          class="sample.spring.security.handler.MyAccessDeniedHandler" />
-    
+    <bean id="authenticationFailureHandler"
+          class="sample.spring.security.handler.MyAuthenticationFailureHandler" />
+
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/test" access="hasAuthority('HOGE')" />
+        <sec:intercept-url pattern="/max-session-error.jsp" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login />
+        <sec:form-login authentication-failure-handler-ref="authenticationFailureHandler" />
         <sec:logout />
-        <sec:access-denied-handler ref="accessDeniedHandler" />
+
+        <sec:session-management>
+            <sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        </sec:session-management>
     </sec:http>
 
     <sec:authentication-manager>

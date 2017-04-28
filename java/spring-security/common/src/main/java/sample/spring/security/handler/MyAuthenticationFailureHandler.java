@@ -8,6 +8,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +21,6 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
     public void onAuthenticationFailure(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
                 throws IOException, ServletException {
-        System.out.println("Hey!!");
-        
         String message;
         if (e instanceof BadCredentialsException) {
             message = "ユーザー名またはパスワードが間違っています";
@@ -33,11 +32,13 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
             message = "アカウントの利用期限が切れています";
         } else if (e instanceof CredentialsExpiredException) {
             message = "パスワードの有効期限が切れています";
+        } else if (e instanceof SessionAuthenticationException) {
+            message = "セッションが上限数に達しています";
         } else {
             message = "ログインに失敗しました";
         }
-        
-        request.setAttribute("message", message);
+
+        System.out.println(message);
         
         DefaultRedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
         redirectStrategy.sendRedirect(request, response, "/login");
