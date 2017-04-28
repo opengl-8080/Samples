@@ -7,20 +7,14 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-    
-    <bean id="authenticationFailureHandler"
-          class="sample.spring.security.handler.MyAuthenticationFailureHandler" />
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/max-session-error.jsp" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login authentication-failure-handler-ref="authenticationFailureHandler" />
+        <sec:form-login />
         <sec:logout />
 
-        <sec:session-management>
-            <sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
-        </sec:session-management>
+        <sec:session-management session-fixation-protection="none" />
     </sec:http>
 
     <sec:authentication-manager>

@@ -9,17 +9,6 @@
     <body>
         <h1>Hello Spring Security!!</h1>
         
-        <%@page import="org.springframework.security.core.context.SecurityContextHolder" %>
-        <%@page import="org.springframework.security.core.Authentication" %>
-        <%@page import="org.springframework.security.core.userdetails.UserDetails" %>
-        <%
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            UserDetails detauls = (UserDetails)auth.getPrincipal();
-            Object name = detauls.getUsername();
-        %>
-        
-        username = <%=name%>
-        
         <c:url var="logoutUrl" value="/logout" />
         <form action="${logoutUrl}" method="post">
             <input type="submit" value="logout" />
