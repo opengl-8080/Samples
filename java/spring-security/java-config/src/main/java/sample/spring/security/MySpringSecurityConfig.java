@@ -2,6 +2,7 @@ package sample.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.access.intercept.RunAsImplAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import sample.spring.security.service.MyRunAsService;
 
 @EnableWebSecurity
+@Import(MyGlobalMethodSecurityConfig.class)
 public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
