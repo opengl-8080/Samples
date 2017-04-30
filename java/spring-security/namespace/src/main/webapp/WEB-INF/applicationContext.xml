@@ -8,20 +8,34 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <bean class="sample.spring.security.service.MyRunAsService" />
+    
+    <sec:global-method-security secured-annotations="enabled" run-as-manager-ref="runAsManager" />
+    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-
-        <sec:session-management session-fixation-protection="none" />
     </sec:http>
+
+    <bean id="runAsManager"
+          class="org.springframework.security.access.intercept.RunAsManagerImpl">
+        <property name="key" value="foo" />
+    </bean>
+
+    <bean id="runAsAuthenticationProvider"
+          class="org.springframework.security.access.intercept.RunAsImplAuthenticationProvider">
+        <property name="key" value="foo" />
+    </bean>
 
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="hoge" password="hoge" authorities="" />
+                <sec:user name="hoge" password="hoge" authorities="ROLE_USER" />
             </sec:user-service>
         </sec:authentication-provider>
+        
+        <sec:authentication-provider ref="runAsAuthenticationProvider" />
     </sec:authentication-manager>
 </beans>

@@ -1,1 +1,1 @@
-include 'common', 'namespace', 'java-config'
+include 'common', 'namespace', 'java-config', 'simple-servlet'
