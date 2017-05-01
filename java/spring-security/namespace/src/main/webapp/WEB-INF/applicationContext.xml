@@ -8,7 +8,10 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <bean class="sample.spring.security.service.MyRunAsService" />
+    <bean class="sample.spring.security.service.MyRunAsService">
+        <constructor-arg index="0" ref="service2" />
+    </bean>
+    <bean id="service2" class="sample.spring.security.service.MyRunAsService2" />
     
     <sec:global-method-security secured-annotations="enabled" run-as-manager-ref="runAsManager" />
     
@@ -28,8 +31,10 @@
           class="org.springframework.security.access.intercept.RunAsImplAuthenticationProvider">
         <property name="key" value="foo" />
     </bean>
+    
+    <bean class="sample.spring.security.processor.MyMethodSecurityInterceptorInitializer" />
 
-    <sec:authentication-manager>
+    <sec:authentication-manager erase-credentials="false">
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user name="hoge" password="hoge" authorities="ROLE_USER" />

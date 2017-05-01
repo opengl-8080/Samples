@@ -5,24 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public class MyRunAsService {
+public class MyRunAsService2 {
     
-    private MyRunAsService2 service2;
-
-    public MyRunAsService(MyRunAsService2 service2) {
-        this.service2 = service2;
-    }
-
-    @Secured({"ROLE_USER", "RUN_AS_HOGE", "RUN_AS_FUGA"})
-    public void secured() {
-        this.printAuthorities("secured");
-        this.service2.printAuthorities("service2");
-    }
-    
-    public void nonSecured() {
-        this.printAuthorities("nonSecured");
-    }
-    
+    @Secured("ROLE_RUN_AS_HOGE")
     public void printAuthorities(String tag) {
         System.out.println("[" + tag + "]");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

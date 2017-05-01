@@ -8,7 +8,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import sample.spring.security.processor.MyMethodSecurityInterceptorInitializer;
 import sample.spring.security.service.MyRunAsService;
+import sample.spring.security.service.MyRunAsService2;
 
 @EnableWebSecurity
 @Import(MyGlobalMethodSecurityConfig.class)
@@ -28,7 +30,8 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
         RunAsImplAuthenticationProvider provider = new RunAsImplAuthenticationProvider();
         provider.setKey(MyGlobalMethodSecurityConfig.RUN_AS_KEY);
         
-        auth.authenticationProvider(provider)
+        auth.eraseCredentials(false)
+            .authenticationProvider(provider)
             .inMemoryAuthentication()
                 .withUser("hoge")
                 .password("hoge")
@@ -36,7 +39,17 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
     
     @Bean
-    public MyRunAsService myRunAsService() {
-        return new MyRunAsService();
+    public MyRunAsService myRunAsService(MyRunAsService2 service2) {
+        return new MyRunAsService(service2);
+    }
+    
+    @Bean
+    public MyRunAsService2 myRunAsService2() {
+        return new MyRunAsService2();
+    }
+    
+    @Bean
+    public MyMethodSecurityInterceptorInitializer myMethodSecurityInterceptorInitializer() {
+        return new MyMethodSecurityInterceptorInitializer();
     }
 }
