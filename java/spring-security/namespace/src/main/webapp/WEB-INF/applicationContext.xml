@@ -8,22 +8,10 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <bean class="sample.spring.security.service.MyRunAsService">
-        <constructor-arg index="0" ref="service2" />
-    </bean>
-    <bean id="service2" class="sample.spring.security.service.MyRunAsService2" />
-    
-    <sec:global-method-security secured-annotations="enabled" run-as-manager-ref="runAsManager" />
-    
-    <sec:http>
-        <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login />
-        <sec:logout />
-    </sec:http>
+    <bean class="sample.spring.security.service.MyRunAsService" />
 
     <bean id="runAsManager"
-          class="org.springframework.security.access.intercept.RunAsManagerImpl">
+          class="sample.spring.security.runas.MyRunAsManagerImpl">
         <property name="key" value="foo" />
     </bean>
 
@@ -32,7 +20,14 @@
         <property name="key" value="foo" />
     </bean>
     
-    <bean class="sample.spring.security.processor.MyMethodSecurityInterceptorInitializer" />
+    <sec:global-method-security pre-post-annotations="enabled" run-as-manager-ref="runAsManager" />
+    
+    <sec:http>
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+        <sec:form-login />
+        <sec:logout />
+    </sec:http>
 
     <sec:authentication-manager erase-credentials="false">
         <sec:authentication-provider>
