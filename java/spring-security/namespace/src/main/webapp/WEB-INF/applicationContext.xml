@@ -7,35 +7,20 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-
-    <bean class="sample.spring.security.service.MyRunAsService" />
-
-    <bean id="runAsManager"
-          class="sample.spring.security.runas.MyRunAsManagerImpl">
-        <property name="key" value="foo" />
-    </bean>
-
-    <bean id="runAsAuthenticationProvider"
-          class="org.springframework.security.access.intercept.RunAsImplAuthenticationProvider">
-        <property name="key" value="foo" />
-    </bean>
-    
-    <sec:global-method-security pre-post-annotations="enabled" run-as-manager-ref="runAsManager" />
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
+        <sec:remember-me remember-me-parameter=""/>
     </sec:http>
 
-    <sec:authentication-manager erase-credentials="false">
+    <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="hoge" password="hoge" authorities="ROLE_USER" />
+                <sec:user name="hoge" password="hoge" authorities="" />
             </sec:user-service>
         </sec:authentication-provider>
-        
-        <sec:authentication-provider ref="runAsAuthenticationProvider" />
     </sec:authentication-manager>
 </beans>
