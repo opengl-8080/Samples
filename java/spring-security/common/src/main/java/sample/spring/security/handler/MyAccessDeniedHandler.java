@@ -1,13 +1,13 @@
 package sample.spring.security.handler;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
     
@@ -18,8 +18,8 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
         }
         
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-        DefaultRedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-        redirectStrategy.sendRedirect(request, response, "/access-denied.html");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println("Access Denied!!");
+        }
     }
 }

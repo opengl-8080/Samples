@@ -8,12 +8,14 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
+    <bean id="accessDeniedHandler" class="sample.spring.security.handler.MyAccessDeniedHandler" />
+    
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:access-denied-handler error-page="/access-denied.html" />
+        <sec:access-denied-handler ref="accessDeniedHandler" />
     </sec:http>
 
     <sec:authentication-manager>

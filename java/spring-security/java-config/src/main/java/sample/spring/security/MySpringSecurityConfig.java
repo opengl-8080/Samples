@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import sample.spring.security.handler.MyAccessDeniedHandler;
 
 @EnableWebSecurity
 public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -18,7 +19,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/access-denied.html");
+                .accessDeniedHandler(new MyAccessDeniedHandler());
     }
 
     @Autowired
