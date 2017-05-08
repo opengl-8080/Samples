@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 import sample.spring.security.runas.MyRunAsManagerImpl;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class MyGlobalMethodSecurityConfig extends GlobalMethodSecurityConfiguration {
     
     public static final String RUN_AS_KEY = "foo";
