@@ -8,14 +8,34 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <bean id="accessDeniedHandler" class="sample.spring.security.handler.MyAccessDeniedHandler" />
+    <bean id="corsConfiguration" class="org.springframework.web.cors.CorsConfiguration">
+        <property name="allowedOrigins">
+            <list>
+                <value>http://opengl-8080.github.io</value>
+            </list>
+        </property>
+        <property name="allowedMethods">
+            <list>
+                <value>GET</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="corsSource" class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+        <property name="corsConfigurations">
+            <map>
+                <entry key="/cors" value-ref="corsConfiguration" />
+            </map>
+        </property>
+    </bean>
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/cors" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:access-denied-handler ref="accessDeniedHandler" />
+        <sec:cors configuration-source-ref="corsSource" />
     </sec:http>
 
     <sec:authentication-manager>

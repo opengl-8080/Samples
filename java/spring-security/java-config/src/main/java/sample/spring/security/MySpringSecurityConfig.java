@@ -5,7 +5,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import sample.spring.security.handler.MyAccessDeniedHandler;
+
+import java.util.Arrays;
 
 @EnableWebSecurity
 public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -14,12 +19,24 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/cors").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
+            .formLogin()
                 .and()
-                .exceptionHandling()
-                .accessDeniedHandler(new MyAccessDeniedHandler());
+            .cors()
+                .configurationSource(this.corsConfigurationSource());
+    }
+    
+    private CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedMethod("GET");
+        corsConfiguration.addAllowedOrigin("http://opengl-8080.github.io");
+
+        UrlBasedCorsConfigurationSource corsSource = new UrlBasedCorsConfigurationSource();
+        corsSource.registerCorsConfiguration("/cors", corsConfiguration);
+        
+        return corsSource;
     }
 
     @Autowired
