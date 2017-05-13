@@ -17,32 +17,36 @@
       <input id="headerValue" placeholder="Header-Value" />
     </div>
 
+    <button type="button" id="sendButton">Send Request</button>
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
 
     <script>
       $(function() {
-        var headers = {};
-        var headerName = $('#headerName').val();
-        var headerValue = $('#headerValue').val();
-        if (headerName) {
-          headers[headerName] = headerValue;
-        }
+        $('#sendButton').on('click', function() {
+          var headers = {};
+          var headerName = $('#headerName').val();
+          var headerValue = $('#headerValue').val();
+          if (headerName) {
+            headers[headerName] = headerValue;
+          }
 
-        var contextPath = $('#contextPath').val();
+          var contextPath = $('#contextPath').val();
 
-        $.ajax({
-          url: 'http://localhost:8080/' + contextPath + '/cors',
-          type: 'GET',
-          dataType: 'text',
-          headers: headers
-        })
-        .done(function(text) {
-          console.log("text = " + text);
-        })
-        .fail(function() {
-          console.error(arguments);
+          $.ajax({
+            url: 'http://localhost:8080/' + contextPath + '/cors',
+            type: 'GET',
+            dataType: 'text',
+            headers: headers
+          })
+          .done(function(text) {
+            console.log("text = " + text);
+          })
+          .fail(function() {
+            console.error(arguments);
+          });
         });
       });
     </script>
