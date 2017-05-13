@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>cors test</title>
+  </head>
+  <body>
+    <div>
+      <select id="contextPath">
+        <option value="namespace" selected>namespace</option>
+        <option value="java-config">java-config</option>
+      </select>
+    </div>
+
+    <div>
+      <input id="headerName" placeholder="Header-Name" />
+      <input id="headerValue" placeholder="Header-Value" />
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script>
+      $(function() {
+        var headers = {};
+        var headerName = $('#headerName').val();
+        var headerValue = $('#headerValue').val();
+        if (headerName) {
+          headers[headerName] = headerValue;
+        }
+
+        var contextPath = $('#contextPath').val();
+
+        $.ajax({
+          url: 'http://localhost:8080/' + contextPath + '/cors',
+          type: 'GET',
+          dataType: 'text',
+          headers: headers
+        })
+        .done(function(text) {
+          console.log("text = " + text);
+        })
+        .fail(function() {
+          console.error(arguments);
+        });
+      });
+    </script>
+  </body>
+</html>
