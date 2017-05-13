@@ -15,6 +15,7 @@ public class CorsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("CorsServlet");
         
+        resp.setHeader("Original-Header", "CORS!!");
         try (PrintWriter writer = resp.getWriter()) {
             writer.println("Hello CORS!!");
         }
