@@ -17,6 +17,10 @@
       <input id="headerValue" placeholder="Header-Value" />
     </div>
 
+    <div>
+      <input id="responseHeaderName" placeholder="responseHeaderName" />
+    </div>
+
     <button type="button" id="sendButton">Send Request</button>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -41,8 +45,13 @@
             dataType: 'text',
             headers: headers
           })
-          .done(function(text) {
+          .done(function(text, status, jqXhr) {
             console.log("text = " + text);
+
+            var responseHeaderName = $('#responseHeaderName').val();
+            if (responseHeaderName) {
+              console.log("[ResponseHeader] " + responseHeaderName + " : " + jqXhr.getResponseHeader(responseHeaderName));
+            }
           })
           .fail(function() {
             console.error(arguments);
