@@ -8,9 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import sample.spring.security.handler.MyAccessDeniedHandler;
-
-import java.util.Arrays;
 
 @EnableWebSecurity
 public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,15 +24,16 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
                 .configurationSource(this.corsConfigurationSource());
     }
-    
+
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedMethod("GET");
         corsConfiguration.addAllowedOrigin("http://opengl-8080.github.io");
+        corsConfiguration.addAllowedHeader("Hoge");
 
         UrlBasedCorsConfigurationSource corsSource = new UrlBasedCorsConfigurationSource();
         corsSource.registerCorsConfiguration("/cors", corsConfiguration);
-        
+
         return corsSource;
     }
 

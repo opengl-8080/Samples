@@ -796,7 +796,7 @@ Spring Security の ACL 機能を使い始めるには、 ACL の情報がどこ
 DataSource は、 JdbcMutableAclService と BasicLookupStrategy インスタンスに注入されます。
 
 > The latter provides high-performance ACL retrieval capabilities, and the former provides mutator capabilities.
-後者（BasicLoopupStrategy）は高機能な ACL に必要で、全社は ACL の変更機能で必要になります。
+後者（BasicLoopupStrategy）は高機能な ACL に必要で、前者は ACL の変更機能で必要になります。
 
 > Refer to one of the samples that ship with Spring Security for an example configuration.
 サンプルの設定ファイルを参照してください。
@@ -855,7 +855,7 @@ aclService.updateAcl(acl);
 上記の例では、識別子が数値の 44 である Foo というドメインオブジェクトに関連する ACL を取得しています。
 
 > We’re then adding an ACE so that a principal named "Samantha" can "administer" the object.
-そして、 "Samantha" という名前のプリンシパルがオブジェクトを管理者できるよう ACE を追加しています。
+そして、 "Samantha" という名前のプリンシパルがオブジェクトを管理者となるよう ACE を追加しています。
 
 > The code fragment is relatively self-explanatory, except the insertAce method.
 insertAce() メソッド以外は自明です。

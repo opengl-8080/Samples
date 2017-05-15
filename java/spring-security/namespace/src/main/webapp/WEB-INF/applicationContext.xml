@@ -2,43 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:sec="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
-         http://www.springframework.org/schema/security/spring-security.xsd">
+         http://www.springframework.org/schema/security/spring-security.xsd
+         http://www.springframework.org/schema/jdbc
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
     
-    <bean id="corsConfiguration" class="org.springframework.web.cors.CorsConfiguration">
-        <property name="allowedOrigins">
-            <list>
-                <value>http://opengl-8080.github.io</value>
-            </list>
-        </property>
-        <property name="allowedMethods">
-            <list>
-                <value>GET</value>
-            </list>
-        </property>
-        <property name="allowedHeaders">
-            <list>
-                <value>Hoge</value>
-            </list>
-        </property>
-        <property name="exposedHeaders">
-            <list>
-                <value>Access-Control-Allow-Origin</value>
-                <value>Original-Header</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="corsSource" class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
-        <property name="corsConfigurations">
-            <map>
-                <entry key="/cors" value-ref="corsConfiguration" />
-            </map>
-        </property>
-    </bean>
+    <jdbc:embedded-database id="dataSource" type="H2">
+        <jdbc:script location="classpath:/sql/create_acl_tables.sql" />
+    </jdbc:embedded-database>
     
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
@@ -46,7 +21,6 @@
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
-        <sec:cors configuration-source-ref="corsSource" />
     </sec:http>
 
     <sec:authentication-manager>
