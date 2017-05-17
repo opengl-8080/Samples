@@ -75,7 +75,7 @@
         <constructor-arg ref="aclCache" />
     </bean>
     
-    <bean class="sample.spring.security.service.AclService">
+    <bean class="sample.spring.security.service.MyAclSampleService">
         <property name="aclService" ref="aclService" />
         <property name="jdbcTemplate">
             <bean class="org.springframework.jdbc.core.JdbcTemplate">
@@ -86,7 +86,6 @@
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />
-        <sec:intercept-url pattern="/cors" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />

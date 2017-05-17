@@ -15,7 +15,7 @@ import sample.spring.security.domain.Foo;
 import java.util.List;
 import java.util.Map;
 
-public class AclService {
+public class MyAclSampleService {
     
     private MutableAclService aclService;
     private JdbcTemplate jdbcTemplate;
