@@ -709,6 +709,14 @@ Spring Security ACL は、４つのデータベーステーブルを必要とす
 
 https://github.com/spring-projects/spring-security/blob/master/samples/xml/contacts/src/main/java/sample/contact/DataSourcePopulator.java
 
+> Given databases are central to the operation of the ACL module, let’s explore the four main tables used by default in the implementation.
+
+与えられたデータベースは ACL モジュールの処理の中心となります。では、デフォルトの実装で使用される４つの主なテーブルについてみていきましょう。
+
+> The tables are presented below in order of size in a typical Spring Security ACL deployment, with the table with the most rows listed last:
+
+テーブルは典型的な Spring Security の ACL デプロイメントでのサイズ順で、最も行数が多いテーブルを最後にしています。
+
 ## ACL_SID
 プリンシパル、または権限を一意に識別する。
 SID は、 Security ID の略。
@@ -763,8 +771,35 @@ CLASS でユニーク。
 - ACL_OBJECT_IDENTITY
     - ACL_OBJECT_IDENTITY の主キーと外部参照制約を持つ
     - NULL 不可
-- ACE_ORDER
-    - 
+
+> As mentioned in the last paragraph, the ACL system uses integer bit masking.
+
+最後のパラグラフで言及されているとおり、 ACL システムは正数のビットマスクを使用しています。
+
+> Don’t worry, you need not be aware of the finer points of bit shifting to use the ACL system, but suffice to say that we have 32 bits we can switch on or off.
+
+安心してください、あなたは ACL システムを使うためにビットシフトを明確に理解しておく必要はありません。32ビットでオンオフを切り替えられることを知っていれば十分です。
+
+> Each of these bits represents a permission, and by default the permissions are read (bit 0), write (bit 1), create (bit 2), delete (bit 3) and administer (bit 4).
+
+それぞれのビットは、パーミッションを表し、デフォルトでは read(0ビット目)、 write(1ビット目)、create(bit2), delete(bit 3), そして管理者 (bit 4)です。
+
+> It’s easy to implement your own Permission instance if you wish to use other permissions, and the remainder of the ACL framework will operate without knowledge of your extensions.
+
+他のパーミッションを使いたい場合は、簡単に独自のパーミッションを実装することができます。そして、 ACL フレームワークはあなたの拡張について知ることなく処理することができることを思い出してください。
+
+> It is important to understand that the number of domain objects in your system has absolutely no bearing on the fact we’ve chosen to use integer bit masking.
+
+システムのドメインオブジェクトの数と整数のビットマスクには全く関係ないということを理解しておくことは重要です。
+
+> Whilst you have 32 bits available for permissions, you could have billions of domain object instances (which will mean billions of rows in ACL_OBJECT_IDENTITY and quite probably ACL_ENTRY).
+
+しばらく、あなたはパーミッションのために有効な３２ビットを持ち、百万のドメインオブジェクトを持つことができます（これは ACL_OBJECT_IDENTITY かもしくは ACL_ENTRY に百万の行があることを意味します）
+
+> We make this point because we’ve found sometimes people mistakenly believe they need a bit for each potential domain object, which is not the case.
+
+なぜこのことに注意を促すかというと、私たちはドメインオブジェクトごとにビットが必要だと勘違いする人々をときどき見るからです。
+
 
 ```sql
 CREATE TABLE ACL_ENTRY(
