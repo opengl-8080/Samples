@@ -800,6 +800,60 @@ CLASS でユニーク。
 
 なぜこのことに注意を促すかというと、私たちはドメインオブジェクトごとにビットが必要だと勘違いする人々をときどき見るからです。
 
+> Now that we’ve provided a basic overview of what the ACL system does, and what it looks like at a table structure, let’s explore the key interfaces.
+
+今、私たちは ACL システムが行うことについての基本的な概要を提供しました。そして、次のテーブル構造でキーとなるインターフェースについてみていきましょう。
+
+> The key interfaces are
+
+キーとなるインターフェースは、
+
+### Acl
+> Every domain object has one and only one Acl object, which internally holds the AccessControlEntry s as well as knows the owner of the Acl
+
+> An Acl does not refer directly to the domain object, but instead to an ObjectIdentity
+
+> The Acl is stored in the ACL_OBJECT_IDENTITY table.
+
+### AccessControlEntry
+> An Acl holds multiple AccessControlEntry s, which are often abbreviated as ACEs in the framework
+
+> Each ACE refers to a specific tuple of Permission, Sid and Acl
+
+> An ACE can also be granting or non-granting and contain audit settings
+
+> The ACE is stored in the ACL_ENTRY table.
+
+### Permission
+> A permission represents a particular immutable bit mask, and offers convenience functions for bit masking and outputting information
+
+> The basic permissions presented above (bits 0 through 4) are contained in the BasePermission class.
+
+### Sid
+> The ACL module needs to refer to principals and GrantedAuthority[] s
+
+> A level of indirection is provided by the Sid interface, which is an abbreviation of "security identity"
+
+> Common classes include PrincipalSid (to represent the principal inside an Authentication object) and GrantedAuthoritySid
+
+> The security identity information is stored in the ACL_SID table.
+
+### ObjectIdentity
+> Each domain object is represented internally within the ACL module by an ObjectIdentity
+
+> The default implementation is called ObjectIdentityImpl.
+
+### AclService
+> Retrieves the Acl applicable for a given ObjectIdentity
+
+> In the included implementation (JdbcAclService), retrieval operations are delegated to a LookupStrategy
+
+> The LookupStrategy provides a highly optimized strategy for retrieving ACL information, using batched retrievals (BasicLookupStrategy) and supporting custom implementations that leverage materialized views, hierarchical queries and similar performance-centric, non-ANSI SQL capabilities.
+
+### MutableAclService
+> Allows a modified Acl to be presented for persistence
+
+> It is not essential to use this interface if you do not wish.
 
 ```sql
 CREATE TABLE ACL_ENTRY(
