@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+
+apply plugin: 'eu.appsatori.fatjar'
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.commons:commons-lang3:3.5'
+}
+
+task run(dependsOn: fatJar, type: Exec) {
+    commandLine "java", "-jar", fatJar.archivePath
+}
+
+fatJar {
+    manifest {
+        attributes('Main-Class': 'TestMain')
+    }
+}
