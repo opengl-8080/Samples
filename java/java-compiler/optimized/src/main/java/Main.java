@@ -19,61 +19,97 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        new Main().execute();
+        new Main().execute(args);
     }
-    
+
     private final Path tmpDirPath;
     private final Path srcDirPath;
     private final Path classDirPath;
 
-    public Main() {
-        String a = "";
-        switch (a) {case "hoge":System.out.println(); break;default:System.out.println();}
-        
+    private Main() {
         try {
             this.tmpDirPath = this.createTempDirectory();
             this.srcDirPath = this.createSrcDirectory();
             this.classDirPath = this.createClassDirectory();
+
+//            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//                try {
+//                    Files.walkFileTree(this.tmpDirPath, new SimpleFileVisitor<Path>() {
+//                        @Override
+//                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+//                            try {
+//                                Files.delete(file);
+//                            } catch (IOException e) {
+//                                System.err.println("failed to delete file (" + file + ") : " + e.getMessage());
+//                                // continue to delete...
+//                            }
+//                            return FileVisitResult.CONTINUE;
+//                        }
+//
+//                        @Override
+//                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+//                            try {
+//                                Files.delete(dir);
+//                            } catch (IOException e) {
+//                                System.err.println("failed to delete directory (" + dir + ") : " + e.getMessage());
+//                                // continue to delete...
+//                            }
+//                            return FileVisitResult.CONTINUE;
+//                        }
+//                    });
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
-    
+
     private Path createTempDirectory() throws IOException {
-        Path path = Files.createTempDirectory(null);
-        this.deleteOnExit(path);
-        return path;
+        return Files.createTempDirectory(null);
     }
 
     private Path createSrcDirectory() throws IOException {
         Path path = this.tmpDirPath.resolve("src");
         Files.createDirectories(path);
-        this.deleteOnExit(path);
         return path;
     }
 
     private Path createClassDirectory() throws IOException {
         Path path = this.tmpDirPath.resolve("classes");
         Files.createDirectories(path);
-        this.deleteOnExit(path);
         return path;
     }
 
 
-    public void execute() throws IOException {
-        this.copySourceCode();
+    public void execute(String[] commandLineArgs) throws IOException {
+        this.copyResourceTarget();
         this.compile();
-        this.run();
+        this.copyNotCompileResource();
+        this.initManifestFile();
+        this.run(commandLineArgs);
     }
 
-    private void run() {
+    private void initManifestFile() {
+        try {
+            Path metaInfDirPath = this.classDirPath.resolve("META-INF");
+            Files.createDirectories(metaInfDirPath);
+            Path manifest = metaInfDirPath.resolve("MANIFEST.MF");
+            Files.write(manifest, "Start-Class: test.TestMain\n".getBytes("UTF-8"));
+            System.out.println("manifest=" + manifest);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private void run(String[] commandLineArgs) {
         try {
             URL url = this.classDirPath.toUri().toURL();
             URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{url}, Main.class.getClassLoader());
-            Class<?> clazz = Class.forName("TestMain", true, classLoader);
+            Class<?> clazz = Class.forName("org.springframework.boot.loader.JarLauncher", true, classLoader);
             Method mainMethod = clazz.getMethod("main", String[].class);
-            Object args = new String[0];
-            mainMethod.invoke(null, args);
+            mainMethod.invoke(null, (Object)commandLineArgs);
         } catch (MalformedURLException e) {
             throw new UncheckedIOException(e);
         } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -84,20 +120,24 @@ public class Main {
     private void compile() {
         try {
             List<String> sourceFileList = Files.walk(this.srcDirPath)
-                                            .filter(path -> Files.isRegularFile(path))
-                                            .map(path -> path.toAbsolutePath().toString())
-                                            .collect(Collectors.toList());
-            
+                    .filter(path -> Files.isRegularFile(path)
+                            && path.getFileName().toString().endsWith(".java"))
+                    .map(path -> path.toAbsolutePath().toString())
+                    .collect(Collectors.toList());
+
             List<String> args = new ArrayList<>();
+            args.add("-Xlint:none");
             args.add("-d");
             args.add(this.classDirPath.toString());
+            args.add("-cp");
+            args.add(this.srcDirPath.toString());
             args.add("-encoding");
             args.add("UTF-8");
             args.addAll(sourceFileList);
-            
+
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
             int returnCode = compiler.run(null, null, null, args.toArray(new String[args.size()]));
-            
+
             if (returnCode != 0) {
                 throw new RuntimeException("javac is not successful. (" + returnCode + ")");
             }
@@ -105,32 +145,44 @@ public class Main {
             throw new UncheckedIOException(e);
         }
     }
-    
-    private void copySourceCode() throws IOException {
+
+    private void copyNotCompileResource() throws IOException {
+        Files.walk(this.srcDirPath)
+                .filter(path -> Files.isRegularFile(path) && !path.getFileName().toString().endsWith(".java"))
+                .forEach(file -> {
+                    Path outPath = this.classDirPath.resolve(this.srcDirPath.relativize(file));
+                    try {
+                        Files.createDirectories(outPath.getParent());
+                        Files.copy(file, outPath);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                });
+    }
+
+    private void copyResourceTarget() throws IOException {
         JarFile jarFile = this.findThisJarFile();
 
-        this.forEachCompileTarget(jarFile, jarEntry -> {
+        this.forEachResourceTarget(jarFile, jarEntry -> {
             String entryName = jarEntry.getName();
             Path outputPath = this.tmpDirPath.resolve(Paths.get(entryName));
 
             Files.createDirectories(outputPath.getParent());
-            this.deleteOnExit(outputPath.getParent());
 
             try (InputStream entryInputStream = Main.class.getResourceAsStream(entryName)) {
                 Files.copy(entryInputStream, outputPath);
-                this.deleteOnExit(outputPath);
             }
         });
     }
-    
+
     private JarFile findThisJarFile() throws IOException {
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         return new JarFile(location.getFile());
     }
-    
-    private void forEachCompileTarget(JarFile jarFile, JarEntryConsumer consumer) {
+
+    private void forEachResourceTarget(JarFile jarFile, JarEntryConsumer consumer) {
         jarFile.stream()
-                .filter(this::isCompileTarget)
+                .filter(this::isResourceTarget)
                 .forEach(jarEntry -> {
                     try {
                         consumer.consume(jarEntry);
@@ -139,17 +191,13 @@ public class Main {
                     }
                 });
     }
-    
-    private boolean isCompileTarget(JarEntry entry) {
+
+    private boolean isResourceTarget(JarEntry entry) {
         String name = entry.getName();
         return !entry.isDirectory()
                 && name.startsWith("src/");
     }
-    
-    private void deleteOnExit(Path path) {
-//        path.toFile().deleteOnExit();
-    }
-    
+
     interface JarEntryConsumer {
         void consume(JarEntry jarEntry) throws IOException;
     }

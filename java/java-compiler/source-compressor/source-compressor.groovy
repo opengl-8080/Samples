@@ -13,12 +13,19 @@ inDirPath.toFile().eachFileRecurse(FileType.FILES) { file ->
 
   Files.createDirectories(outPath.parent)
 
-  def text = new String(Files.readAllBytes(inPath), StandardCharsets.UTF_8)
-  def compressedText = text.replaceAll(/(?m)^[ \t]+/, '')
-                        .replaceAll(/(?m)[ \t]+$/, '')
-                        .replaceAll('(?m)//.*$', '')
-                        .replaceAll(/\r|\n/, ' ')
-                        .replaceAll('/\\*.*?\\*/', '')
+  if (file.name.endsWith(".java")) {
+    def text = new String(Files.readAllBytes(inPath), StandardCharsets.UTF_8)
+    def compressedText = text.replaceAll(/(?m)^[ \t]+/, '')
+                          .replaceAll(/(?m)[ \t]+$/, '')
+                          .replaceAll('(?m)//.*$', '')
+                          .replaceAll(/\r|\n/, ' ')
+                          .replaceAll('/\\*.*?\\*/', '')
 
-  Files.write(outPath, compressedText.getBytes(StandardCharsets.UTF_8))
+    Files.write(outPath, compressedText.getBytes(StandardCharsets.UTF_8))
+  } else {
+    if (Files.exists(outPath)) {
+      throw new RuntimeException("file already exists. ($outPath)");
+    }
+    Files.copy(inPath, outPath)
+  }
 }
