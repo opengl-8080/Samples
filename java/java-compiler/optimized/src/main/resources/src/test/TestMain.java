@@ -1,12 +1,1 @@
-package test;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class TestMain {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(test.TestMain.class, args);
-    }
-}
+package test;import org.springframework.boot.SpringApplication;import org.springframework.boot.autoconfigure.SpringBootApplication;@SpringBootApplication public class TestMain { public static void main(String[] args) { SpringApplication.run(test.TestMain.class, args);} } 

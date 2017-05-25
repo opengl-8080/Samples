@@ -8,9 +8,12 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -32,35 +35,35 @@ public class Main {
             this.srcDirPath = this.createSrcDirectory();
             this.classDirPath = this.createClassDirectory();
 
-//            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//                try {
-//                    Files.walkFileTree(this.tmpDirPath, new SimpleFileVisitor<Path>() {
-//                        @Override
-//                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//                            try {
-//                                Files.delete(file);
-//                            } catch (IOException e) {
-//                                System.err.println("failed to delete file (" + file + ") : " + e.getMessage());
-//                                // continue to delete...
-//                            }
-//                            return FileVisitResult.CONTINUE;
-//                        }
-//
-//                        @Override
-//                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-//                            try {
-//                                Files.delete(dir);
-//                            } catch (IOException e) {
-//                                System.err.println("failed to delete directory (" + dir + ") : " + e.getMessage());
-//                                // continue to delete...
-//                            }
-//                            return FileVisitResult.CONTINUE;
-//                        }
-//                    });
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    Files.walkFileTree(this.tmpDirPath, new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                            try {
+                                Files.delete(file);
+                            } catch (IOException e) {
+                                System.err.println("failed to delete file (" + file + ") : " + e.getMessage());
+                                // continue to delete...
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                            try {
+                                Files.delete(dir);
+                            } catch (IOException e) {
+                                System.err.println("failed to delete directory (" + dir + ") : " + e.getMessage());
+                                // continue to delete...
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -97,7 +100,6 @@ public class Main {
             Files.createDirectories(metaInfDirPath);
             Path manifest = metaInfDirPath.resolve("MANIFEST.MF");
             Files.write(manifest, "Start-Class: test.TestMain\n".getBytes("UTF-8"));
-            System.out.println("manifest=" + manifest);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
