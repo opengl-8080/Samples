@@ -809,11 +809,17 @@ CLASS でユニーク。
 キーとなるインターフェースは、
 
 ### Acl
-> Every domain object has one and only one Acl object, which internally holds the AccessControlEntry s as well as knows the owner of the Acl
+> Every domain object has one and only one Acl object, which internally holds the AccessControlEntrys as well as knows the owner of the Acl
+
+全てのドメインオブジェクトはたった１つの `Acl` オブジェクトを持ちます。それ（`Acl` オブジェクト）は `Acl` のオーナー（ドメインオブジェクト？）を知っているのと同様に `AccessControlEntry` を内部に持っています。
 
 > An Acl does not refer directly to the domain object, but instead to an ObjectIdentity
 
+`Acl` は、ドメインオブジェクトを直接参照しない代わりに `ObjectIdentity` を参照します。
+
 > The Acl is stored in the ACL_OBJECT_IDENTITY table.
+
+`Acl` は `ACL_OBJECT_IDENTITY` テーブルに格納されます。
 
 ### AccessControlEntry
 > An Acl holds multiple AccessControlEntry s, which are often abbreviated as ACEs in the framework
