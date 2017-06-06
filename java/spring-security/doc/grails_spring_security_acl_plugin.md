@@ -153,10 +153,17 @@ class ReportService {
 
 > The plugin classes related to persistence use these classes, so they’re included in the plugin but can be overridden by running the s2-create-acl-domains script.
 
+永続化に関係するプラグインクラスは、これらのクラスを使用します。そのため、彼らはプラグインに含まれています。しかし、 `s2-create-acl-domains` スクリプトの実行により上書きすることが可能です。
+
 > As you can see, the database structure is highly normalized.
+
+ご覧の通り、データベースの構造は高度に正規化されています。
 
 ### 2.3.1. AclClass
 > The AclClass domain class contains entries for the names of each application domain class that has associated permissions:
+
+`AclClass` ドメインクラスは、関連するパーミッションを持った個々のアプリケーションのドメインクラスの名前をエントリに含んでいます。
+
 
 ```groovy
 package grails.plugin.springsecurity.acl
@@ -184,9 +191,15 @@ class AclClass {
 ### 2.3.2. AclSid
 > The AclSid domain class contains entries for the names of grant recipients (a principal or authority - SID is an acronym for “security identity”).
 
+`AclSid` ドメインクラスは、付与された受信者（プリンシパルか権限 - SID は "security identity" の略語）の名前のエントリを含みます。
+
 > These are typically usernames (where principal is true) but can also be a GrantedAuthority (role name, where principal is false).
 
+典型的なものはユーザー名（プリンシパルの場合）です。しかし、 `GrantedAuthority` （プリンシパルでない場合はロール名）の場合もあります。
+
 > When granting permissions to a role, any user with that role receives that permission:
+
+ロールにパーミッションを付与するとき、ロールを持つ任意のユーザはパーミッションを受け取ります。
 
 ```groovy
 package grails.plugin.springsecurity.acl

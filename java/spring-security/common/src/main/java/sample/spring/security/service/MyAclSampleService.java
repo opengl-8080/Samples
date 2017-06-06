@@ -2,13 +2,10 @@ package sample.spring.security.service;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.acls.domain.BasePermission;
+import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
-import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
-import org.springframework.security.acls.model.NotFoundException;
-import org.springframework.security.acls.model.Permission;
-import org.springframework.security.acls.model.Sid;
 import org.springframework.transaction.annotation.Transactional;
 import sample.spring.security.domain.Foo;
 
@@ -23,18 +20,23 @@ public class MyAclSampleService {
     @Transactional
     public void save() {
         ObjectIdentityImpl oi = new ObjectIdentityImpl(Foo.class, 44L);
-        Sid sid = new PrincipalSid("Samantha");
-        Permission permission = BasePermission.ADMINISTRATION;
-
-        MutableAcl acl = null;
-        try {
-            acl = (MutableAcl) this.aclService.readAclById(oi);
-        } catch (NotFoundException e) {
-            acl = this.aclService.createAcl(oi);
-        }
-
-        acl.insertAce(acl.getEntries().size(), permission, sid, true);
+        MutableAcl acl = this.aclService.createAcl(oi);
+        System.out.println(acl.getClass());
+        acl.insertAce(acl.getEntries().size(), BasePermission.READ, new GrantedAuthoritySid("role_hoge"), true);
         this.aclService.updateAcl(acl);
+
+//        Sid sid = new PrincipalSid("Samantha");
+//        Permission permission = BasePermission.ADMINISTRATION;
+//
+//        MutableAcl acl = null;
+//        try {
+//            acl = (MutableAcl) this.aclService.readAclById(oi);
+//        } catch (NotFoundException e) {
+//            acl = this.aclService.createAcl(oi);
+//        }
+//
+//        acl.insertAce(acl.getEntries().size(), permission, sid, true);
+//        this.aclService.updateAcl(acl);
     }
     
     @Transactional
