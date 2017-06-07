@@ -1,29 +1,25 @@
 package sample.spring.security.service;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.acls.domain.BasePermission;
-import org.springframework.security.acls.domain.GrantedAuthoritySid;
-import org.springframework.security.acls.domain.ObjectIdentityImpl;
-import org.springframework.security.acls.model.MutableAcl;
-import org.springframework.security.acls.model.MutableAclService;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import sample.spring.security.domain.Foo;
-
-import java.util.List;
-import java.util.Map;
 
 public class MyAclSampleService {
     
-    private MutableAclService aclService;
-    private JdbcTemplate jdbcTemplate;
+    @PreAuthorize("hasPermission(#foo, read)")
+    public void logic(Foo foo) {
+        System.out.println("foo=" + foo);
+    }
+    
+//    private MutableAclService aclService;
+//    private JdbcTemplate jdbcTemplate;
 
-    @Transactional
+//    @Transactional
     public void save() {
-        ObjectIdentityImpl oi = new ObjectIdentityImpl(Foo.class, 44L);
-        MutableAcl acl = this.aclService.createAcl(oi);
-        System.out.println(acl.getClass());
-        acl.insertAce(acl.getEntries().size(), BasePermission.READ, new GrantedAuthoritySid("role_hoge"), true);
-        this.aclService.updateAcl(acl);
+//        ObjectIdentityImpl oi = new ObjectIdentityImpl(Foo.class, 44L);
+//        MutableAcl acl = this.aclService.createAcl(oi);
+//        System.out.println(acl.getClass());
+//        acl.insertAce(acl.getEntries().size(), BasePermission.READ, new GrantedAuthoritySid("role_hoge"), true);
+//        this.aclService.updateAcl(acl);
 
 //        Sid sid = new PrincipalSid("Samantha");
 //        Permission permission = BasePermission.ADMINISTRATION;
@@ -39,27 +35,27 @@ public class MyAclSampleService {
 //        this.aclService.updateAcl(acl);
     }
     
-    @Transactional
+//    @Transactional
     public void list() {
-        this.printTable("ACL_SID");
-        this.printTable("ACL_CLASS");
-        this.printTable("ACL_OBJECT_IDENTITY");
-        this.printTable("ACL_ENTRY");
+//        this.printTable("ACL_SID");
+//        this.printTable("ACL_CLASS");
+//        this.printTable("ACL_OBJECT_IDENTITY");
+//        this.printTable("ACL_ENTRY");
     }
-    
-    private void printTable(String tableName) {
-        System.out.println("[" + tableName + "]");
-        List<Map<String, Object>> records = this.jdbcTemplate.queryForList("select * from " + tableName);
-        records.forEach(System.out::println);
-
-        System.out.println();
-    }
-    
-    public void setAclService(MutableAclService aclService) {
-        this.aclService = aclService;
-    }
-
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+//    
+//    private void printTable(String tableName) {
+//        System.out.println("[" + tableName + "]");
+//        List<Map<String, Object>> records = this.jdbcTemplate.queryForList("select * from " + tableName);
+//        records.forEach(System.out::println);
+//
+//        System.out.println();
+//    }
+//    
+//    public void setAclService(MutableAclService aclService) {
+//        this.aclService = aclService;
+//    }
+//
+//    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+//        this.jdbcTemplate = jdbcTemplate;
+//    }
 }

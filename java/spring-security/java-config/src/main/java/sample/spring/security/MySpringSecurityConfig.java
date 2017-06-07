@@ -100,8 +100,8 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
         DataSource dataSource
     ) {
         MyAclSampleService service = new MyAclSampleService();
-        service.setAclService(aclService);
-        service.setJdbcTemplate(new JdbcTemplate(dataSource));
+//        service.setAclService(aclService);
+//        service.setJdbcTemplate(new JdbcTemplate(dataSource));
 
         return service;
     }

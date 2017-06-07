@@ -13,6 +13,18 @@
          http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
          http://www.springframework.org/schema/tx
          http://www.springframework.org/schema/tx/spring-tx.xsd">
+    
+    <sec:global-method-security pre-post-annotations="enabled">
+        <sec:expression-handler ref="expressionHandler" />
+    </sec:global-method-security>
+    
+    <bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+        <property name="permissionEvaluator">
+            <bean class="org.springframework.security.acls.AclPermissionEvaluator">
+                <constructor-arg ref="aclService" />
+            </bean>
+        </property>
+    </bean>
 
     <jdbc:embedded-database id="dataSource" type="H2">
         <jdbc:script location="classpath:/sql/create_acl_tables.sql" />
@@ -76,12 +88,12 @@
     </bean>
     
     <bean class="sample.spring.security.service.MyAclSampleService">
-        <property name="aclService" ref="aclService" />
-        <property name="jdbcTemplate">
-            <bean class="org.springframework.jdbc.core.JdbcTemplate">
-                <constructor-arg ref="dataSource" />
-            </bean>
-        </property>
+        <!--<property name="aclService" ref="aclService" />-->
+        <!--<property name="jdbcTemplate">-->
+            <!--<bean class="org.springframework.jdbc.core.JdbcTemplate">-->
+                <!--<constructor-arg ref="dataSource" />-->
+            <!--</bean>-->
+        <!--</property>-->
     </bean>
 
     <sec:http>
@@ -95,6 +107,8 @@
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user name="hoge" password="hoge" authorities="" />
+                <sec:user name="fuga" password="fuga" authorities="" />
+                <sec:user name="piyo" password="piyo" authorities="role_hoge" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
