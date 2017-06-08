@@ -3,16 +3,13 @@
        xmlns:sec="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd
          http://www.springframework.org/schema/jdbc
-         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
-         http://www.springframework.org/schema/tx
-         http://www.springframework.org/schema/tx/spring-tx.xsd">
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
     
     <sec:global-method-security pre-post-annotations="enabled">
         <sec:expression-handler ref="expressionHandler" />
@@ -30,11 +27,11 @@
         <jdbc:script location="classpath:/sql/create_acl_tables.sql" />
     </jdbc:embedded-database>
 
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <constructor-arg ref="dataSource" />
-    </bean>
+    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<constructor-arg ref="dataSource" />-->
+    <!--</bean>-->
 
-    <tx:annotation-driven />
+    <!--<tx:annotation-driven />-->
 
     <bean id="aclCache" class="org.springframework.security.acls.domain.SpringCacheBasedAclCache">
         <constructor-arg>

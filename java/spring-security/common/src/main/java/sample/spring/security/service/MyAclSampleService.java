@@ -5,7 +5,7 @@ import sample.spring.security.domain.Foo;
 
 public class MyAclSampleService {
     
-    @PreAuthorize("hasPermission(#foo, read)")
+    @PreAuthorize("hasPermission(#foo, admin)")
     public void logic(Foo foo) {
         System.out.println("foo=" + foo);
     }
