@@ -21,12 +21,9 @@ public class MyMethodSecurityServlet extends HttpServlet {
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(req.getServletContext());
         MyMethodSecurityService service = context.getBean(MyMethodSecurityService.class);
 
-        String strValue = req.getParameter("strValue");
-        int intValue = Integer.parseInt(req.getParameter("intValue"));
-
         PrintWriter writer = resp.getWriter();
         try {
-            writer.println(service.getMessage(strValue, intValue));
+            writer.println(service.getMessage());
         } catch (AccessDeniedException e) {
             writer.println(e.getMessage());
         } finally {

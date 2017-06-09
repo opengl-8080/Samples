@@ -1,6 +1,7 @@
 package sample.spring.security.service;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.model.MutableAclService;
 import sample.spring.security.domain.Foo;
 
 public class MyAclSampleService {
@@ -10,7 +11,7 @@ public class MyAclSampleService {
         System.out.println("foo=" + foo);
     }
     
-//    private MutableAclService aclService;
+    private MutableAclService aclService;
 //    private JdbcTemplate jdbcTemplate;
 
 //    @Transactional
