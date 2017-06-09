@@ -23,7 +23,9 @@ public class MyMethodSecurityServlet extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
         try {
-            writer.println(service.getMessage());
+            String strValue = req.getParameter("strValue");
+            int intValue = Integer.parseInt(req.getParameter("intValue"));
+            writer.println(service.getMessage(strValue, intValue));
         } catch (AccessDeniedException e) {
             writer.println(e.getMessage());
         } finally {

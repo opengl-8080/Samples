@@ -4,8 +4,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 public class MyMethodSecurityService {
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String getMessage() {
-        return "Hello Method Security!!";
+    @PreAuthorize("#strValue == 'aaa' and #intValue == 1")
+    public String getMessage(String strValue, int intValue) {
+        return "strValue=" + strValue + ", intValue=" + intValue;
     }
 }
