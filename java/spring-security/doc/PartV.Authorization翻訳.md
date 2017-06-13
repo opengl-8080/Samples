@@ -1005,3 +1005,8 @@ ACL の情報は実行時に評価されます。
 
 > Please refer to the sample applications to learn how to use these classes.
 サンプルアプリを見てさらに勉強してください。
+
+## Acl.isGranted() の Javadoc
+> administrativeMode - if true denotes the query is for administrative purposes and no logging or auditing (if supported by the implementation) should be undertaken
+
+もし true なら、クエリが管理を目的とし、ロギングや（実装がサポートするなら）監査は行われない
