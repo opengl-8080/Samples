@@ -1,7 +1,7 @@
 package sample.spring.security.domain;
 
 public class Foo {
-    private long id;
+    private final long id;
 
     public Foo(long id) {
         this.id = id;
@@ -13,8 +13,6 @@ public class Foo {
 
     @Override
     public String toString() {
-        return "Foo{" +
-                "id=" + id +
-                '}';
+        return "Foo{id=" + id + '}';
     }
 }
