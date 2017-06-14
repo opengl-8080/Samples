@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 @WebServlet("/acl")
-public class AclServlet extends HttpServlet {
+public class MyAclServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,7 +26,6 @@ public class AclServlet extends HttpServlet {
         Foo foo = this.makeDomainObject(req);
         
         try {
-            System.out.println("********************************");
             this.printPrincipal();
             service.logic(foo);
         } catch (AccessDeniedException e) {

@@ -2,7 +2,6 @@ package sample.spring.security;
 
 import org.springframework.cache.support.NoOpCache;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.access.PermissionEvaluator;
@@ -24,7 +23,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.sql.DataSource;
 
-@Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class MyGlobalMethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
