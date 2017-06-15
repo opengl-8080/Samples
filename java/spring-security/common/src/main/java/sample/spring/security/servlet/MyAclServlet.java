@@ -22,27 +22,11 @@ public class MyAclServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        MyAclSampleService service = this.findServiceBean(req);
-        Foo foo = this.makeDomainObject(req);
-        
-        try {
-            this.printPrincipal();
-            service.logic(foo);
-        } catch (AccessDeniedException e) {
-            System.out.println("AccessDeniedException : " + e.getMessage());
-        }
+        this.printPrincipal();
+        this.callServiceLogic(new Foo(44L), req);
+        this.callServiceLogic(new Foo(45L), req);
     }
-    
-    private MyAclSampleService findServiceBean(HttpServletRequest req) {
-        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(req.getServletContext());
-        return context.getBean(MyAclSampleService.class);
-    }
-    
-    private Foo makeDomainObject(HttpServletRequest req) {
-        String id = req.getParameter("id");
-        return new Foo(Long.parseLong(id));
-    }
-    
+
     private void printPrincipal() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
@@ -52,5 +36,18 @@ public class MyAclServlet extends HttpServlet {
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.joining(", "))
         );
+    }
+    
+    private void callServiceLogic(Foo foo, HttpServletRequest req) {
+        try {
+            this.findServiceBean(req).logic(foo);
+        } catch (AccessDeniedException e) {
+            System.out.println("AccessDeniedException : " + e.getMessage());
+        }
+    }
+    
+    private MyAclSampleService findServiceBean(HttpServletRequest req) {
+        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(req.getServletContext());
+        return context.getBean(MyAclSampleService.class);
     }
 }
