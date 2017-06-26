@@ -78,8 +78,8 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="foo" password="foo" authorities="" />
-                <sec:user name="bar" password="bar" authorities="SAMPLE_AUTHORITY" />
+                <sec:user name="foo" password="foo" authorities="AUTHORITY_10101" />
+                <sec:user name="bar" password="bar" authorities="AUTHORITY_01010" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>

@@ -23,8 +23,13 @@ public class MyAclServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.printPrincipal();
-        this.callServiceLogic(new Foo(44L), req);
-        this.callServiceLogic(new Foo(45L), req);
+        MyAclSampleService serviceBean = this.findServiceBean(req);
+        Foo foo = new Foo(44L);
+        this.callServiceLogic("read", () -> serviceBean.read(foo));
+        this.callServiceLogic("write", () -> serviceBean.write(foo));
+        this.callServiceLogic("create", () -> serviceBean.create(foo));
+        this.callServiceLogic("delete", () -> serviceBean.delete(foo));
+        this.callServiceLogic("admin", () -> serviceBean.admin(foo));
     }
 
     private void printPrincipal() {
@@ -38,9 +43,10 @@ public class MyAclServlet extends HttpServlet {
         );
     }
     
-    private void callServiceLogic(Foo foo, HttpServletRequest req) {
+    private void callServiceLogic(String methodName, Runnable runnable) {
         try {
-            this.findServiceBean(req).logic(foo);
+            System.out.println("* invoke " + methodName + "()");
+            runnable.run();
         } catch (AccessDeniedException e) {
             System.out.println("AccessDeniedException : " + e.getMessage());
         }
