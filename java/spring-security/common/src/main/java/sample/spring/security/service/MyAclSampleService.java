@@ -20,5 +20,9 @@ public class MyAclSampleService {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
         MutableAcl acl = this.aclService.createAcl(objectIdentity);
         System.out.println("acl = " + acl);
+        
+        objectIdentity = new ObjectIdentityImpl(Foo.class, 11L);
+        acl = this.aclService.createAcl(objectIdentity);
+        System.out.println("acl = " + acl);
     }
 }
