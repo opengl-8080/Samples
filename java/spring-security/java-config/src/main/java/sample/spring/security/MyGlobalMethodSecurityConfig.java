@@ -2,6 +2,8 @@ package sample.spring.security;
 
 import org.springframework.cache.support.NoOpCache;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.access.PermissionEvaluator;
@@ -12,7 +14,7 @@ import org.springframework.security.acls.domain.ConsoleAuditLogger;
 import org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy;
 import org.springframework.security.acls.domain.SpringCacheBasedAclCache;
 import org.springframework.security.acls.jdbc.BasicLookupStrategy;
-import org.springframework.security.acls.jdbc.JdbcAclService;
+import org.springframework.security.acls.jdbc.JdbcMutableAclService;
 import org.springframework.security.acls.jdbc.LookupStrategy;
 import org.springframework.security.acls.model.AclCache;
 import org.springframework.security.acls.model.AclService;
@@ -20,6 +22,7 @@ import org.springframework.security.acls.model.PermissionGrantingStrategy;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -32,8 +35,18 @@ public class MyGlobalMethodSecurityConfig extends GlobalMethodSecurityConfigurat
                 .generateUniqueName(true)
                 .setType(EmbeddedDatabaseType.H2)
                 .setScriptEncoding("UTF-8")
-                .addScripts("/sql/create_acl_tables.sql", "/sql/insert_acl_tables.sql")
+                .addScripts("/sql/create_acl_tables.sql")
                 .build();
+    }
+    
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean
@@ -42,26 +55,26 @@ public class MyGlobalMethodSecurityConfig extends GlobalMethodSecurityConfigurat
     }
 
     @Bean
-    public AclService aclService(DataSource dataSource, LookupStrategy lookupStrategy) {
-        return new JdbcAclService(dataSource, lookupStrategy);
+    public AclService aclService(DataSource dataSource, LookupStrategy lookupStrategy, AclCache aclCache) {
+        return new JdbcMutableAclService(dataSource, lookupStrategy, aclCache);
     }
 
     @Bean
     public LookupStrategy lookupStrategy(DataSource dataSource, AclCache aclCache, AclAuthorizationStrategy aclAuthorizationStrategy, PermissionGrantingStrategy permissionGrantingStrategy) {
         return new BasicLookupStrategy(
-                dataSource,
-                aclCache,
-                aclAuthorizationStrategy,
-                permissionGrantingStrategy
+            dataSource,
+            aclCache,
+            aclAuthorizationStrategy,
+            permissionGrantingStrategy
         );
     }
 
     @Bean
     public AclCache aclCache(PermissionGrantingStrategy permissionGrantingStrategy, AclAuthorizationStrategy aclAuthorizationStrategy) {
         return new SpringCacheBasedAclCache(
-                new NoOpCache("myCache"),
-                permissionGrantingStrategy,
-                aclAuthorizationStrategy
+            new NoOpCache("myCache"),
+            permissionGrantingStrategy,
+            aclAuthorizationStrategy
         );
     }
     
