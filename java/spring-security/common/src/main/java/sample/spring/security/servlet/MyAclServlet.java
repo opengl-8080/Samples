@@ -22,6 +22,8 @@ public class MyAclServlet extends HttpServlet {
         MyAclSampleService service = this.findServiceBean(req, MyAclSampleService.class);
         service.createObjectIdentity();
         this.printTables(req);
+        
+        service.findAcl();
     }
     
     private void printTables(HttpServletRequest req) {

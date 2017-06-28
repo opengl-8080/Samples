@@ -1,6 +1,7 @@
 package sample.spring.security.service;
 
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
+import org.springframework.security.acls.model.Acl;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.security.acls.model.ObjectIdentity;
@@ -20,9 +21,11 @@ public class MyAclSampleService {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
         MutableAcl acl = this.aclService.createAcl(objectIdentity);
         System.out.println("acl = " + acl);
-        
-        objectIdentity = new ObjectIdentityImpl(Foo.class, 11L);
-        acl = this.aclService.createAcl(objectIdentity);
+    }
+    
+    public void findAcl() {
+        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
+        Acl acl = aclService.readAclById(objectIdentity);
         System.out.println("acl = " + acl);
     }
 }
