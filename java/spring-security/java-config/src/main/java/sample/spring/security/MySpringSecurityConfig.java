@@ -51,6 +51,10 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("foo")
                 .password("foo")
-                .authorities(Collections.emptyList());
+                .authorities("PERMIT_READ")
+            .and()
+                .withUser("bar")
+                .password("bar")
+                .authorities("DENIED_READ");
     }
 }

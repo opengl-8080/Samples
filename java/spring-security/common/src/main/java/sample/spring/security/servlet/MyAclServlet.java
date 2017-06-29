@@ -1,8 +1,12 @@
 package sample.spring.security.servlet;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import sample.spring.security.domain.Foo;
 import sample.spring.security.service.MyAclSampleService;
 
 import javax.servlet.ServletException;
@@ -13,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/acl")
 public class MyAclServlet extends HttpServlet {
@@ -20,10 +25,22 @@ public class MyAclServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         MyAclSampleService service = this.findServiceBean(req, MyAclSampleService.class);
-        service.createObjectIdentity();
+        service.addPermission();
         this.printTables(req);
         
-        service.findAcl();
+        this.printPrincipal();
+        service.read(new Foo(10L));
+    }
+    
+    private void printPrincipal() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        System.out.println("name=" + name);
+        System.out.println("authorities=" +
+                auth.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.joining(", "))
+        );
     }
     
     private void printTables(HttpServletRequest req) {
