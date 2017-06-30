@@ -6,6 +6,7 @@ import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +23,18 @@ public class MyAclSampleService {
 
     public void addPermission() {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
-        MutableAcl acl = this.aclService.createAcl(objectIdentity);
-
-        GrantedAuthoritySid permitRead = new GrantedAuthoritySid(new SimpleGrantedAuthority("PERMIT_READ"));
-        GrantedAuthoritySid deniedRead = new GrantedAuthoritySid(new SimpleGrantedAuthority("DENIED_READ"));
-        acl.insertAce(0, BasePermission.READ, deniedRead, false);
-        acl.insertAce(1, BasePermission.READ, permitRead, true);
-
-        this.aclService.updateAcl(acl);
-        
-        System.out.println("acl = " + acl);
+        try {
+            this.aclService.readAclById(objectIdentity);
+        } catch (NotFoundException e) {
+            MutableAcl acl = this.aclService.createAcl(objectIdentity);
+            
+            GrantedAuthoritySid permitRead = new GrantedAuthoritySid(new SimpleGrantedAuthority("PERMIT_READ"));
+            GrantedAuthoritySid deniedRead = new GrantedAuthoritySid(new SimpleGrantedAuthority("DENIED_READ"));
+            acl.insertAce(0, BasePermission.READ, deniedRead, false);
+            acl.insertAce(1, BasePermission.READ, permitRead, true);
+            
+            this.aclService.updateAcl(acl);
+        }
     }
     
     @PreAuthorize("hasPermission(#foo, read)")

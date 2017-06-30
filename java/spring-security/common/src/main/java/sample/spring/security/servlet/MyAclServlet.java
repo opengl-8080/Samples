@@ -1,6 +1,7 @@
 package sample.spring.security.servlet;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,12 +25,17 @@ public class MyAclServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        this.printPrincipal();
+        
         MyAclSampleService service = this.findServiceBean(req, MyAclSampleService.class);
         service.addPermission();
         this.printTables(req);
         
-        this.printPrincipal();
-        service.read(new Foo(10L));
+        try {
+            service.read(new Foo(10L));
+        } catch (AccessDeniedException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     private void printPrincipal() {
