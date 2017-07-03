@@ -94,7 +94,8 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="foo" password="foo" authorities="" />
+                <sec:user name="foo" password="foo" authorities="PERMIT_READ" />
+                <sec:user name="bar" password="bar" authorities="PERMIT_READ,DENIED_READ" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>

@@ -55,6 +55,6 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .withUser("bar")
                 .password("bar")
-                .authorities("DENIED_READ");
+                .authorities("PERMIT_READ", "DENIED_READ");
     }
 }
