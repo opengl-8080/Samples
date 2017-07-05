@@ -64,7 +64,7 @@
         <constructor-arg>
             <list>
                 <bean class="org.springframework.security.core.authority.SimpleGrantedAuthority">
-                    <constructor-arg value="TEST"/>
+                    <constructor-arg value="PERMISSION_MANAGER"/>
                 </bean>
             </list>
         </constructor-arg>
@@ -94,8 +94,9 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="foo" password="foo" authorities="PERMIT_READ" />
-                <sec:user name="bar" password="bar" authorities="PERMIT_READ,DENIED_READ" />
+                <sec:user name="hoge" password="hoge" authorities="" />
+                <sec:user name="fuga" password="fuga" authorities="" />
+                <sec:user name="piyo" password="piyo" authorities="PERMISSION_MANAGER" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>

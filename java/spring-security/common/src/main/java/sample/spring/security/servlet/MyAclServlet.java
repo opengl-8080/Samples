@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import sample.spring.security.domain.Foo;
 import sample.spring.security.service.MyAclSampleService;
 
 import javax.servlet.ServletException;
@@ -25,17 +24,20 @@ public class MyAclServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.printPrincipal();
-        
         MyAclSampleService service = this.findServiceBean(req, MyAclSampleService.class);
+        
         service.addPermission();
+        
+        this.printPrincipal();
         this.printTables(req);
         
         try {
-            service.read(new Foo(10L));
+            service.modifyPermission();
         } catch (AccessDeniedException e) {
             System.out.println(e.getMessage());
         }
+        
+        this.printTables(req);
     }
     
     private void printPrincipal() {
