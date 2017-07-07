@@ -3,6 +3,7 @@ package sample.spring.security.service;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
+import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.model.AlreadyExistsException;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
@@ -25,9 +26,15 @@ public class MyAclSampleService {
         try {
             MutableAcl acl = this.aclService.createAcl(objectIdentity);
             acl.insertAce(
+                    acl.getEntries().size(),
+                    BasePermission.READ,
+                    new GrantedAuthoritySid(new SimpleGrantedAuthority("aaa")),
+                    true
+            );
+            acl.insertAce(
                 acl.getEntries().size(),
                 BasePermission.READ,
-                new GrantedAuthoritySid(new SimpleGrantedAuthority("aaa")),
+                new PrincipalSid("fuga"),
                 true
             );
             this.aclService.updateAcl(acl);
