@@ -22,28 +22,6 @@ public class MyAclSampleService {
     }
     
     public void addPermission() {
-        ObjectIdentityImpl objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
-        try {
-            MutableAcl acl = this.aclService.createAcl(objectIdentity);
-            acl.insertAce(
-                    acl.getEntries().size(),
-                    BasePermission.READ,
-                    new GrantedAuthoritySid(new SimpleGrantedAuthority("aaa")),
-                    true
-            );
-            acl.insertAce(
-                acl.getEntries().size(),
-                BasePermission.READ,
-                new PrincipalSid("fuga"),
-                true
-            );
-            this.aclService.updateAcl(acl);
-        } catch (AlreadyExistsException e) {
-            System.out.println("skip add permission.");
-        }
-    }
-    
-    public void modifyPermission() {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
         MutableAcl acl = (MutableAcl) this.aclService.readAclById(objectIdentity);
         

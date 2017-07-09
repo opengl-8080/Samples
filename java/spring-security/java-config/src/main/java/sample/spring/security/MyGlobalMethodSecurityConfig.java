@@ -67,7 +67,7 @@ public class MyGlobalMethodSecurityConfig extends GlobalMethodSecurityConfigurat
     
     @Bean
     public AclAuthorizationStrategy aclAuthorizationStrategy() {
-        return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority("TEST"));
+        return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority("PERMISSION_MANAGER"));
     }
 
     @Bean

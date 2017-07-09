@@ -2,6 +2,7 @@ package sample.spring.security.servlet;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,19 +26,17 @@ public class MyAclServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         MyAclSampleService service = this.findServiceBean(req, MyAclSampleService.class);
-        
-        service.addPermission();
-        
+
         this.printPrincipal();
         this.printTables(req);
         
         try {
-            service.modifyPermission();
-        } catch (AccessDeniedException e) {
-            System.out.println(e.getMessage());
+            System.out.println("service.addPermission()");
+            service.addPermission();
+            this.printTables(req);
+        } catch (AccessDeniedException | NotFoundException e) {
+            System.out.println("e.class = " + e.getClass() + ", message = " + e.getMessage());
         }
-        
-        this.printTables(req);
     }
     
     private void printPrincipal() {
