@@ -64,7 +64,13 @@
         <constructor-arg>
             <list>
                 <bean class="org.springframework.security.core.authority.SimpleGrantedAuthority">
-                    <constructor-arg value="PERMISSION_MANAGER"/>
+                    <constructor-arg value="PERMISSION_MANAGER_OWNERSHIP"/>
+                </bean>
+                <bean class="org.springframework.security.core.authority.SimpleGrantedAuthority">
+                    <constructor-arg value="PERMISSION_MANAGER_AUDIT"/>
+                </bean>
+                <bean class="org.springframework.security.core.authority.SimpleGrantedAuthority">
+                    <constructor-arg value="PERMISSION_MANAGER_GENERAL"/>
                 </bean>
             </list>
         </constructor-arg>
@@ -94,10 +100,10 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="hoge" password="hoge" authorities="" />
-                <sec:user name="fuga" password="fuga" authorities="" />
-                <sec:user name="piyo" password="piyo" authorities="PERMISSION_MANAGER" />
-                <sec:user name="admin" password="admin" authorities="" />
+                <sec:user name="aaa" password="aaa" authorities="" />
+                <sec:user name="bbb" password="bbb" authorities="PERMISSION_MANAGER_GENERAL" />
+                <sec:user name="ccc" password="ccc" authorities="PERMISSION_MANAGER_GENERAL,PERMISSION_MANAGER_AUDIT" />
+                <sec:user name="ddd" password="ddd" authorities="PERMISSION_MANAGER_GENERAL,PERMISSION_MANAGER_AUDIT,PERMISSION_MANAGER_OWNERSHIP" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>

@@ -31,8 +31,12 @@ public class MyAclServlet extends HttpServlet {
         this.printTables(req);
         
         try {
-            System.out.println("service.addPermission()");
-            service.addPermission();
+            System.out.println("general");
+            service.general();
+            System.out.println("audit");
+            service.audit();
+            System.out.println("ownership");
+            service.ownership();
             this.printTables(req);
         } catch (AccessDeniedException | NotFoundException e) {
             System.out.println("e.class = " + e.getClass() + ", message = " + e.getMessage());

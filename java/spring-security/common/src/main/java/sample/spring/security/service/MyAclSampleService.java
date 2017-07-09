@@ -5,6 +5,7 @@ import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.model.AlreadyExistsException;
+import org.springframework.security.acls.model.AuditableAcl;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.security.acls.model.ObjectIdentity;
@@ -21,7 +22,7 @@ public class MyAclSampleService {
         this.aclService = aclService;
     }
     
-    public void addPermission() {
+    public void general() {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
         MutableAcl acl = (MutableAcl) this.aclService.readAclById(objectIdentity);
         
@@ -31,6 +32,24 @@ public class MyAclSampleService {
             new GrantedAuthoritySid(new SimpleGrantedAuthority("test")),
             true
         );
+        
+        this.aclService.updateAcl(acl);
+    }
+    
+    public void audit() {
+        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
+        AuditableAcl acl = (AuditableAcl) this.aclService.readAclById(objectIdentity);
+        
+        acl.updateAuditing(0, true, true);
+        
+        this.aclService.updateAcl(acl);
+    }
+    
+    public void ownership() {
+        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Foo.class, 10L);
+        MutableAcl acl = (MutableAcl) this.aclService.readAclById(objectIdentity);
+        
+        acl.setOwner(new PrincipalSid("other"));
         
         this.aclService.updateAcl(acl);
     }
