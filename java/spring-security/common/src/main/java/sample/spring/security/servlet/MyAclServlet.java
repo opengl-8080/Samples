@@ -28,16 +28,10 @@ public class MyAclServlet extends HttpServlet {
         MyAclSampleService service = this.findServiceBean(req, MyAclSampleService.class);
 
         this.printPrincipal();
-        this.printTables(req);
         
         try {
-            System.out.println("general");
-            service.general();
-            System.out.println("audit");
-            service.audit();
-            System.out.println("ownership");
-            service.ownership();
-            this.printTables(req);
+            System.out.println("execute logic()");
+            service.logic(10L);
         } catch (AccessDeniedException | NotFoundException e) {
             System.out.println("e.class = " + e.getClass() + ", message = " + e.getMessage());
         }

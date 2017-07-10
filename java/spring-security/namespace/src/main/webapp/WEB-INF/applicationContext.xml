@@ -83,7 +83,6 @@
     </bean>
     
     <bean class="sample.spring.security.service.MyAclSampleService">
-        <constructor-arg ref="aclService" />
     </bean>
 
     <bean class="org.springframework.jdbc.core.JdbcTemplate">
@@ -100,10 +99,8 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="aaa" password="aaa" authorities="" />
-                <sec:user name="bbb" password="bbb" authorities="PERMISSION_MANAGER_GENERAL" />
-                <sec:user name="ccc" password="ccc" authorities="PERMISSION_MANAGER_GENERAL,PERMISSION_MANAGER_AUDIT" />
-                <sec:user name="ddd" password="ddd" authorities="PERMISSION_MANAGER_GENERAL,PERMISSION_MANAGER_AUDIT,PERMISSION_MANAGER_OWNERSHIP" />
+                <sec:user name="foo" password="foo" authorities="" />
+                <sec:user name="bar" password="bar" authorities="TEST_AUTHORITY" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
