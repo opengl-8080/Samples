@@ -99,8 +99,8 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="foo" password="foo" authorities="" />
-                <sec:user name="bar" password="bar" authorities="TEST_AUTHORITY" />
+                <sec:user name="foo" password="foo" authorities="READONLY" />
+                <sec:user name="bar" password="bar" authorities="WRITABLE" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
