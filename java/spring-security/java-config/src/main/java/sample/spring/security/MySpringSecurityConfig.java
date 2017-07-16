@@ -42,7 +42,7 @@ public class MySpringSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
     public MyAclSampleService myAclSampleService(MutableAclService aclService) {
-        return new MyAclSampleService(aclService);
+        return new MyAclSampleService();
     }
     
     @Autowired
