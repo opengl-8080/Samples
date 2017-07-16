@@ -28,11 +28,14 @@ public class MyAclServlet extends HttpServlet {
         MyAclSampleService service = this.findServiceBean(req);
         Foo foo = new Foo(44L);
 
+        this.callMethod("read", () -> service.read(foo));
+        this.callMethod("hoge", () -> service.hoge(foo));
+    }
+        
+    private void callMethod(String method, Runnable runnable) {
         try {
-            System.out.println("service.read()");
-            service.read(foo);
-            System.out.println("service.write()");
-            service.write(foo);
+            System.out.println(method);
+            runnable.run();
         } catch (AccessDeniedException e) {
             System.out.println(e.getMessage());
         }

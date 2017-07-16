@@ -33,8 +33,13 @@
         <property name="permissionEvaluator">
             <bean class="org.springframework.security.acls.AclPermissionEvaluator">
                 <constructor-arg ref="aclService" />
+                <property name="permissionFactory" ref="permissionFactory" />
             </bean>
         </property>
+    </bean>
+    
+    <bean id="permissionFactory" class="org.springframework.security.acls.domain.DefaultPermissionFactory">
+        <constructor-arg value="sample.spring.security.acl.MyPermission" />
     </bean>
 
     <bean id="aclService" class="org.springframework.security.acls.jdbc.JdbcMutableAclService">
@@ -48,6 +53,7 @@
         <constructor-arg ref="aclCache" />
         <constructor-arg ref="aclAuthorizationStrategy" />
         <constructor-arg ref="permissionGrantingStrategy" />
+        <property name="permissionFactory" ref="permissionFactory" />
     </bean>
 
     <bean id="aclCache" class="org.springframework.security.acls.domain.SpringCacheBasedAclCache">
@@ -101,6 +107,7 @@
         <sec:authentication-provider>
             <sec:user-service>
                 <sec:user name="foo" password="foo" authorities="READONLY" />
+                <sec:user name="bar" password="bar" authorities="HOGE" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>

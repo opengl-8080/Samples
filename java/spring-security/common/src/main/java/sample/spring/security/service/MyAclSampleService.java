@@ -10,8 +10,8 @@ public class MyAclSampleService {
         System.out.println(foo);
     }
     
-    @PreAuthorize("hasPermission(#foo, write)")
-    public void write(Foo foo) {
+    @PreAuthorize("hasPermission(#foo, 'hoge')")
+    public void hoge(Foo foo) {
         System.out.println(foo);
     }
 }
