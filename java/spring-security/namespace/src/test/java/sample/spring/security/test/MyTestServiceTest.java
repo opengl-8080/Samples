@@ -4,24 +4,37 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@WithMockUser
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/test-applicationContext.xml")
 public class MyTestServiceTest {
+
+    @Test
+    @WithAnonymousUser
+    public void testAnonymous() throws Exception {
+        this.printAuthentication("testAnonymous");
+    }
     
     @Test
-    @WithMockUser
-    public void test() throws Exception {
+    public void testDefault() throws Exception {
+        this.printAuthentication("testDefault");
+    }
+
+    private void printAuthentication(String testMethodName) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String message = "class = " + auth.getClass() + "\n" +
-                         "name = " + auth.getName() + "\n" +
-                         "credentials = " + auth.getCredentials() + "\n" +
-                         "authorities = " + auth.getAuthorities() + "\n" +
-                         "principal = " + auth.getPrincipal() + "\n" +
-                         "details = " + auth.getDetails();
+        String message =
+                "[" + testMethodName + "]\n" +
+                "class = " + auth.getClass() + "\n" +
+                "name = " + auth.getName() + "\n" +
+                "credentials = " + auth.getCredentials() + "\n" +
+                "authorities = " + auth.getAuthorities() + "\n" +
+                "principal = " + auth.getPrincipal() + "\n" +
+                "details = " + auth.getDetails();
 
         System.out.println(message);
     }
