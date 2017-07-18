@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -13,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class MyTestServiceTest {
 
     @Test
-    @WithUserDetails
+    @MyTestUser(name="foo", pass="FOO", authority="TEST_FOO")
     public void test() throws Exception {
         this.printAuthentication("test");
     }
