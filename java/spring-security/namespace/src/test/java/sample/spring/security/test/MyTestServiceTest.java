@@ -4,25 +4,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@WithMockUser
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/test-applicationContext.xml")
 public class MyTestServiceTest {
 
     @Test
-    @WithAnonymousUser
-    public void testAnonymous() throws Exception {
-        this.printAuthentication("testAnonymous");
-    }
-    
-    @Test
-    public void testDefault() throws Exception {
-        this.printAuthentication("testDefault");
+    @WithUserDetails
+    public void test() throws Exception {
+        this.printAuthentication("test");
     }
 
     private void printAuthentication(String testMethodName) {
