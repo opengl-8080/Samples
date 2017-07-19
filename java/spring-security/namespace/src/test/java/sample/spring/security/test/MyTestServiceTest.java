@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class MyTestServiceTest {
 
     @Test
-    @MyTestUser(name="foo", pass="FOO", authority="TEST_FOO")
+    @HogeUser
     public void test() throws Exception {
         this.printAuthentication("test");
     }
