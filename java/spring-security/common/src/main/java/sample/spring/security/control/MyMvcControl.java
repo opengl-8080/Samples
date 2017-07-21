@@ -13,11 +13,11 @@ public class MyMvcControl {
     @GetMapping
     public String hello() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
         if (auth != null) {
             System.out.println("auth.name = " + auth.getName());
-        } else {
-            System.out.println("auth is null.");
         }
-        return "Hello MVC Test!!";
+        
+        return "test";
     }
 }
