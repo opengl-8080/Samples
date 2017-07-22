@@ -45,14 +45,14 @@ public class MyMvcControllerTest {
     }
 
     @Test
-    public void useToken() throws Exception {
+    public void useInvalidToken() throws Exception {
         MvcResult mvcResult = this.mvc.perform(
             post("/mvc")
             .with(user("bar"))
-            .with(csrf())
+            .with(csrf().useInvalidToken())
         ).andReturn();
         
-        this.printResponse("useToken", mvcResult);
+        this.printResponse("useInvalidToken", mvcResult);
     }
     
     private void printResponse(String method, MvcResult result) throws Exception {
