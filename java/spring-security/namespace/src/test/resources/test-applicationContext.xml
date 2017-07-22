@@ -8,7 +8,7 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <bean class="sample.spring.security.control.MyMvcControl" />
+    <bean class="sample.spring.security.control.MyMvcController" />
 
     <sec:http>
         <sec:intercept-url pattern="/login" access="permitAll" />

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/test-applicationContext.xml")
 @WebAppConfiguration
-public class MyMvcControlTest {
+public class MyMvcControllerTest {
     @Autowired
     private WebApplicationContext context;
     

@@ -8,15 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/mvc")
-public class MyMvcControl {
+public class MyMvcController {
     
     @GetMapping
     public String hello() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        
-        if (auth != null) {
-            System.out.println("auth.name = " + auth.getName());
-        }
+        System.out.println("auth.name = " + auth.getName());
         
         return "test";
     }
