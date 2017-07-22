@@ -35,24 +35,33 @@ public class MyMvcControllerTest {
     }
 
     @Test
-    public void unauthorized() throws Exception {
-        MvcResult mvcResult = this.mvc.perform(get("/mvc")).andReturn();
-        this.printResponse("unauthorized", mvcResult);
+    public void noToken() throws Exception {
+        MvcResult mvcResult = this.mvc.perform(
+            post("/mvc")
+            .with(user("foo"))
+        ).andReturn();
+        
+        this.printResponse("noToken", mvcResult);
     }
 
     @Test
-    public void authorized() throws Exception {
-        MvcResult mvcResult = this.mvc.perform(get("/mvc").with(user("foo"))).andReturn();
-        this.printResponse("authorized", mvcResult);
+    public void useToken() throws Exception {
+        MvcResult mvcResult = this.mvc.perform(
+            post("/mvc")
+            .with(user("bar"))
+            .with(csrf())
+        ).andReturn();
+        
+        this.printResponse("useToken", mvcResult);
     }
     
     private void printResponse(String method, MvcResult result) throws Exception {
         MockHttpServletResponse response = result.getResponse();
         int status = response.getStatus();
-        String locationHeader = response.getHeader("Location");
+        String errorMessage = response.getErrorMessage();
 
         System.out.println("[" + method + "]\n" +
                            "status : " + status + "\n" +
-                           "Location : " + locationHeader);
+                           "errorMessage : " + errorMessage);
     }
 }

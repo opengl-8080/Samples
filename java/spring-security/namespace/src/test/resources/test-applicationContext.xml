@@ -15,6 +15,7 @@
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
         <sec:logout />
+        <sec:csrf />
     </sec:http>
 
     <sec:authentication-manager />
