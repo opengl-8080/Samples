@@ -35,13 +35,7 @@ public class MyMvcControllerTest {
 
     @Test
     public void test() throws Exception {
-        MvcResult result = this.mvc.perform(
-            formLogin("/do-login")
-            .userParameter("login-id")
-            .passwordParam("pass")
-            .user("user")
-            .password("password")
-        ).andReturn();
+        MvcResult result = this.mvc.perform(logout()).andReturn();
         this.printResponse("test", result);
     }
 

@@ -11,18 +11,16 @@
     <bean class="sample.spring.security.control.MyMvcController" />
 
     <sec:http>
-        <sec:intercept-url pattern="/do-login" access="permitAll" />
+        <sec:intercept-url pattern="/login" access="permitAll" />
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-        <sec:form-login login-processing-url="/do-login"
-                        username-parameter="login-id"
-                        password-parameter="pass" />
+        <sec:form-login />
         <sec:logout />
     </sec:http>
 
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="user" password="password" authorities="FOO" />
+                <sec:user name="user" password="password1" authorities="FOO" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
