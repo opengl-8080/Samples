@@ -23,8 +23,8 @@ public class MyMvcController {
         String authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", "));
 
         System.out.println(
-            "name = " + name + "\n" + 
-            "credentials = " + credentials + "\n" + 
+            "name = " + name + "\n" +
+            "credentials = " + credentials + "\n" +
             "authorities = " + authorities + "\n" +
             "principal = " + principal
         );
