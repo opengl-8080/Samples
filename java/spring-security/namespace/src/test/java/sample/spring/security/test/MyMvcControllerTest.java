@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -13,7 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static sample.spring.security.test.MyMockUserPostProcessors.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/test-applicationContext.xml")
@@ -31,9 +31,10 @@ public class MyMvcControllerTest {
                     .apply(springSecurity())
                     .build();
     }
-    
+
     @Test
+    @WithMockUser(username="foo", password="test-pass", authorities={"FOO", "BAR"})
     public void test() throws Exception {
-        this.mvc.perform(get("/mvc").with(hoge()));
+        this.mvc.perform(get("/mvc"));
     }
 }
