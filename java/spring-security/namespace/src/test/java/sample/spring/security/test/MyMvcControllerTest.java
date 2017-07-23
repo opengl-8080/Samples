@@ -4,16 +4,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/test-applicationContext.xml")
@@ -33,8 +34,24 @@ public class MyMvcControllerTest {
     }
 
     @Test
-    @WithMockUser(username="foo", password="test-pass", authorities={"FOO", "BAR"})
     public void test() throws Exception {
-        this.mvc.perform(get("/mvc"));
+        MvcResult result = this.mvc.perform(
+            formLogin("/do-login")
+            .userParameter("login-id")
+            .passwordParam("pass")
+            .user("user")
+            .password("password")
+        ).andReturn();
+        this.printResponse("test", result);
+    }
+
+    private void printResponse(String method, MvcResult result) throws Exception {
+        MockHttpServletResponse response = result.getResponse();
+        int status = response.getStatus();
+        String location = response.getHeader("Location");
+
+        System.out.println("[" + method + "]\n" +
+                "status : " + status + "\n" +
+                "location : " + location);
     }
 }
