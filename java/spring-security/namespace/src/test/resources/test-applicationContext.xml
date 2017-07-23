@@ -20,7 +20,8 @@
     <sec:authentication-manager>
         <sec:authentication-provider>
             <sec:user-service>
-                <sec:user name="user" password="password1" authorities="FOO" />
+                <sec:user name="foo" password="foo" authorities="FOO, BAR" />
+                <sec:user name="fizz" password="fizz" authorities="ROLE_FIZZ, ROLE_BUZZ" />
             </sec:user-service>
         </sec:authentication-provider>
     </sec:authentication-manager>
