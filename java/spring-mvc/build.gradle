@@ -1,0 +1,19 @@
+apply plugin: 'war'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+//  providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+  compile 'org.springframework:spring-webmvc:4.3.10.RELEASE'
+}
+
+war {
+  baseName = 'mvc'
+}
+
+task ('deploy', dependsOn: war, type: Copy) {
+  from war.archivePath
+  into "${System.getenv('TOMCAT_HOME')}/webapps"
+}
