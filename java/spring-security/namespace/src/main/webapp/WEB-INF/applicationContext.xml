@@ -7,26 +7,11 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-    
-    <bean class="sample.spring.security.mvc.MyMvcController" />
-    
-    <bean id="viewResolver"
-          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
-    
+            
     <sec:http>
-        <sec:intercept-url pattern="/hello" access="permitAll" />
+        <sec:intercept-url pattern="/hello" access="isAuthenticated()" />
         <sec:form-login />
     </sec:http>
 
-    <sec:authentication-manager>
-        <sec:authentication-provider>
-            <sec:user-service>
-                <sec:user name="foo" password="foo" authorities="" />
-            </sec:user-service>
-        </sec:authentication-provider>
-    </sec:authentication-manager>
+    <sec:authentication-manager />
 </beans>
