@@ -7,9 +7,9 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
-            
+    
     <sec:http>
-        <sec:intercept-url pattern="/hello" access="isAuthenticated()" />
+        <sec:intercept-url pattern="/foo" access="isAuthenticated()" />
         <sec:form-login />
     </sec:http>
 

@@ -10,6 +10,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/hello").authenticated();
+            .antMatchers("/foo").authenticated()
+            .anyRequest().permitAll()
+            .and()
+            .formLogin();
     }
 }

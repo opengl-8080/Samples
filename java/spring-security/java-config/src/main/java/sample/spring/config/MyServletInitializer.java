@@ -13,7 +13,6 @@ public class MyServletInitializer extends AbstractAnnotationConfigDispatcherServ
     protected Class<?>[] getServletConfigClasses() {
         return new Class[] {MyMvcConfig.class};
     }
-
     
     @Override
     protected String[] getServletMappings() {
