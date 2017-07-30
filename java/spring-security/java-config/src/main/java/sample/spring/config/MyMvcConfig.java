@@ -8,12 +8,12 @@ import sample.spring.security.mvc.MyMvcController;
 
 @EnableWebMvc
 public class MyMvcConfig extends WebMvcConfigurerAdapter {
-    
+
     @Bean
     public MyMvcController myMvcController() {
         return new MyMvcController();
     }
-    
+
     @Bean
     public RequestMappingHandlerMapping requestMappingHandlerMapping() {
         return new RequestMappingHandlerMapping();

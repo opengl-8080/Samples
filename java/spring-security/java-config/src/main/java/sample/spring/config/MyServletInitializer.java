@@ -6,12 +6,12 @@ public class MyServletInitializer extends AbstractAnnotationConfigDispatcherServ
     
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {MySecurityConfig.class};
+        return new Class[] {MySecurityConfig.class, MyMvcConfig.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {MyMvcConfig.class};
+        return new Class[] {};
     }
     
     @Override
