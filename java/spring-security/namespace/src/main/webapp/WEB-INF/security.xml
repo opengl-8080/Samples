@@ -9,9 +9,17 @@
          http://www.springframework.org/schema/security/spring-security.xsd">
     
     <sec:http request-matcher="mvc">
-        <sec:intercept-url pattern="/foo" access="isAuthenticated()" />
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         <sec:form-login />
+        <sec:logout />
     </sec:http>
 
-    <sec:authentication-manager />
+    <sec:authentication-manager>
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user name="foo" password="foo" authorities="GENERAL_USER, ADMINISTRATOR" />
+            </sec:user-service>
+        </sec:authentication-provider>
+    </sec:authentication-manager>
 </beans>
