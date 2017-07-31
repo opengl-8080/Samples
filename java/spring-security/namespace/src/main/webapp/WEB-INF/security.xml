@@ -8,7 +8,7 @@
          http://www.springframework.org/schema/security
          http://www.springframework.org/schema/security/spring-security.xsd">
     
-    <sec:http>
+    <sec:http request-matcher="mvc">
         <sec:intercept-url pattern="/foo" access="isAuthenticated()" />
         <sec:form-login />
     </sec:http>
