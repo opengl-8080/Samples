@@ -2,7 +2,8 @@ package sample.javaparser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.IOException;
@@ -15,11 +16,22 @@ public class Main {
         
         try {
             CompilationUnit unit = JavaParser.parse(source);
-            
+
+            System.out.println("unit orphan comment > " + unit.getOrphanComments());
+
             unit.accept(new VoidVisitorAdapter<Void>() {
                 @Override
-                public void visit(LineComment n, Void arg) {
-                    System.out.println(n);
+                public void visit(ClassOrInterfaceDeclaration n, Void arg) {
+                    System.out.println("<<ClassOrInterfaceDeclaration>>");
+                    System.out.println("comment > " + n.getComment());
+                    System.out.println("orphan comment > " + n.getOrphanComments());
+                    super.visit(n, arg);
+                }
+
+                @Override
+                public void visit(FieldDeclaration n, Void arg) {
+                    System.out.println("<<FieldDeclaration>>");
+                    System.out.println("comment > " + n.getComment());
                     super.visit(n, arg);
                 }
             }, null);
