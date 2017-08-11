@@ -14,7 +14,8 @@ public class Main {
         try {
             CompilationUnit unit = JavaParser.parse(source);
             
-            unit.accept(new MyVoidVisitor(), "ARG!!");
+            int result = unit.accept(new MyGenericVisitor(), "ARG!!");
+            System.out.println(result);
             
         } catch (IOException e) {
             e.printStackTrace(System.err);
