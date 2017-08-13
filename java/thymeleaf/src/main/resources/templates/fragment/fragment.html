@@ -6,7 +6,6 @@
     </head>
     <body>
         <h1>Hello Fragment</h1>
-        <div id="foo"
-             th:include="fragment/embedded :: fuga"></div>
+        <div th:include="fragment/embedded :: hoge(p2='HOGE', p1='FUGA')"></div>
     </body>
 </html>
