@@ -5,8 +5,7 @@
         <title>Hello Thymeleaf</title>
     </head>
     <body>
-        <h1>Hello Thymeleaf</h1>
-        <div id="foo"
-             th:include="embedded :: hoge"></div>
+        <h1 th:text="#{foo.message}"></h1>
+        <h1 th:text="#{bar.message}"></h1>
     </body>
 </html>
