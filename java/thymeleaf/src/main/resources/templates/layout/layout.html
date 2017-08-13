@@ -2,7 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
         <meta charset="UTF-8" />
-        <title>Layout File</title>
+        <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Layout</title>
     </head>
     <body>
         <h1>Common Layout</h1>
