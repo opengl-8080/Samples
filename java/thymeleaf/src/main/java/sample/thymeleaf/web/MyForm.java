@@ -1,36 +1,27 @@
 package sample.thymeleaf.web;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 public class MyForm {
-    private List<Row> rows = new ArrayList<>();
-    
-    public void appendRow() {
-        this.rows.add(new Row());
-    }
-    
-    public void removeRow(int index) {
-        this.rows.remove(index);
-    }
+    @Size(min=3)
+    private String text;
+    @Min(100)
+    private Integer number;
 
-    public List<Row> getRows() {
-        return rows;
+    public String getText() {
+        return text;
     }
 
-    public void setRows(List<Row> rows) {
-        this.rows = rows;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public static class Row {
-        private String value;
+    public Integer getNumber() {
+        return number;
+    }
 
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

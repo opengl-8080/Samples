@@ -6,26 +6,20 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
-            <table border="1">
-                <tr>
-                    <th>No</th>
-                    <th>User input</th>
-                    <th>Remove Row</th>
-                </tr>
-                <tr th:each="row, loop : *{rows}">
-                    <th th:text="${loop.count}"></th>
-                    <th>
-                        <input type="text" th:field="*{rows[__${loop.index}__].value}" />
-                    </th>
-                    <th>
-                        <button type="submit" name="removeIndex" th:value="${loop.index}">
-                            Remove
-                        </button>
-                    </th>
-                </tr>
-            </table>
+            <div>
+                <input type="text" th:field="*{text}" />
+                <ul th:each="error : ${#fields.errors('text')}">
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+            <div>
+                <input type="text" th:field="*{number}" />
+                <ul th:each="error : ${#fields.errors('number')}">
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
             
-            <input type="submit" name="appendRow" value="Append Row" />
+            <input type="submit" value="Submit" />
         </form>
     </body>
 </html>
