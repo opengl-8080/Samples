@@ -6,8 +6,10 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
-            <label th:for="${#ids.next('checked')}">checked</label>
-            <input type="checkbox" th:field="*{checked}" />
+            <div th:each="radioButton : *{radioButtons()}">
+                <label th:for="${#ids.next('selectedValue')}" th:text="${radioButton.value}"></label>
+                <input type="radio" th:field="*{selectedValue}" th:value="${radioButton.key}" />
+            </div>
             
             <input type="submit" value="Submit" />
         </form>
