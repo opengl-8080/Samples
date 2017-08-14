@@ -8,15 +8,11 @@
         <form th:action="@{/form}" method="post" th:object="${myForm}">
             <div>
                 <input type="text" th:field="*{text}" />
-                <ul th:each="error : ${#fields.errors('text')}">
-                    <li th:text="${error}"></li>
-                </ul>
+                <span th:if="${#fields.hasErrors('text')}">エラーです！</span>
             </div>
             <div>
                 <input type="text" th:field="*{number}" />
-                <ul th:each="error : ${#fields.errors('number')}">
-                    <li th:text="${error}"></li>
-                </ul>
+                <span th:if="${#fields.hasErrors('number')}">エラーです！</span>
             </div>
             
             <input type="submit" value="Submit" />
