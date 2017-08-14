@@ -6,7 +6,7 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
-            <h3>[[${#fields.hasGlobalErrors()}]]</h3>
+            <h3>[[${#fields.globalErrors()}]]</h3>
             
             <div>
                 <input type="text" th:field="*{text}" />
