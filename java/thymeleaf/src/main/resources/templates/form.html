@@ -6,7 +6,9 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
-            <input type="text" th:field="*{value}" />
+            <label th:for="${#ids.next('checked')}">checked</label>
+            <input type="checkbox" th:field="*{checked}" />
+            
             <input type="submit" value="Submit" />
         </form>
     </body>

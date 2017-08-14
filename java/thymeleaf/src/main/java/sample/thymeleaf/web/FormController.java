@@ -18,7 +18,7 @@ public class FormController {
     
     @PostMapping
     public String submit(MyForm form) {
-        System.out.println("form.value=" + form.getValue());
+        System.out.println("form.checked=" + form.isChecked());
         return "form";
     }
 }

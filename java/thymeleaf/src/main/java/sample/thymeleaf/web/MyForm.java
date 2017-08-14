@@ -1,13 +1,13 @@
 package sample.thymeleaf.web;
 
 public class MyForm {
-    private String value;
+    private boolean checked;
 
-    public String getValue() {
-        return value;
+    public boolean isChecked() {
+        return checked;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
