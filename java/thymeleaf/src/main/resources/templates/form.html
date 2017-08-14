@@ -1,0 +1,13 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Form Sample</title>
+    </head>
+    <body>
+        <form th:action="@{/form}" method="post" th:object="${myForm}">
+            <input type="text" th:field="*{value}" />
+            <input type="submit" value="Submit" />
+        </form>
+    </body>
+</html>
