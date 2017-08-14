@@ -6,12 +6,26 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
-            <div th:each="radioButton : *{radioButtons()}">
-                <label th:for="${#ids.next('selectedValue')}" th:text="${radioButton.value}"></label>
-                <input type="radio" th:field="*{selectedValue}" th:value="${radioButton.key}" />
-            </div>
+            <table border="1">
+                <tr>
+                    <th>No</th>
+                    <th>User input</th>
+                    <th>Remove Row</th>
+                </tr>
+                <tr th:each="row, loop : *{rows}">
+                    <th th:text="${loop.count}"></th>
+                    <th>
+                        <input type="text" th:field="*{rows[__${loop.index}__].value}" />
+                    </th>
+                    <th>
+                        <button type="submit" name="removeIndex" th:value="${loop.index}">
+                            Remove
+                        </button>
+                    </th>
+                </tr>
+            </table>
             
-            <input type="submit" value="Submit" />
+            <input type="submit" name="appendRow" value="Append Row" />
         </form>
     </body>
 </html>

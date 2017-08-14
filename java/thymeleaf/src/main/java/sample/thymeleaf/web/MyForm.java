@@ -1,25 +1,36 @@
 package sample.thymeleaf.web;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyForm {
-    private String selectedValue = "piyo";
+    private List<Row> rows = new ArrayList<>();
     
-    public Map<String, String> radioButtons() {
-        Map<String, String> radioButtons = new LinkedHashMap<>();
-        radioButtons.put("hoge", "HOGE");
-        radioButtons.put("fuga", "FUGA");
-        radioButtons.put("piyo", "PIYO");
-        
-        return radioButtons;
+    public void appendRow() {
+        this.rows.add(new Row());
+    }
+    
+    public void removeRow(int index) {
+        this.rows.remove(index);
     }
 
-    public String getSelectedValue() {
-        return selectedValue;
+    public List<Row> getRows() {
+        return rows;
     }
 
-    public void setSelectedValue(String selectedValue) {
-        this.selectedValue = selectedValue;
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
+    }
+
+    public static class Row {
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }
