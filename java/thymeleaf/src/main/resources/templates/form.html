@@ -7,12 +7,10 @@
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
             <div>
-                <input type="text" th:field="*{text}" />
-                <span th:if="${#fields.hasErrors('text')}">エラーです！</span>
+                <input type="text" th:field="*{text}" class="always-assigned" th:errorclass="error-style" />
             </div>
             <div>
-                <input type="text" th:field="*{number}" />
-                <span th:if="${#fields.hasErrors('number')}">エラーです！</span>
+                <input type="text" th:field="*{number}" class="always-assigned" th:errorclass="error-style" />
             </div>
             
             <input type="submit" value="Submit" />
