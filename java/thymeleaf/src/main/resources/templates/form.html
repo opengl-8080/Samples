@@ -6,11 +6,13 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
+            <h3 th:if="${#fields.hasAnyErrors()}">エラーがあります</h3>
+            
             <div>
-                <input type="text" th:field="*{text}" class="always-assigned" th:errorclass="error-style" />
+                <input type="text" th:field="*{text}" />
             </div>
             <div>
-                <input type="text" th:field="*{number}" class="always-assigned" th:errorclass="error-style" />
+                <input type="text" th:field="*{number}" />
             </div>
             
             <input type="submit" value="Submit" />
