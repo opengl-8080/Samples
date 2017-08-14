@@ -2,6 +2,7 @@ package sample.thymeleaf;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
@@ -13,9 +14,9 @@ public class Main {
     }
     
     @Bean
-    public ResourceBundleMessageSource messageSource() {
+    public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages/Messages");
+        messageSource.addBasenames("messages/Messages", "messages/validation-messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

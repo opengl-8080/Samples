@@ -6,7 +6,11 @@
     </head>
     <body>
         <form th:action="@{/form}" method="post" th:object="${myForm}">
-            <h3>[[${#fields.globalErrors()}]]</h3>
+            <ul>
+                <li th:each="error : ${#fields.allErrors()}">
+                    [[${error}]]
+                </li>
+            </ul>
             
             <div>
                 <input type="text" th:field="*{text}" />
