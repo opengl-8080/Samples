@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MithraObject objectType="transactional"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="mithraobject.xsd">
+    
+    <PackageName>sample.reladomo</PackageName>
+    <ClassName>SampleTable</ClassName>
+    <DefaultTable>SAMPLE_TABLE</DefaultTable>
+    
+    <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" />
+    <Attribute name="name" javaType="String" columnName="NAME" />
+    <Attribute name="updateDate" javaType="Timestamp" columnName="UPDATE_DATE" />
+</MithraObject>
