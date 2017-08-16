@@ -1,11 +1,14 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Hello Fragment</title>
-    </head>
-    <body>
-        <h1>Hello Fragment</h1>
-        <div th:include="fragment/embedded :: hoge(p2='HOGE', p1='FUGA')"></div>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello Fragment</title>
+</head>
+<body>
+<h1>Hello Fragment</h1>
+<div id="foo"
+     th:insert="fragment/embedded :: hoge"></div>
+<div id="bar"
+     th:replace="fragment/embedded :: hoge"></div>
+</body>
 </html>
