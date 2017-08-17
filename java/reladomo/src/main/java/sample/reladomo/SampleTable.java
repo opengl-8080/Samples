@@ -9,5 +9,7 @@ public class SampleTable extends SampleTableAbstract
 		// You can call this constructor. You can also add new constructors.
 	}
 	
-	
+	public String method() {
+		return "hoge";
+	}
 }

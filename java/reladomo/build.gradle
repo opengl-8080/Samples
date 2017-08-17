@@ -13,10 +13,13 @@ configurations {
     reladomoGenTask
 }
 
-sourceSets {
-    main.java.srcDir "$buildDir/generated-sources/reladomo"
+ext {
+    reladomoGeneratedDir = "$buildDir/generated-sources/reladomo"
 }
 
+sourceSets {
+    main.java.srcDir(reladomoGeneratedDir)
+}
 
 dependencies {
     compile 'com.h2database:h2:1.4.196'
@@ -25,11 +28,15 @@ dependencies {
 }
 
 task('genReladomo') {
-    ant.taskdef(name: "genReladomo",
-            classpath: configurations.reladomoGenTask.asPath,
-            classname: "com.gs.fw.common.mithra.generator.MithraGenerator")
-    ant.genReladomo(xml: "$projectDir/src/main/resources/ClassList.xml",
-            generateGscListMethod: "true",
-            generatedDir: "$buildDir/generated-sources/reladomo",
-            nonGeneratedDir: "$projectDir/src/main/java")
+    ant.taskdef(
+        name: "genReladomo",
+        classpath: configurations.reladomoGenTask.asPath,
+        classname: "com.gs.fw.common.mithra.generator.MithraGenerator"
+    )
+    ant.genReladomo(
+        xml: "$projectDir/src/main/resources/ClassList.xml",
+        generateGscListMethod: "true",
+        generatedDir: reladomoGeneratedDir,
+        nonGeneratedDir: "$projectDir/src/main/java"
+    )
 }
