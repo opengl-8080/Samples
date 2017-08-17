@@ -14,7 +14,7 @@ configurations {
 }
 
 dependencies {
-    compile 'mysql:mysql-connector-java:5.1.43'
+    compile 'com.h2database:h2:1.4.196'
     compile 'com.goldmansachs.reladomo:reladomo:16.5.1'
     reladomoGenTask 'com.goldmansachs.reladomo:reladomogen:16.5.1'
 }

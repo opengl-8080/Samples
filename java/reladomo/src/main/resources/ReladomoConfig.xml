@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MithraRuntime>
+    <ConnectionManager className="sample.reladomo.MyConnectionManager">
+        <MithraObjectConfiguration className="sample.reladomo.SampleTable" cacheType="partial" />
+    </ConnectionManager>
+</MithraRuntime>
