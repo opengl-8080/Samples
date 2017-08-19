@@ -1,8 +1,6 @@
 package sample.reladomo;
 
 import com.gs.fw.common.mithra.MithraManagerProvider;
-import com.gs.fw.common.mithra.attribute.LongAttribute;
-import com.gs.fw.common.mithra.attribute.StringAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import org.h2.tools.RunScript;
 
@@ -20,25 +18,24 @@ public class Main {
         prepareConnectionManager();
         
         MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-            insertSampleTable("one");
-            insertSampleTable("two");
-            insertSampleTable("three");
+            insertSampleTable("foo");
+            insertSampleTable("bar");
 
             return null;
         });
 
-        StringAttribute<SampleTable> nameAttribute = SampleTableFinder.name();
-        Operation operation = nameAttribute.contains("o");
-        SampleTableList sampleTable = SampleTableFinder.findMany(operation);
-        sampleTable.forEach(s -> System.out.println(s.getId() + ", " + s.getName()));
+        Operation operation = SampleTableFinder.name().eq("foo");
+        SampleTable sampleTable = SampleTableFinder.findOne(operation);
+        System.out.println(sampleTable);
     }
     
-    private static void insertSampleTable(String name) {
+    private static SampleTable insertSampleTable(String name) {
         SampleTable sampleTable = new SampleTable();
         sampleTable.setName(name);
         sampleTable.insert();
+        return sampleTable;
     }
-
+    
     private static void prepareDatabase() {
         try (
             Connection con = MyConnectionManager.getInstance().getConnection();

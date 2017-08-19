@@ -9,7 +9,8 @@ public class SampleTable extends SampleTableAbstract
 		// You can call this constructor. You can also add new constructors.
 	}
 	
-	public String method() {
-		return "hoge";
+	@Override
+	public String toString() {
+		return "SampleTable(id=" + this.getId() + ", name=" + this.getName() + ")";
 	}
 }
