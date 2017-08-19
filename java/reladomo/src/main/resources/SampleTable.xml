@@ -7,7 +7,6 @@
     <ClassName>SampleTable</ClassName>
     <DefaultTable>SAMPLE_TABLE</DefaultTable>
     
-    <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" />
+    <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" primaryKeyGeneratorStrategy="Max" />
     <Attribute name="name" javaType="String" columnName="NAME" />
-    <Attribute name="updateDate" javaType="Timestamp" columnName="UPDATE_DATE" />
 </MithraObject>
