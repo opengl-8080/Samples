@@ -17,6 +17,9 @@ public class Main {
         prepareConnectionManager();
 
         try (TablePrinter tablePrinter = new TablePrinter()) {
+            SampleTableList sampleTables = new SampleTableList();
+            sampleTables.insertAll();
+
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
                 SampleTable foo = new SampleTable();
                 foo.setName("foo");

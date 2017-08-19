@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<MithraRuntime>
+<MithraRuntime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="mithraruntime.xsd">
     <ConnectionManager className="sample.reladomo.MyConnectionManager">
         <MithraObjectConfiguration className="sample.reladomo.SampleTable" cacheType="partial" />
         <MithraObjectConfiguration className="sample.reladomo.SequenceTable" cacheType="partial" />
