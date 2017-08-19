@@ -18,22 +18,22 @@ public class Main {
         prepareConnectionManager();
         
         MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-            insertSampleTable("foo");
-            insertSampleTable("bar");
+            insertSampleTable("one");
+            insertSampleTable("two");
+            insertSampleTable("three");
 
             return null;
         });
 
-        Operation operation = SampleTableFinder.name().eq("foo");
-        SampleTable sampleTable = SampleTableFinder.findOne(operation);
+        Operation operation = SampleTableFinder.name().contains("e");
+        SampleTableList sampleTable = SampleTableFinder.findMany(operation);
         System.out.println(sampleTable);
     }
     
-    private static SampleTable insertSampleTable(String name) {
+    private static void insertSampleTable(String name) {
         SampleTable sampleTable = new SampleTable();
         sampleTable.setName(name);
         sampleTable.insert();
-        return sampleTable;
     }
     
     private static void prepareDatabase() {

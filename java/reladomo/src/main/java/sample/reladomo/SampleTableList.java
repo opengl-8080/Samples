@@ -27,8 +27,8 @@ public class SampleTableList extends SampleTableListAbstract
 	}
 	
 	public String toString() {
-		return "SampleTableList(\n"
+		return "SampleTableList(\n  "
 				+ this.stream().map(SampleTable::toString).collect(joining(",\n  "))
-				+ ")";
+				+ "\n)";
 	}
 }
