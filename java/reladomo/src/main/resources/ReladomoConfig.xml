@@ -2,5 +2,6 @@
 <MithraRuntime>
     <ConnectionManager className="sample.reladomo.MyConnectionManager">
         <MithraObjectConfiguration className="sample.reladomo.SampleTable" cacheType="partial" />
+        <MithraObjectConfiguration className="sample.reladomo.SequenceTable" cacheType="partial" />
     </ConnectionManager>
 </MithraRuntime>

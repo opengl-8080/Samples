@@ -30,6 +30,7 @@ public class Main {
             });
             
             tablePrinter.print("sample_table");
+            tablePrinter.print("sequence_table");
         }
     }
 

@@ -3,4 +3,5 @@
         xsi:noNamespaceSchemaLocation="mithraobject.xsd">
     
     <MithraObjectResource name="SampleTable" />
+    <MithraObjectResource name="SequenceTable" />
 </Mithra>

@@ -23,7 +23,7 @@ public class TablePrinter implements AutoCloseable {
     
     public void print(String tableName) {
         try (
-            PreparedStatement ps = this.con.prepareStatement("select * from " + tableName + " order by id asc");
+            PreparedStatement ps = this.con.prepareStatement("select * from " + tableName);
             ResultSet rs = ps.executeQuery();
         ) {
             ResultSetMetaData metaData = rs.getMetaData();

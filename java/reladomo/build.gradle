@@ -36,7 +36,7 @@ task('genReladomo') {
     )
     ant.genReladomo(
         xml: "$projectDir/src/main/resources/ClassList.xml",
-        generateGscListMethod: "false",
+        generateGscListMethod: "true",
         generatedDir: reladomoGeneratedDir,
         nonGeneratedDir: "$projectDir/src/main/java"
     )

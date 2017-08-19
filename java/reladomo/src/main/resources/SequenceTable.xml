@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MithraObject objectType="transactional"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="mithraobject.xsd">
+    
+    <PackageName>sample.reladomo</PackageName>
+    <ClassName>SequenceTable</ClassName>
+    <DefaultTable>SEQUENCE_TABLE</DefaultTable>
+    
+    <Attribute name="name" javaType="String" columnName="NAME" maxLength="50" primaryKey="true" />
+    <Attribute name="nextValue" javaType="long" columnName="NEXT_VALUE" />
+</MithraObject>

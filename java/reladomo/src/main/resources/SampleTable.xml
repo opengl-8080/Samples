@@ -7,6 +7,13 @@
     <ClassName>SampleTable</ClassName>
     <DefaultTable>SAMPLE_TABLE</DefaultTable>
     
-    <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" primaryKeyGeneratorStrategy="Max" />
+    <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" primaryKeyGeneratorStrategy="SimulatedSequence">
+        <SimulatedSequence
+                sequenceName="sampleTableSequence"
+                sequenceObjectFactoryName="sample.reladomo.SequenceTableFactory"
+                initialValue="5"
+                incrementSize="6"
+        />
+    </Attribute>
     <Attribute name="name" javaType="String" columnName="NAME" />
 </MithraObject>
