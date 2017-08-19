@@ -17,17 +17,39 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
         
+        // list1, 2 を findMany() で取得
+        SampleTableList list1 = SampleTableFinder.findMany(SampleTableFinder.all());
+        SampleTableList list2 = SampleTableFinder.findMany(SampleTableFinder.all());
+
+        // list1 だけ内容を出力
+        System.out.println("[list1]");
+        System.out.println(list1);
+        
+        // one, two を登録
         MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
             insertSampleTable("one");
             insertSampleTable("two");
+
+            return null;
+        });
+        
+        // list1, 2 の内容を出力
+        System.out.println("[list1]");
+        System.out.println(list1);
+
+        System.out.println("[list2]");
+        System.out.println(list2);
+
+        // three を登録
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
             insertSampleTable("three");
 
             return null;
         });
 
-        Operation operation = SampleTableFinder.name().contains("e");
-        SampleTableList sampleTable = SampleTableFinder.findMany(operation);
-        System.out.println(sampleTable);
+        // list2 だけ内容を出力
+        System.out.println("[list2]");
+        System.out.println(list2);
     }
     
     private static void insertSampleTable(String name) {
