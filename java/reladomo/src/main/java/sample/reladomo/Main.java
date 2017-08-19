@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
 
@@ -17,39 +19,25 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
         
-        // list1, 2 を findMany() で取得
-        SampleTableList list1 = SampleTableFinder.findMany(SampleTableFinder.all());
-        SampleTableList list2 = SampleTableFinder.findMany(SampleTableFinder.all());
-
-        // list1 だけ内容を出力
-        System.out.println("[list1]");
-        System.out.println(list1);
-        
-        // one, two を登録
         MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
             insertSampleTable("one");
             insertSampleTable("two");
-
-            return null;
-        });
-        
-        // list1, 2 の内容を出力
-        System.out.println("[list1]");
-        System.out.println(list1);
-
-        System.out.println("[list2]");
-        System.out.println(list2);
-
-        // three を登録
-        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+            insertSampleTable("two");
+            insertSampleTable("three");
+            insertSampleTable("three");
             insertSampleTable("three");
 
             return null;
         });
 
-        // list2 だけ内容を出力
-        System.out.println("[list2]");
-        System.out.println(list2);
+        Set<String> names = new HashSet<>();
+        names.add("one");
+        names.add("three");
+
+        Operation operation = SampleTableFinder.name().in(names);
+        SampleTableList list = SampleTableFinder.findMany(operation);
+        
+        System.out.println(list);
     }
     
     private static void insertSampleTable(String name) {
