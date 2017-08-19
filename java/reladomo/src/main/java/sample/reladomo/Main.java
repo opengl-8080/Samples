@@ -15,26 +15,45 @@ public class Main {
     public static void main(String[] args) throws Exception {
         prepareDatabase();
         prepareConnectionManager();
+        
+        SampleTableList list1 = new SampleTableList(SampleTableFinder.all());
+        SampleTableList list2 = new SampleTableList(SampleTableFinder.all());
 
-        try (TablePrinter tablePrinter = new TablePrinter()) {
-            SampleTableList sampleTables = new SampleTableList();
-            sampleTables.insertAll();
+        printList("list1", list1);
+        
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+            insertSampleTable("foo");
+            insertSampleTable("bar");
 
-            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTable foo = new SampleTable();
-                foo.setName("foo");
-                foo.insert();
-                
-                SampleTable bar = new SampleTable();
-                bar.setName("bar");
-                bar.insert();
+            return null;
+        });
 
-                return null;
-            });
-            
-            tablePrinter.print("sample_table");
-            tablePrinter.print("sequence_table");
-        }
+        printList("list1", list1);
+        printList("list2", list2);
+
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+            insertSampleTable("fizz");
+
+            return null;
+        });
+        
+        printList("list2", list2);
+    }
+    
+    private static void insertSampleTable(String name) {
+        SampleTable sampleTable = new SampleTable();
+        sampleTable.setName(name);
+        sampleTable.insert();
+        System.out.println("* insert " + name + ". hashCode=" + sampleTable.hashCode());
+        System.out.println();
+    }
+    
+    private static void printList(String listName, SampleTableList list) {
+        System.out.println("[" + listName + "]");
+        list.forEach(sampleTable -> {
+            System.out.printf("id=%s, name=%s, hash=%s%n", sampleTable.getId(), sampleTable.getName(), sampleTable.hashCode());
+        });
+        System.out.println();
     }
 
     private static void prepareDatabase() {
