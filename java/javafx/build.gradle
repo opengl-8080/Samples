@@ -10,7 +10,4 @@ repositories {
 }
 
 dependencies {
-    compile 'com.mpatric:mp3agic:0.8.4'
 }
-
-
