@@ -1,6 +1,9 @@
 package sample.reladomo;
 
 import com.gs.fw.common.mithra.MithraManagerProvider;
+import com.gs.fw.common.mithra.attribute.LongAttribute;
+import com.gs.fw.common.mithra.attribute.StringAttribute;
+import com.gs.fw.common.mithra.finder.Operation;
 import org.h2.tools.RunScript;
 
 import java.io.IOException;
@@ -16,44 +19,24 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
         
-        SampleTableList list1 = new SampleTableList(SampleTableFinder.all());
-        SampleTableList list2 = new SampleTableList(SampleTableFinder.all());
-
-        printList("list1", list1);
-        
         MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-            insertSampleTable("foo");
-            insertSampleTable("bar");
+            insertSampleTable("one");
+            insertSampleTable("two");
+            insertSampleTable("three");
 
             return null;
         });
 
-        printList("list1", list1);
-        printList("list2", list2);
-
-        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-            insertSampleTable("fizz");
-
-            return null;
-        });
-        
-        printList("list2", list2);
+        StringAttribute<SampleTable> nameAttribute = SampleTableFinder.name();
+        Operation operation = nameAttribute.contains("o");
+        SampleTableList sampleTable = SampleTableFinder.findMany(operation);
+        sampleTable.forEach(s -> System.out.println(s.getId() + ", " + s.getName()));
     }
     
     private static void insertSampleTable(String name) {
         SampleTable sampleTable = new SampleTable();
         sampleTable.setName(name);
         sampleTable.insert();
-        System.out.println("* insert " + name + ". hashCode=" + sampleTable.hashCode());
-        System.out.println();
-    }
-    
-    private static void printList(String listName, SampleTableList list) {
-        System.out.println("[" + listName + "]");
-        list.forEach(sampleTable -> {
-            System.out.printf("id=%s, name=%s, hash=%s%n", sampleTable.getId(), sampleTable.getName(), sampleTable.hashCode());
-        });
-        System.out.println();
     }
 
     private static void prepareDatabase() {
