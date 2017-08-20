@@ -24,16 +24,18 @@ public class Main {
                 
                 return null;
             });
-            
+
+            System.out.println("[before]");
             tablePrinter.print("sample_table");
 
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTable two = SampleTableFinder.findOne(SampleTableFinder.name().eq("two"));
-                two.delete();
+                SampleTableList list = SampleTableFinder.findMany(SampleTableFinder.all());
+                list.deleteAll();
 
                 return null;
             });
-            
+
+            System.out.println("[after]");
             tablePrinter.print("sample_table");
         }
     }
