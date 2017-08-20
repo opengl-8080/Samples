@@ -1,7 +1,6 @@
 package sample.reladomo;
 
 import com.gs.fw.common.mithra.MithraManagerProvider;
-import com.gs.fw.common.mithra.finder.Operation;
 import org.h2.tools.RunScript;
 
 import java.io.IOException;
@@ -10,40 +9,38 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
         prepareDatabase();
         prepareConnectionManager();
-        
-        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-            insertSampleTable("one");
-            insertSampleTable("two");
-            insertSampleTable("two");
-            insertSampleTable("three");
-            insertSampleTable("three");
-            insertSampleTable("three");
 
-            return null;
-        });
+        try (TablePrinter tablePrinter = new TablePrinter()) {
+            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+                SampleTable foo = newSampleTable("foo");
+                foo.insert();
+                
+                return null;
+            });
+            
+            tablePrinter.print("sample_table");
 
-        Set<String> names = new HashSet<>();
-        names.add("one");
-        names.add("three");
+            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+                SampleTable foo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
+                foo.setName("FOO");
 
-        Operation operation = SampleTableFinder.name().in(names);
-        SampleTableList list = SampleTableFinder.findMany(operation);
-        
-        System.out.println(list);
+                return null;
+            });
+            
+            tablePrinter.print("sample_table");
+        }
     }
     
-    private static void insertSampleTable(String name) {
+    private static SampleTable newSampleTable(String name) {
         SampleTable sampleTable = new SampleTable();
         sampleTable.setName(name);
-        sampleTable.insert();
+        return sampleTable;
     }
     
     private static void prepareDatabase() {
