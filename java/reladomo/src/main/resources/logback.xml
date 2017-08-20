@@ -6,9 +6,8 @@
         </encoder>
     </appender>
     
-    <logger name="com.gs.fw.common.mithra.sqllogs" level="debug" />
+    <logger name="com.gs.fw.common.mithra" level="debug" />
 
     <root level="info">
-        <appender-ref ref="STDOUT" />
     </root>
 </configuration>
