@@ -18,11 +18,9 @@ public class Main {
 
         try (TablePrinter tablePrinter = new TablePrinter()) {
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTableList list = new SampleTableList();
-                list.add(newSampleTable("one"));
-                list.add(newSampleTable("two"));
-                list.add(newSampleTable("three"));
-                list.insertAll();
+                newSampleTable("one").insert();
+                newSampleTable("two").insert();
+                newSampleTable("three").insert();
                 
                 return null;
             });
@@ -30,8 +28,8 @@ public class Main {
             tablePrinter.print("sample_table");
 
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTableList list = SampleTableFinder.findMany(SampleTableFinder.all());
-                list.setName("HOGE");
+                SampleTable two = SampleTableFinder.findOne(SampleTableFinder.name().eq("two"));
+                two.delete();
 
                 return null;
             });
