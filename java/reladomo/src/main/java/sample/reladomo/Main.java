@@ -18,8 +18,11 @@ public class Main {
 
         try (TablePrinter tablePrinter = new TablePrinter()) {
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTable foo = newSampleTable("foo");
-                foo.insert();
+                SampleTableList list = new SampleTableList();
+                list.add(newSampleTable("one"));
+                list.add(newSampleTable("two"));
+                list.add(newSampleTable("three"));
+                list.insertAll();
                 
                 return null;
             });
@@ -27,8 +30,8 @@ public class Main {
             tablePrinter.print("sample_table");
 
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTable foo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
-                foo.setName("FOO");
+                SampleTableList list = SampleTableFinder.findMany(SampleTableFinder.all());
+                list.setName("HOGE");
 
                 return null;
             });
