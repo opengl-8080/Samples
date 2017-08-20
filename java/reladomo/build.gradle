@@ -24,6 +24,7 @@ sourceSets {
 dependencies {
     compile 'com.h2database:h2:1.4.196'
     compile 'com.goldmansachs.reladomo:reladomo:16.5.1'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
     reladomoGenTask 'com.goldmansachs.reladomo:reladomogen:16.5.1'
     compile 'com.goldmansachs.reladomo:reladomogen:16.5.1'
 }

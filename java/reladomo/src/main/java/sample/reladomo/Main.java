@@ -16,34 +16,12 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
 
-        try (TablePrinter tablePrinter = new TablePrinter()) {
-            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                newSampleTable("one").insert();
-                newSampleTable("two").insert();
-                newSampleTable("three").insert();
-                
-                return null;
-            });
+        SampleTable foo = new SampleTable();
+        foo.setName("foo");
+        foo.insert();
 
-            System.out.println("[before]");
-            tablePrinter.print("sample_table");
-
-            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                SampleTableList list = SampleTableFinder.findMany(SampleTableFinder.all());
-                list.deleteAll();
-
-                return null;
-            });
-
-            System.out.println("[after]");
-            tablePrinter.print("sample_table");
-        }
-    }
-    
-    private static SampleTable newSampleTable(String name) {
-        SampleTable sampleTable = new SampleTable();
-        sampleTable.setName(name);
-        return sampleTable;
+        SampleTable savedFoo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
+        savedFoo.setName("FOO");
     }
     
     private static void prepareDatabase() {

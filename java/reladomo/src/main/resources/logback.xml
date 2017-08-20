@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%-5level] %date %-15logger{15} - %m%n</pattern>
+        </encoder>
+    </appender>
+    
+    <logger name="com.gs.fw.common.mithra.sqllogs" level="debug" />
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
