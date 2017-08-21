@@ -1,6 +1,5 @@
 package sample.reladomo;
 
-import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import org.h2.tools.RunScript;
 
@@ -17,27 +16,23 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
 
-        try (TablePrinter tablePrinter = new TablePrinter()) {
-            String resultValue = MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                insertSampleTable("foo");
-                return "hogehoge";
-            });
+        System.out.println("[No Transactional]");
+        insertSampleTable("one");
+        insertSampleTable("two");
+        insertSampleTable("three");
+        
+        SampleTableFinder.findMany(SampleTableFinder.all()).setName("UPDATE");
 
-            System.out.println("resultValue = " + resultValue);
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+            System.out.println("[Transactional]");
+            insertSampleTable("four");
+            insertSampleTable("five");
+            insertSampleTable("six");
             
-            tablePrinter.print("sample_table");
-
-            try {
-                MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                    insertSampleTable("bar");
-                    throw new Exception("test exception");
-                });
-            } catch (MithraBusinessException e) {
-                e.printStackTrace(System.out);
-            }
+            SampleTableFinder.findMany(SampleTableFinder.all()).setName("UPDATE");
             
-            tablePrinter.print("sample_table");
-        }
+            return null;
+        });
     }
     
     private static void insertSampleTable(String name) {

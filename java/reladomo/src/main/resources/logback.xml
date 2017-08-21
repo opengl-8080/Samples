@@ -2,12 +2,13 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%-5level] %date %-15logger{15} - %m%n</pattern>
+            <pattern>[%-5level] %-15logger{15} - %m%n</pattern>
         </encoder>
     </appender>
     
-    <logger name="com.gs.fw.common.mithra" level="debug" />
+    <logger name="com.gs.fw.common.mithra.sqllogs" level="debug" />
 
     <root level="info">
+        <appender-ref ref="STDOUT" />
     </root>
 </configuration>
