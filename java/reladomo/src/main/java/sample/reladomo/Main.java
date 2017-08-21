@@ -29,8 +29,8 @@ public class Main {
             System.out.println("* find foo");
             SampleTable beforeUpdateFoo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
 
-            System.out.println("* update foo to FOO");
-            tableWriter.write("update sample_table set name=? where id=?", "FOO", beforeUpdateFoo.getId());
+            System.out.println("* update foo to hoge");
+            tableWriter.write("update sample_table set name=? where id=?", "hoge", beforeUpdateFoo.getId());
 
             System.out.println("* print table");
             tablePrinter.print("sample_table");
@@ -41,6 +41,10 @@ public class Main {
             System.out.println(afterUpdateFoo);
             System.out.println("insertedFoo == beforeUpdateFoo > " + (insertedFoo == beforeUpdateFoo));
             System.out.println("beforeUpdateFoo == afterUpdateFoo > " + (beforeUpdateFoo == afterUpdateFoo));
+
+            System.out.println("* find hoge");
+            SampleTable hoge = SampleTableFinder.findOne(SampleTableFinder.name().eq("hoge"));
+            System.out.println("beforeUpdateFoo == hoge > " + (beforeUpdateFoo == hoge));
         }
     }
     
