@@ -16,29 +16,39 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
 
-        System.out.println("[No Transactional]");
-        insertSampleTable("one");
-        insertSampleTable("two");
-        insertSampleTable("three");
-        
-        SampleTableFinder.findMany(SampleTableFinder.all()).setName("UPDATE");
+        try (
+            TablePrinter tablePrinter = new TablePrinter();
+            TableWriter tableWriter = new TableWriter();
+        ) {
+            System.out.println("* insert foo");
+            SampleTable insertedFoo = insertSampleTable("foo");
 
-        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-            System.out.println("[Transactional]");
-            insertSampleTable("four");
-            insertSampleTable("five");
-            insertSampleTable("six");
+            System.out.println("* print table");
+            tablePrinter.print("sample_table");
+
+            System.out.println("* find foo");
+            SampleTable beforeUpdateFoo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
+
+            System.out.println("* update foo to FOO");
+            tableWriter.write("update sample_table set name=? where id=?", "FOO", beforeUpdateFoo.getId());
+
+            System.out.println("* print table");
+            tablePrinter.print("sample_table");
             
-            SampleTableFinder.findMany(SampleTableFinder.all()).setName("UPDATE");
+            System.out.println("* find foo");
+            SampleTable afterUpdateFoo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
             
-            return null;
-        });
+            System.out.println(afterUpdateFoo);
+            System.out.println("insertedFoo == beforeUpdateFoo > " + (insertedFoo == beforeUpdateFoo));
+            System.out.println("beforeUpdateFoo == afterUpdateFoo > " + (beforeUpdateFoo == afterUpdateFoo));
+        }
     }
     
-    private static void insertSampleTable(String name) {
+    private static SampleTable insertSampleTable(String name) {
         SampleTable sampleTable = new SampleTable();
         sampleTable.setName(name);
         sampleTable.insert();
+        return sampleTable;
     }
     
     private static void prepareDatabase() {
