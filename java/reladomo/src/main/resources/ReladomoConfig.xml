@@ -2,7 +2,7 @@
 <MithraRuntime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:noNamespaceSchemaLocation="mithraruntime.xsd">
     <ConnectionManager className="sample.reladomo.MyConnectionManager">
-        <MithraObjectConfiguration className="sample.reladomo.SampleTable" cacheType="partial" />
+        <MithraObjectConfiguration className="sample.reladomo.SampleTable" cacheType="none" />
         <MithraObjectConfiguration className="sample.reladomo.SequenceTable" cacheType="partial" />
     </ConnectionManager>
 </MithraRuntime>

@@ -7,6 +7,13 @@
     <ClassName>SampleTable</ClassName>
     <DefaultTable>SAMPLE_TABLE</DefaultTable>
     
+    <AsOfAttribute name="processingDate"
+                   fromColumnName="FROM_DATE"
+                   toColumnName="TO_DATE"
+                   isProcessingDate="true"
+                   infinityDate="[sample.reladomo.MyInfinityDateProvider.get()]"
+    />
+    
     <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" primaryKeyGeneratorStrategy="SimulatedSequence">
         <SimulatedSequence
                 sequenceName="sampleTableSequence"

@@ -1,6 +1,7 @@
 package sample.reladomo;
 
 import com.gs.fw.common.mithra.MithraManagerProvider;
+import com.sun.jmx.snmp.SnmpUnknownAccContrModelException;
 import org.h2.tools.RunScript;
 
 import java.io.IOException;
@@ -9,6 +10,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Main {
 
@@ -16,35 +20,23 @@ public class Main {
         prepareDatabase();
         prepareConnectionManager();
 
-        try (
-            TablePrinter tablePrinter = new TablePrinter();
-            TableWriter tableWriter = new TableWriter();
-        ) {
-            System.out.println("* insert foo");
-            SampleTable insertedFoo = insertSampleTable("foo");
+        try (TablePrinter tablePrinter = new TablePrinter()) {
+            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+                insertSampleTable("foo");
 
-            System.out.println("* print table");
-            tablePrinter.print("sample_table");
+                Timestamp now = Timestamp.valueOf(LocalDate.now().atStartOfDay());
 
-            System.out.println("* find foo 1");
-            SampleTable beforeUpdateFoo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
-            System.out.println("beforeUpdateFoo = " + beforeUpdateFoo);
-            System.out.println("insertedFoo == beforeUpdateFoo > " + (insertedFoo == beforeUpdateFoo));
-
-            System.out.println("* update foo to bar");
-            tableWriter.write("update sample_table set name=? where id=?", "bar", beforeUpdateFoo.getId());
-
-            System.out.println("* print table");
+                SampleTable foo = SampleTableFinder.findOne(
+                        SampleTableFinder.id().eq(1L)
+                        .and(SampleTableFinder.processingDate().equalsInfinity())
+                );
+                System.out.println(foo);
+                foo.setName("FOO");
+                return null;
+            });
+            
             tablePrinter.print("sample_table");
             
-            System.out.println("* find foo 2");
-            SampleTable afterUpdateFoo = SampleTableFinder.findOne(SampleTableFinder.name().eq("foo"));
-            System.out.println("afterUpdateFoo = " + afterUpdateFoo);
-            System.out.println("beforeUpdateFoo == afterUpdateFoo > " + (beforeUpdateFoo == afterUpdateFoo));
-
-            System.out.println("* find bar");
-            SampleTable bar = SampleTableFinder.findOne(SampleTableFinder.name().eq("bar"));
-            System.out.println("beforeUpdateFoo == bar > " + (beforeUpdateFoo == bar));
         }
     }
     
@@ -69,6 +61,7 @@ public class Main {
     private static void prepareConnectionManager() {
         try (InputStream config = Main.class.getResourceAsStream("/ReladomoConfig.xml")) {
             MithraManagerProvider.getMithraManager().readConfiguration(config);
+            MithraManagerProvider.getMithraManager().setTransactionTimeout(600);
         } catch (IOException e) {
             throw new RuntimeException("failed to prepare ConnectionManager", e);
         }
