@@ -16,8 +16,10 @@
     
     <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" primaryKeyGeneratorStrategy="SimulatedSequence">
         <SimulatedSequence
+                initialValue="100"
                 sequenceName="sampleTableSequence"
                 sequenceObjectFactoryName="sample.reladomo.SequenceTableFactory" />
     </Attribute>
-    <Attribute name="name" javaType="String" columnName="NAME" />
+    <Attribute name="code" javaType="String" columnName="CODE" />
+    <Attribute name="value" javaType="String" columnName="VALUE" />
 </MithraObject>

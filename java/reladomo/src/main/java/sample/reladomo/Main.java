@@ -22,16 +22,18 @@ public class Main {
 
         try (TablePrinter tablePrinter = new TablePrinter()) {
             MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                insertSampleTable("foo");
-
-                Timestamp now = Timestamp.valueOf(LocalDate.now().atStartOfDay());
-
+                insertSampleTable();
+                return null;
+            });
+            tablePrinter.print("sample_table");
+            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
+                Timestamp now = Timestamp.valueOf(LocalDate.now().plusDays(1).atStartOfDay());
                 SampleTable foo = SampleTableFinder.findOne(
-                        SampleTableFinder.id().eq(1L)
-                        .and(SampleTableFinder.processingDate().equalsInfinity())
+                        SampleTableFinder.code().eq("FOO")
+                                .and(SampleTableFinder.processingDate().equalsInfinity())
                 );
                 System.out.println(foo);
-                foo.setName("FOO");
+                foo.setValue("update foo");
                 return null;
             });
             
@@ -40,9 +42,10 @@ public class Main {
         }
     }
     
-    private static SampleTable insertSampleTable(String name) {
+    private static SampleTable insertSampleTable() {
         SampleTable sampleTable = new SampleTable();
-        sampleTable.setName(name);
+        sampleTable.setCode("FOO");
+        sampleTable.setValue("original foo");
         sampleTable.insert();
         return sampleTable;
     }
