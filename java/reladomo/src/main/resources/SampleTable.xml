@@ -8,18 +8,17 @@
     <DefaultTable>SAMPLE_TABLE</DefaultTable>
     
     <AsOfAttribute name="processingDate"
-                   fromColumnName="FROM_DATE"
-                   toColumnName="TO_DATE"
+                   fromColumnName="PROCESS_DATE_FROM"
+                   toColumnName="PROCESS_DATE_TO"
                    isProcessingDate="true"
                    infinityDate="[sample.reladomo.MyInfinityDateProvider.get()]"
+                   defaultIfNotSpecified="[sample.reladomo.MyInfinityDateProvider.get()]"
     />
     
     <Attribute name="id" javaType="long" columnName="ID" primaryKey="true" primaryKeyGeneratorStrategy="SimulatedSequence">
         <SimulatedSequence
-                initialValue="100"
                 sequenceName="sampleTableSequence"
                 sequenceObjectFactoryName="sample.reladomo.SequenceTableFactory" />
     </Attribute>
-    <Attribute name="code" javaType="String" columnName="CODE" />
     <Attribute name="value" javaType="String" columnName="VALUE" />
 </MithraObject>

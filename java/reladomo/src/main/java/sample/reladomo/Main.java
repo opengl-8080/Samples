@@ -1,7 +1,8 @@
 package sample.reladomo;
 
+import com.gs.fw.common.mithra.MithraManager;
 import com.gs.fw.common.mithra.MithraManagerProvider;
-import com.sun.jmx.snmp.SnmpUnknownAccContrModelException;
+import com.gs.fw.common.mithra.finder.Operation;
 import org.h2.tools.RunScript;
 
 import java.io.IOException;
@@ -10,9 +11,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Main {
 
@@ -21,33 +19,27 @@ public class Main {
         prepareConnectionManager();
 
         try (TablePrinter tablePrinter = new TablePrinter()) {
-            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                insertSampleTable();
+            MithraManager manager = MithraManagerProvider.getMithraManager();
+            manager.executeTransactionalCommand(tx -> {
+                SampleTable foo = new SampleTable();
+                foo.setValue("FOO");
+                foo.insert();
+                
                 return null;
             });
+            
             tablePrinter.print("sample_table");
-            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
-                Timestamp now = Timestamp.valueOf(LocalDate.now().plusDays(1).atStartOfDay());
-                SampleTable foo = SampleTableFinder.findOne(
-                        SampleTableFinder.code().eq("FOO")
-                                .and(SampleTableFinder.processingDate().equalsInfinity())
-                );
-                System.out.println(foo);
+            
+            manager.executeTransactionalCommand(tx -> {
+                Operation operation = SampleTableFinder.value().eq("FOO");
+                SampleTable foo = SampleTableFinder.findOne(operation);
                 foo.setValue("update foo");
+                
                 return null;
             });
             
             tablePrinter.print("sample_table");
-            
         }
-    }
-    
-    private static SampleTable insertSampleTable() {
-        SampleTable sampleTable = new SampleTable();
-        sampleTable.setCode("FOO");
-        sampleTable.setValue("original foo");
-        sampleTable.insert();
-        return sampleTable;
     }
     
     private static void prepareDatabase() {
