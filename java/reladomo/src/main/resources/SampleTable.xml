@@ -11,6 +11,7 @@
                    fromColumnName="PROCESS_DATE_FROM"
                    toColumnName="PROCESS_DATE_TO"
                    isProcessingDate="true"
+                   toIsInclusive="false"
                    infinityDate="[sample.reladomo.MyInfinityDateProvider.get()]"
                    defaultIfNotSpecified="[sample.reladomo.MyInfinityDateProvider.get()]"
     />

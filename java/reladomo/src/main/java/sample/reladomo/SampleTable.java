@@ -15,4 +15,13 @@ public class SampleTable extends SampleTableAbstract
 	{
 		this(sample.reladomo.MyInfinityDateProvider.get());
 	}
+
+	@Override
+	public String toString() {
+		return "SampleTable(id=" + this.getId()
+				+ ", value=" + this.getValue()
+				+ ", processDateFrom=" + this.getProcessingDateFrom().toLocalDateTime().toLocalDate()
+				+ ", processDateTo=" + this.getProcessingDateTo().toLocalDateTime().toLocalDate()
+				+ ")";
+	}
 }
