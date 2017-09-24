@@ -1,4 +1,4 @@
 module sample_module.main {
-    requires sample_module.sub;
+    requires no.module.sub;
     exports sample.main;
 }
