@@ -1,10 +1,12 @@
 package sample.main;
 
-import sample.sub.Sub;
+import sample.sub.FooFactory;
+import sample.sub.api.Foo;
+import sample.sub.internal.FooImpl;
 
 public class Main {
     public static void main(String... args) {
-        Sub sub = new Sub();
-        sub.method();
+        FooImpl foo = (FooImpl)FooFactory.newInstance();
+        foo.hello();
     }
 }
