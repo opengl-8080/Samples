@@ -1,3 +1,3 @@
-module sample_module.sub {
-    opens sample.sub;
+open module sample_module.sub {
+    exports sample.sub;
 }

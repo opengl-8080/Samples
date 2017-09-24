@@ -3,13 +3,17 @@ package sample.main;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import sample.sub.Sub;
+
 public class Main {
     public static void main(String... args) throws Exception {
-        Class<?> subClass = Class.forName("sample.sub.Sub");
-        Constructor<?> constructor = subClass.getConstructor();
-        Object sub = constructor.newInstance();
+        new Sub().sub();
 
-        Method method = subClass.getMethod("sub");
-        method.invoke(sub);
+        Class<?> clazz = Class.forName("sample.sub.foo.Foo");
+        Constructor<?> constructor = clazz.getConstructor();
+        Object obj = constructor.newInstance();
+
+        Method method = clazz.getMethod("foo");
+        method.invoke(obj);
     }
 }
