@@ -6,24 +6,25 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPrivateModifier;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.IOException;
@@ -40,7 +41,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public String hoge;
@@ -48,6 +48,8 @@ public class Main {
     public static String piyo;
     private static final int aaa = 10;
     int bbb;
+    private List<String> fieldTargetList = new ArrayList<java.lang.String>();
+    private List<String> fieldNonTargetList = new ArrayList<>();
     protected boolean ccc;
     
     private int method() {return 1;}
@@ -56,10 +58,13 @@ public class Main {
     private static void mmm() {}
     
     public static void main(String[] args) {
+        List<String> localTargetList = new ArrayList<String>();
+        List<String> localNonTargetList = new ArrayList<>();
         
         Path source = Paths.get("src/main/java/sample/javaparser/Main.java");
         
         try {
+            List<ClassOrInterfaceType> removeTargetClassOrInterfaceType = new ArrayList<>();
             CompilationUnit unit = JavaParser.parse(source);
             List<ImportDeclaration> removeImport = new ArrayList<>();
             Set<RemoveAnnotation> removeAnnotations = new HashSet<>();
@@ -67,6 +72,16 @@ public class Main {
             unit.accept(new VoidVisitorAdapter<Void>() {
                 
                 private Set<String> importNames = new HashSet<>();
+
+                @Override
+                public void visit(AssignExpr n, Void arg) {
+                    this.collectDiamond(n);
+                    
+                    List<String> list;
+                    list = new ArrayList<String>();
+                    
+                    super.visit(n, arg);
+                }
 
                 @Override
                 public void visit(ImportDeclaration n, Void arg) {
@@ -108,8 +123,42 @@ public class Main {
                 }
 
                 @Override
+                public void visit(VariableDeclarator n, Void arg) {
+                    this.collectDiamond(n);
+                    super.visit(n, arg);
+                }
+                
+                private void collectDiamond(Node node) {
+                    node.accept(new VoidVisitorAdapter<Void>() {
+                        @Override
+                        public void visit(ObjectCreationExpr n, Void arg) {
+//                            for (Node c1 : n.getChildNodes()) {
+//                                System.out.println("[c1]" + c1 + ":" + c1.getClass());
+//                                for (Node c2 : c1.getChildNodes()) {
+//                                    System.out.println(" [c2]" + c2 + ":" + c2.getClass());
+//                                    for (Node c3 : c2.getChildNodes()) {
+//                                        System.out.println("  [c3]" + c3 + ":" + c3.getClass());
+//                                    }
+//                                }
+//                            }
+                            
+                            n.accept(new VoidVisitorAdapter<Void>() {
+                                @Override
+                                public void visit(ClassOrInterfaceType n, Void arg) {
+                                    removeTargetClassOrInterfaceType.add(n);
+                                    super.visit(n, arg);
+                                }
+                            }, null);
+                            super.visit(n, arg);
+                        }
+                    }, null);
+                }
+
+                @Override
                 public void visit(FieldDeclaration n, Void arg) {
                     this.removePrivateModifier(n);
+                    this.collectDiamond(n);
+                    
                     super.visit(n, arg);
                 }
 
@@ -158,7 +207,6 @@ public class Main {
                 }
                 
                 private void renameLocalVariables(MethodDeclaration n) {
-                    System.out.println("[" + n.getNameAsString() + "]");
                     List<VariableDeclarator> variableDeclarations = new ArrayList<>();
 
                     n.accept(new VoidVisitorAdapter<Void>() {
@@ -174,14 +222,13 @@ public class Main {
                     n.accept(new VoidVisitorAdapter<Void>() {
                         @Override
                         public void visit(NameExpr n, Void arg) {
-                            System.out.println(n);
                             nameExprs.add(n);
                             super.visit(n, arg);
                         }
                     }, null);
 
                     int cnt = 0;
-                    Map<String, String> renameMapping = new HashMap<>();
+                    Map<String, String> renameMapping = new HashMap<String, String>();
 
                     for (NameExpr nameExpr : nameExprs) {
                         String name = nameExpr.getNameAsString();
@@ -216,10 +263,11 @@ public class Main {
                 }
             }, null);
 
+            removeTargetClassOrInterfaceType.forEach(Node::remove);
             removeImport.forEach(ImportDeclaration::remove);
             removeAnnotations.forEach(RemoveAnnotation::removeAnnotation);
 
-//            System.out.println(unit);
+            System.out.println(unit);
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
