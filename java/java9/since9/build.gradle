@@ -1,4 +1,6 @@
-apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'since9.Main'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -10,5 +12,5 @@ repositories {
 }
 
 dependencies {
-  compile 'org.jsoup:jsoup:1.10.3'
+  compile 'com.github.javaparser:javaparser-core:3.4.3'
 }
