@@ -4,3 +4,13 @@ targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
 compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+    compile group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.19'
+    compile group: 'org.openjdk.jmh', name: 'jmh-generator-annprocess', version: '1.19'
+}
