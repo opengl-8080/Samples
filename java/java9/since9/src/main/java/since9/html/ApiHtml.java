@@ -28,7 +28,7 @@ public class ApiHtml {
         this.path = apiDir.resolve(relativePath);
         this.doc = this.parse();
     }
-
+    
     private Document parse() {
         try (InputStream in = Files.newInputStream(this.path, StandardOpenOption.READ)) {
             return Jsoup.parse(in, "UTF-8", "");

@@ -7,9 +7,16 @@ public class AllClassesHtml extends ApiHtml {
         super("allclasses-noframe.html");
     }
     
-    public Stream<ClassHtml> stream() {
+    public Stream<ClassHtml> classes() {
         return this.doc.select("body main ul li a")
                 .stream()
+                .map(a -> a.attr("href"))
+                .map(ClassHtml::new);
+    }
+
+    public Stream<ClassHtml> classesWithParallel() {
+        return this.doc.select("body main ul li a")
+                .parallelStream()
                 .map(a -> a.attr("href"))
                 .map(ClassHtml::new);
     }

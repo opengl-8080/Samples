@@ -4,3 +4,6 @@ out/
 *.iml
 build/
 apidir
+list.md
+members.md
+types.md
