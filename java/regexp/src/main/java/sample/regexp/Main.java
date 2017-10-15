@@ -8,23 +8,19 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args) throws RunnerException {
-        test("123");
-        test("abc456");
-        test("12ab");
+        test("abc");
+        test("123abc456def789");
     }
-    
+
     private static void test(String text) {
-        Pattern pattern = Pattern.compile("[0-9]+");
+        Pattern pattern = Pattern.compile("[a-z]+");
         Matcher matcher = pattern.matcher(text);
 
         System.out.println("[text=" + text + "]");
-        if (matcher.lookingAt()) {
-            System.out.println("lookingAt = true");
+        while (matcher.find()) {
             System.out.println("start = " + matcher.start());
             System.out.println("end = " + matcher.end());
             System.out.println("group = " + matcher.group());
-        } else {
-            System.out.println("lookingAt = false");
         }
     }
 }
