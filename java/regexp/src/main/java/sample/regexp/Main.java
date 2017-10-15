@@ -1,10 +1,6 @@
 package sample.regexp;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,31 +8,22 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args) throws RunnerException {
-        Options options = new OptionsBuilder().include(Main.class.getSimpleName())
-                .warmupIterations(5)
-                .measurementIterations(5)
-                .forks(2)
-                .build();
-        
-        new Runner(options).run();
+        test("123");
+        test("123abc");
     }
     
-    static final int loop = 10000;
-    
-    @Benchmark
-    public void useString() {
-        for (int i=0; i<loop; i++) {
-            "org.openjdk.jmh.annotations.Benchmark".matches("[a-z]+");
-        }
-    }
-    
-    @Benchmark
-    public void usePattern() {
-        Pattern pattern = Pattern.compile("[a-z]+");
+    private static void test(String text) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(text);
 
-        for (int i=0; i<loop; i++) {
-            Matcher matcher = pattern.matcher("org.openjdk.jmh.annotations.Benchmark");
-            matcher.matches();
+        System.out.println("[text=" + text + "]");
+        if (matcher.matches()) {
+            System.out.println("matches = true");
+            System.out.println("start = " + matcher.start());
+            System.out.println("end = " + matcher.end());
+            System.out.println("group = " + matcher.group());
+        } else {
+            System.out.println("matches = false");
         }
     }
 }
