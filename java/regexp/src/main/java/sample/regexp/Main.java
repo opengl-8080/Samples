@@ -8,19 +8,10 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args) throws RunnerException {
-        test("abc");
-        test("123abc456def789");
-    }
-
-    private static void test(String text) {
         Pattern pattern = Pattern.compile("[a-z]+");
-        Matcher matcher = pattern.matcher(text);
+        Matcher matcher = pattern.matcher("abc123def");
 
-        System.out.println("[text=" + text + "]");
-        while (matcher.find()) {
-            System.out.println("start = " + matcher.start());
-            System.out.println("end = " + matcher.end());
-            System.out.println("group = " + matcher.group());
-        }
+        System.out.println("replaceAll = " + matcher.replaceAll("*"));
+        System.out.println("replaceFirst = " + matcher.replaceFirst("*"));
     }
 }
