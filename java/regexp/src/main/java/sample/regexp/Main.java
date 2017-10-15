@@ -8,10 +8,21 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args) throws RunnerException {
-        Pattern pattern = Pattern.compile("[a-z]+");
-        Matcher matcher = pattern.matcher("abc123def");
+        Pattern pattern = Pattern.compile("([a-z]+)([0-9]+)");
+        Matcher matcher = pattern.matcher("abc123de45fg");
 
-        System.out.println("replaceAll = " + matcher.replaceAll("*"));
-        System.out.println("replaceFirst = " + matcher.replaceFirst("*"));
+        int groupCount = matcher.groupCount();
+        System.out.println("groupCount=" + groupCount);
+        
+        while (matcher.find()) {
+            System.out.println("==========");
+            String group = matcher.group();
+            System.out.println("group=" + group);
+            
+            for (int i=0; i<=groupCount; i++) {
+                String g = matcher.group(i);
+                System.out.println("group(" + i + ")=" + g);
+            }
+        }
     }
 }
