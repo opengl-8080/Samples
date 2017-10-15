@@ -2,27 +2,29 @@ package sample.regexp;
 
 import org.openjdk.jmh.runner.RunnerException;
 
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
 
     public static void main(String[] args) throws RunnerException {
-        Pattern pattern = Pattern.compile("([a-z]+)([0-9]+)");
-        Matcher matcher = pattern.matcher("abc123de45fg");
+        test("[default]", () -> Pattern.compile("^[a-z]+$"));
+        test("[MULTILINE]", () -> Pattern.compile("^[a-z]+$", Pattern.MULTILINE));
+    }
+    
+    private static void test(String label, Supplier<Pattern> patternSupplier) {
+        System.out.println(label);
+        Pattern pattern = patternSupplier.get();
 
-        int groupCount = matcher.groupCount();
-        System.out.println("groupCount=" + groupCount);
-        
+        String text = "abc\n"
+                    + "def\n";
+
+        Matcher matcher = pattern.matcher(text);
+
         while (matcher.find()) {
-            System.out.println("==========");
             String group = matcher.group();
-            System.out.println("group=" + group);
-            
-            for (int i=0; i<=groupCount; i++) {
-                String g = matcher.group(i);
-                System.out.println("group(" + i + ")=" + g);
-            }
+            System.out.println(group);
         }
     }
 }
