@@ -9,7 +9,8 @@ public class Main {
 
     public static void main(String[] args) throws RunnerException {
         test("123");
-        test("123abc");
+        test("abc456");
+        test("12ab");
     }
     
     private static void test(String text) {
@@ -17,13 +18,13 @@ public class Main {
         Matcher matcher = pattern.matcher(text);
 
         System.out.println("[text=" + text + "]");
-        if (matcher.matches()) {
-            System.out.println("matches = true");
+        if (matcher.lookingAt()) {
+            System.out.println("lookingAt = true");
             System.out.println("start = " + matcher.start());
             System.out.println("end = " + matcher.end());
             System.out.println("group = " + matcher.group());
         } else {
-            System.out.println("matches = false");
+            System.out.println("lookingAt = false");
         }
     }
 }
