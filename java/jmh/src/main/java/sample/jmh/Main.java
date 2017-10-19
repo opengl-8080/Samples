@@ -1,24 +1,24 @@
 package sample.jmh;
 
-import java.io.IOException;
-
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        for (int i=0; i<1000; i++) {
-            long start = System.nanoTime();
-            new Main().execute();
-            long end = System.nanoTime();
-            System.out.print(String.format("[%05d] %d%n", i, (end - start)));
+//    private static volatile String s;
+    
+    public static void main(String[] args) {
+        
+        for (int i=0; i<100_000; i++) {
+            Main m = new Main();
+            String s = m.execute();
         }
     }
     
-    private void execute() {
-        for (int i=0; i<10000; i++) {
-            String a = "abc";
-            String b = "def";
-            
-            String c = a + b;
+    private String execute() {
+        String text = "";
+        
+        for (int i=0; i<100; i++) {
+            text += String.valueOf(i);
         }
+        
+        return text;
     }
 }
