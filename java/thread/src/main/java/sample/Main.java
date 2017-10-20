@@ -1,28 +1,23 @@
 package sample;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class Main {
-    private static Map<String, Integer> map = new ConcurrentHashMap<>();
-    
     public static void main(String[] args) throws Exception {
-        new Thread(() ->
-            add(1)
-        ).start();
-        
-        new Thread(() ->
-            add(2)
-        ).start();
-        
-        Thread.sleep(100);
+        Main m = new Main();
 
-        System.out.println(map.get("foo"));
+        new Thread(() -> {
+            for (int i=0; i<100; i++) {
+                System.out.println("m.i=" + m.i);
+            }
+        }).start();
+        
+        new Thread(() -> {
+            while (m.i == 10) {
+                continue;
+            }
+        }).start();
+
+        System.out.println("done");
     }
     
-    synchronized private static void add(int n) {
-        Integer total = map.getOrDefault("foo", 0);
-        System.out.println("total = " + total + ", n = " + n);
-        map.put("foo", total + n);
-    }
+    private int i;
 }
