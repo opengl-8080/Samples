@@ -10,24 +10,25 @@ import java.sql.Statement;
 
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        Server server = Server.createWebServer().start();
+        Server server = Server.createTcpServer().start();
 
         System.out.println("hoge");
 
         Class.forName("org.h2.Driver");
-        try (Connection con = DriverManager.getConnection("jdbc:h2:localhost/test", "sa", "")) {
-            try (Statement stmt = con.createStatement()) {
-                stmt.executeUpdate("create table foo(id number(10), code varchar(20))");
+        try (Connection con1 = DriverManager.getConnection("jdbc:h2:tcp://localhost/./out/test", "sa", "");
+             Connection con2 = DriverManager.getConnection("jdbc:h2:tcp://localhost/./out/test", "sa", "")) {
+            try (Statement stmt = con1.createStatement()) {
+                stmt.executeUpdate("create table if not exists foo(id number(10), code varchar(20))");
 
                 stmt.executeUpdate("insert into foo values (1, 'hoge')");
                 stmt.executeUpdate("insert into foo values (2, 'fuga')");
-                
-                try (ResultSet rs = stmt.executeQuery("select * from foo")) {
-                    while (rs.next()) {
-                        long id = rs.getLong("id");
-                        String code = rs.getString("code");
-                        System.out.println("id=" + id + ", code=" + code);
-                    }
+            }
+            
+            try (ResultSet rs = con2.createStatement().executeQuery("select * from foo")) {
+                while (rs.next()) {
+                    long id = rs.getLong("id");
+                    String code = rs.getString("code");
+                    System.out.println("id=" + id + ", code=" + code);
                 }
             }
         }
