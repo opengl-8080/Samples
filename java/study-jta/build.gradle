@@ -11,4 +11,5 @@ repositories {
 
 dependencies {
     compile 'com.h2database:h2:1.4.196'
+    compile group: 'org.codehaus.btm', name: 'btm', version: '2.1.4'
 }
