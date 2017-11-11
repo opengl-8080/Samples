@@ -2,14 +2,17 @@ package sample.javafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class MainController {
     
     @FXML
     public void showDialog() {
-        new Alert(Alert.AlertType.INFORMATION).showAndWait();
-        new Alert(Alert.AlertType.CONFIRMATION).showAndWait();
-        new Alert(Alert.AlertType.WARNING).showAndWait();
-        new Alert(Alert.AlertType.ERROR).showAndWait();
+        Alert alert = new Alert(
+                Alert.AlertType.INFORMATION, 
+                "めっせーじ",
+                ButtonType.OK,
+                ButtonType.NO);
+        alert.showAndWait();
     }
 }
