@@ -10,7 +10,7 @@ public class MainController {
     
     @FXML
     public void showDialog() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "めっせーじ", ButtonType.YES);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "めっせーじ", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         Optional<ButtonType> buttonType = alert.showAndWait();
         String result = buttonType.map(ButtonType::getText).orElse("選択無し");
         System.out.println(result);
