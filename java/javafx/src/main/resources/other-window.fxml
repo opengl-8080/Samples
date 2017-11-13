@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.OtherController">
+   <children>
+      <Label layoutX="104.0" layoutY="98.0" text="Other Window">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
