@@ -2,8 +2,8 @@ package sample.javafx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,12 +13,19 @@ public class MainController {
     
     @FXML
     public void openOtherWindow() throws IOException {
-        URL fxml = this.getClass().getResource("/other-window.fxml");
+        // fxml をロードして、
+        URL fxml = this.getClass().getResource("/other.fxml");
         FXMLLoader loader = new FXMLLoader(fxml);
-        Parent parent = loader.load();
-        Scene scene = new Scene(parent);
+        Pane pane = loader.load();
+        
+        // シーンを作成
+        Scene scene = new Scene(pane);
+        
+        // ステージにシーンを登録して
         Stage stage = new Stage();
         stage.setScene(scene);
+        
+        // 表示
         stage.showAndWait();
     }
 }
