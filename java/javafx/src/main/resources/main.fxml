@@ -5,6 +5,6 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <children>
-      <Button layoutX="37.0" layoutY="38.0" mnemonicParsing="false" text="Open Other Window" />
+      <Button onAction="#openOtherWindow" layoutX="37.0" layoutY="38.0" mnemonicParsing="false" text="Open Other Window" />
    </children>
 </Pane>
