@@ -1,38 +1,19 @@
 package sample.javafx;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController {
-    
-    private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
+public class MainController implements Initializable {
 
     @FXML
-    public void openOtherWindow() throws IOException {
-        // fxml をロードして、
-        URL fxml = this.getClass().getResource("/other.fxml");
-        FXMLLoader loader = new FXMLLoader(fxml);
-        Pane pane = loader.load();
-
-        // シーンを作成
-        Scene scene = new Scene(pane);
-
-        // ステージにシーンを登録して
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.initOwner(this.stage);
-
-        // 表示
-        stage.showAndWait();
+    private Label label;
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        System.out.println(this.label.getStyleClass());
     }
 }
