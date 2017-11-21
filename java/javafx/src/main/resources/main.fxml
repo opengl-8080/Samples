@@ -3,8 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
-
-<Label fx:id="label" alignment="CENTER" prefHeight="200.0" prefWidth="300.0" text="CSS Test" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<Label fx:id="label" alignment="CENTER" prefHeight="200.0" prefWidth="300.0" styleClass="my-class" text="CSS Test" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <font>
       <Font size="30.0" />
    </font>

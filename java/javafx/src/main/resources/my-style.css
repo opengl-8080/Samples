@@ -1,3 +1,5 @@
-.label {
-    -fx-background-color: skyblue;
+.my-class {
+    -fx-font-weight: bold;
+    -fx-underline: true;
+    -fx-text-fill: red;
 }
