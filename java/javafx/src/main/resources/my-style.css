@@ -1,5 +1,3 @@
 .my-class {
-    -fx-font-weight: bold;
-    -fx-underline: true;
-    -fx-text-fill: red;
+    -fx-background-image: url(file:./build/image.jpg);
 }
