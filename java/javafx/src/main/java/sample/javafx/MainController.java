@@ -1,18 +1,35 @@
 package sample.javafx;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class MainController implements Initializable {
+public class MainController {
 
     @FXML
-    private Pane pane;
+    private Label label;
     
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void onDragOver(DragEvent event) {
+        Dragboard dragboard = event.getDragboard();
+
+        if (dragboard.hasFiles()) {
+            dragboard.getFiles().forEach(System.out::println);
+            event.acceptTransferModes(TransferMode.COPY);
+        }
+
+        event.consume();
+    }
+    
+    @FXML
+    public void onDragDropped(DragEvent event) {
+        Dragboard dragboard = event.getDragboard();
+
+        dragboard.getFiles().forEach(System.out::println);
+
+        event.setDropCompleted(true);
+        event.consume();
     }
 }
