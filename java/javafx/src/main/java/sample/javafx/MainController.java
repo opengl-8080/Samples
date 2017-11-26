@@ -5,19 +5,30 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+import java.io.File;
+import java.util.List;
+
 public class MainController {
     
     @FXML
     public void onDragOver(DragEvent e) {
-        e.acceptTransferModes(TransferMode.ANY);
+        Dragboard dragboard = e.getDragboard();
+        
+        if (dragboard.hasFiles()) {
+            e.acceptTransferModes(TransferMode.ANY);
+        }
+
         e.consume();
     }
     
     @FXML
     public void onDragDropped(DragEvent e) {
+        System.out.println("onDragDropped()");
         Dragboard dragboard = e.getDragboard();
-        String string = dragboard.getString();
-        System.out.println("dropped string = " + string);
+
+        List<File> files = dragboard.getFiles();
+        files.forEach(file -> System.out.println(file.getName()));
+
         e.consume();
     }
 }
