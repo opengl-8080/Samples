@@ -1,52 +1,40 @@
 package sample.javafx;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.TransferMode;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+public class MainController {
+    @FXML
+    private Label dragLabel;
+    @FXML
+    private Label dropLabel;
+    
+    @FXML
+    public void onDragDetected(MouseEvent e) {
+        Dragboard dragboard = this.dragLabel.startDragAndDrop(TransferMode.COPY);
 
-public class MainController implements Initializable {
-    @FXML
-    private Pane bluePane;
-    @FXML
-    private Pane yellowPane;
-    @FXML
-    private Button button;
-    @FXML
-    private TextField textField;
-    @FXML
-    private Label label;
+        ClipboardContent content = new ClipboardContent();
+        content.putString("Drag Test");
+        dragboard.setContent(content);
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.registerHandlers(this.bluePane, "bluePane");
-        this.registerHandlers(this.yellowPane, "yellowPane");
-//        this.registerConsumeHandlers(this.yellowPane, "yellowPane");
-        this.registerHandlers(this.button, "button");
-        this.registerHandlers(this.textField, "textField");
-        this.registerHandlers(this.label, "label");
+        e.consume();
     }
     
-    private void registerHandlers(Node node, String name) {
-        node.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> System.out.println("filter " + name));
-        node.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> System.out.println("handler " + name));
+    @FXML
+    public void onDragOver(DragEvent e) {
+        e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        e.consume();
     }
-
-    private void registerConsumeHandlers(Node node, String name) {
-        node.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            System.out.println("filter " + name);
-            e.consume();
-        });
-        node.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            System.out.println("handler " + name);
-            e.consume();
-        });
+    
+    @FXML
+    public void onDragDropped(DragEvent e) {
+        Dragboard dragboard = e.getDragboard();
+        String string = dragboard.getString();
+        System.out.println("dropped string = " + string);
     }
 }
