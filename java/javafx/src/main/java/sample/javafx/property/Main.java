@@ -1,12 +1,20 @@
 package sample.javafx.property;
 
+import javafx.beans.property.SimpleDoubleProperty;
+
 public class Main {
     public static void main(String[] args) {
-        MyClass myClass = new MyClass();
-        myClass.hogeProperty().addListener((observableValue, oldValue, newValue) -> {
-            System.out.println("observableValue=" + observableValue + ", oldValue=" + oldValue + ", newValue=" + newValue);
-        });
+        SimpleDoubleProperty a = new SimpleDoubleProperty();
+        SimpleDoubleProperty b = new SimpleDoubleProperty();
+
+        System.out.println(b.get());
+        a.set(1.0);
+        b.bind(a);
+
+        System.out.println(b.get());
         
-        myClass.setHoge(2.0);
+        a.set(2.0);
+
+        System.out.println(b.get());
     }
 }
