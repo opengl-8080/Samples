@@ -4,17 +4,17 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class MyClass {
-    private DoubleProperty hoge = new SimpleDoubleProperty();
+    private DoubleProperty value = new SimpleDoubleProperty();
     
-    public double getHoge() {
-        return this.hoge.get();
+    public final double getValue() {
+        return this.value.get();
     }
     
-    public void setHoge(double hoge) {
-        this.hoge.set(hoge);
+    public final void setValue(double value) {
+        this.value.set(value);
     }
 
-    public DoubleProperty hogeProperty() {
-        return this.hoge;
+    public DoubleProperty valueProperty() {
+        return this.value;
     }
 }
