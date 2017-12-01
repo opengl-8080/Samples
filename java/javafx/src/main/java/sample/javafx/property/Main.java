@@ -1,14 +1,20 @@
 package sample.javafx.property;
 
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class Main {
     public static void main(String[] args) {
-        SimpleDoubleProperty a = new SimpleDoubleProperty();
+        DoubleProperty a = new SimpleDoubleProperty(1.0);
+        DoubleProperty b = new SimpleDoubleProperty(2.0);
+
+        DoubleBinding sum = a.add(b);
+
+        System.out.println("sum=" + sum.get());
         
-        a.addListener(System.out::println);
-        
-        a.set(1.0);
-        a.set(2.0);
+        a.set(3.0);
+
+        System.out.println("sum=" + sum.get());
     }
 }
