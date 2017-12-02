@@ -6,22 +6,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 public class Main {
     public static void main(String[] args) {
-        DoubleProperty a = new SimpleDoubleProperty(1.0);
-        DoubleProperty b = new SimpleDoubleProperty(2.0);
+        DoubleProperty a = new SimpleDoubleProperty(2.0);
+        DoubleBinding binding = a.add(3).multiply(2).subtract(4.0).divide(3.0);
 
-        DoubleBinding sum = a.add(b);
-        sum.addListener((observableValue, oldValue, newValue) -> {
-            System.out.println("変更されました(oldValue=" + oldValue + ", newValue=" + newValue + ")");
-        });
-
-        System.out.println("sum=" + sum);
-        System.out.println("sum.get()=" + sum.get());
-        System.out.println("sum=" + sum);
+        System.out.println("((2.0 + 3) * 2 - 4.0) / 3.0 = " + binding.get());
         
-        a.set(3.0);
+        a.set(5.0);
 
-        System.out.println("sum=" + sum);
-        System.out.println("sum.get()=" + sum.get());
-        System.out.println("sum=" + sum);
+        System.out.println("((5.0 + 3) * 2 - 4.0) / 3.0 = " + binding.get());
     }
 }
