@@ -10,6 +10,9 @@ public class Main {
         DoubleProperty b = new SimpleDoubleProperty(2.0);
 
         DoubleBinding sum = a.add(b);
+        sum.addListener((observableValue, oldValue, newValue) -> {
+            System.out.println("変更されました(oldValue=" + oldValue + ", newValue=" + newValue + ")");
+        });
 
         System.out.println("sum=" + sum);
         System.out.println("sum.get()=" + sum.get());
