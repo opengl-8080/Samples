@@ -11,10 +11,14 @@ public class Main {
 
         DoubleBinding sum = a.add(b);
 
-        System.out.println("sum=" + sum.get());
+        System.out.println("sum=" + sum);
+        System.out.println("sum.get()=" + sum.get());
+        System.out.println("sum=" + sum);
         
         a.set(3.0);
 
-        System.out.println("sum=" + sum.get());
+        System.out.println("sum=" + sum);
+        System.out.println("sum.get()=" + sum.get());
+        System.out.println("sum=" + sum);
     }
 }
