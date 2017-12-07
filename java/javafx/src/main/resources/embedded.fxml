@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label layoutX="64.0" layoutY="74.0" text="Embedded">
+
+<BorderPane prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.EmbeddedController">
+   <center>
+      <Label fx:id="label" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Embedded">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-   </children>
-</Pane>
+   </center>
+</BorderPane>
