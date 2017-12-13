@@ -2,17 +2,27 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="316.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <fx:define>
       <fx:include fx:id="embeddedPane" source="embedded.fxml" />
    </fx:define>
    <center>
-      <Button mnemonicParsing="false" onAction="#start" text="Start" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Button>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#startTask" text="Start Task">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#startService" text="Start Service">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
    </center>
 </BorderPane>
