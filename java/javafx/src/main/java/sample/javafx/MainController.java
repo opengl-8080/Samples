@@ -1,15 +1,24 @@
 package sample.javafx;
 
-import javafx.fxml.Initializable;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+public class MainController {
 
-public class MainController implements Initializable {
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("thread = " + Thread.currentThread().getName());
+    @FXML
+    private Button button;
+    
+    @FXML
+    public void click() {
+        new Thread(() -> {
+            System.out.println("thread = " + Thread.currentThread().getName());
+            
+            Platform.runLater(() -> {
+                System.out.println("runLater thread = " + Thread.currentThread().getName());
+                button.setText("hoge");
+            });
+        }).start();
     }
 //    
 //    @FXML
