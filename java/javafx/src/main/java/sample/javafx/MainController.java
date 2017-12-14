@@ -16,10 +16,15 @@ public class MainController {
 
             @Override
             protected String call() throws Exception {
+                this.updateMessage("foo");
                 System.out.println(Thread.currentThread().getName());
                 return "hoge";
             }
         };
+
+        task.setOnSucceeded(e -> {
+            System.out.println("succeeded thread = " + Thread.currentThread().getName());
+        });
 
         Thread thread = new Thread(task);
         System.out.println("begin thread");
