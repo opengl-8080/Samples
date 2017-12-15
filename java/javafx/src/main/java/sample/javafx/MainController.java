@@ -28,13 +28,14 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.startButton.disableProperty().bind(this.service.runningProperty());
         this.stopButton.disableProperty().bind(this.service.runningProperty().not());
-        this.progressBar.progressProperty().bind(this.service.progressProperty());
         this.statusLabel.textProperty().bind(this.service.messageProperty());
+        this.progressBar.setProgress(0.0);
     }
     
     @FXML
     public void start() {
         this.service.restart();
+        this.progressBar.progressProperty().bind(this.service.progressProperty());
     }
     
     @FXML
