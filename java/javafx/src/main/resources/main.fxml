@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="316.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <fx:define>
       <fx:include fx:id="embeddedPane" source="embedded.fxml" />
    </fx:define>
    <center>
-      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" spacing="30.0">
          <children>
-            <Button fx:id="button" mnemonicParsing="false" onAction="#click" text="Start Task">
+            <Button fx:id="startButton" mnemonicParsing="false" onAction="#start" text="Start">
                <font>
                   <Font size="25.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="Start Service">
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stop" text="Stop">
                <font>
                   <Font size="25.0" />
                </font>
             </Button>
          </children>
-      </VBox>
+      </HBox>
    </center>
+   <bottom>
+      <Label fx:id="statusLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="stop" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="34.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </bottom>
+   <top>
+      <ProgressBar fx:id="progressBar" prefHeight="30.0" prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+      </ProgressBar>
+   </top>
 </BorderPane>

@@ -1,73 +1,82 @@
 package sample.javafx;
 
-import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 
-public class MainController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainController implements Initializable {
 
     @FXML
-    private Button button;
+    private ProgressBar progressBar;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Button startButton;
+    @FXML
+    private Button stopButton;
+    
+    private Service<Void> service = new MyService();
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.startButton.disableProperty().bind(this.service.runningProperty());
+        this.stopButton.disableProperty().bind(this.service.runningProperty().not());
+        this.progressBar.progressProperty().bind(this.service.progressProperty());
+        this.statusLabel.textProperty().bind(this.service.messageProperty());
+    }
     
     @FXML
-    public void click() {
-        new Thread(() -> {
-            System.out.println("thread = " + Thread.currentThread().getName());
-            
-            Platform.runLater(() -> {
-                System.out.println("runLater thread = " + Thread.currentThread().getName());
-                button.setText("hoge");
-            });
-        }).start();
+    public void start() {
+        this.service.restart();
     }
-//    
-//    @FXML
-//    public void startTask() throws ExecutionException, InterruptedException {
-//        System.out.println("Main Thread = " + Thread.currentThread().getName());
-//        
-//        Task<String> task = new Task<String>() {
-//
-//            @Override
-//            protected String call() throws Exception {
-//                this.updateMessage("foo");
-//                System.out.println(Thread.currentThread().getName());
-//                return "hoge";
-//            }
-//        };
-//
-//        task.setOnSucceeded(e -> {
-//            System.out.println("succeeded thread = " + Thread.currentThread().getName());
-//        });
-//
-//        Thread thread = new Thread(task);
-//        System.out.println("begin thread");
-//        thread.start();
-//
-//        String result = task.get();
-//        System.out.println("end thread. result=" + result);
-//    }
-//    
-//    @FXML
-//    public void startService() {
-//        Service<String> service = new Service<String>() {
-//            @Override
-//            protected Task<String> createTask() {
-//                return new Task<String>() {
-//
-//                    @Override
-//                    protected String call() throws Exception {
-//                        System.out.println(Thread.currentThread().getName());
-//                        return "fuga";
-//                    }
-//                };
-//            }
-//        };
-//
-//        System.out.println("start service");
-//        service.start();
-//        service.setOnSucceeded(e -> {
-//            System.out.println("value=" + service.getValue());
-//            System.out.println("thread = " + Thread.currentThread().getName());
-//        });
-//    }
+    
+    @FXML
+    public void stop() {
+        this.service.cancel();
+    }
+
+    private static class MyService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+            return new MyTask();
+        }
+    }
+    
+    private static class MyTask extends Task<Void> {
+        
+        @Override
+        protected Void call() throws Exception {
+            int max = 100000000;
+            for (int i=0; i<=max && !this.isCancelled(); i++) {
+                this.updateProgress(i, max);
+            }
+            return null;
+        }
+
+        @Override
+        protected void running() {
+            super.running();
+            updateMessage("実行中です...");
+        }
+
+        @Override
+        protected void cancelled() {
+            super.cancelled();
+            updateMessage("キャンセルされました");
+        }
+
+        @Override
+        protected void succeeded() {
+            super.succeeded();
+            updateMessage("正常終了しました");
+        }
+    }
 }
