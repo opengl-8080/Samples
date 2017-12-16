@@ -1,7 +1,6 @@
 package sample.javafx;
 
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -10,6 +9,9 @@ import javafx.scene.control.ProgressBar;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MainController implements Initializable {
 
@@ -21,63 +23,64 @@ public class MainController implements Initializable {
     private Button startButton;
     @FXML
     private Button stopButton;
-    
-    private Service<Void> service = new MyService();
 
+    private ExecutorService executorService = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        return thread;
+    });
+    private Future<Void> future;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.startButton.disableProperty().bind(this.service.runningProperty());
-        this.stopButton.disableProperty().bind(this.service.runningProperty().not());
-        this.statusLabel.textProperty().bind(this.service.messageProperty());
+        this.changeButtonStatusToStopped();
         this.progressBar.setProgress(0.0);
+        this.statusLabel.setText("");
     }
     
     @FXML
     public void start() {
-        this.service.restart();
-        this.progressBar.progressProperty().bind(this.service.progressProperty());
+        this.future = this.executorService.submit(() -> {
+            final long max = 1000000000L;
+            final long interval = max / 20L;
+            
+            for (long i=0; i<=max; i++) {
+                if (Thread.currentThread().isInterrupted()) {
+                    Platform.runLater(() -> this.statusLabel.setText("キャンセルされました"));
+                    return null;
+                }
+                
+                if (i%interval == 0) {
+                    double progress = (double)i/max;
+                    Platform.runLater(() -> this.progressBar.setProgress(progress));
+                }
+            }
+            
+            Platform.runLater(() -> {
+                this.statusLabel.setText("完了しました");
+                this.changeButtonStatusToStopped();
+            });
+            
+            return null;
+        });
+        
+        this.changeButtonStatusToRunning();
+        this.statusLabel.setText("実行中です...");
     }
     
     @FXML
     public void stop() {
-        this.service.cancel();
-    }
-
-    private static class MyService extends Service<Void> {
-
-        @Override
-        protected Task<Void> createTask() {
-            return new MyTask();
-        }
+        this.future.cancel(true);
+        this.changeButtonStatusToStopped();
     }
     
-    private static class MyTask extends Task<Void> {
-        
-        @Override
-        protected Void call() throws Exception {
-            int max = 100000000;
-            for (int i=0; i<=max && !this.isCancelled(); i++) {
-                this.updateProgress(i, max);
-            }
-            return null;
-        }
+    private void changeButtonStatusToRunning() {
+        this.startButton.setDisable(true);
+        this.stopButton.setDisable(false);
+    }
 
-        @Override
-        protected void running() {
-            super.running();
-            updateMessage("実行中です...");
-        }
-
-        @Override
-        protected void cancelled() {
-            super.cancelled();
-            updateMessage("キャンセルされました");
-        }
-
-        @Override
-        protected void succeeded() {
-            super.succeeded();
-            updateMessage("正常終了しました");
-        }
+    private void changeButtonStatusToStopped() {
+        this.startButton.setDisable(false);
+        this.stopButton.setDisable(true);
     }
 }
