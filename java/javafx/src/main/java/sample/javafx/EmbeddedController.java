@@ -16,16 +16,16 @@ public class EmbeddedController implements Initializable {
     
     @FXML
     private Label label;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        StringBinding output = this.count.asString("count = %d");
-        this.label.textProperty().bind(output);
-    }
     
     @FXML
     public void countUp() {
         int now = this.count.get();
         this.count.set(now + 1);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        StringBinding output = this.count.asString("count = %d");
+        this.label.textProperty().bind(output);
     }
 }
