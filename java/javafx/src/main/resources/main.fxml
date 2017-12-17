@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="136.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <fx:define>
       <fx:include fx:id="embeddedPane" source="embedded.fxml" />
    </fx:define>
    <center>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" spacing="30.0">
-         <children>
-            <ProgressBar fx:id="progressBar" prefHeight="30.0" prefWidth="200.0" progress="0.0" />
-         </children>
-      </HBox>
+      <Button mnemonicParsing="false" onAction="#openOtherWindow" text="Open Other Window" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
