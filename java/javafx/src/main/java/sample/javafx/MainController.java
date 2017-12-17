@@ -1,16 +1,16 @@
 package sample.javafx;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ProgressBar;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-    
-    private Worker worker;
+    @FXML
+    private ProgressBar progressBar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -18,27 +18,17 @@ public class MainController implements Initializable {
 
             @Override
             protected Void call() throws Exception {
-                System.out.println("start...");
                 final long max = 100000000L;
                 
-                for (long i=0; i<max; i++) {
-                    if (this.isCancelled()) {
-                        System.out.println("cancelled!!");
-                        return null;
-                    }
+                for (long i=0; i<=max; i++) {
+                    this.updateProgress(i, max);
                 }
-
-                System.out.println("finished");
+                
                 return null;
             }
         };
         
-        this.worker = task;
+        this.progressBar.progressProperty().bind(task.progressProperty());
         new Thread(task).start();
-    }
-    
-    @FXML
-    public void stop() {
-        this.worker.cancel();
     }
 }
