@@ -12,7 +12,7 @@
    <center>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" spacing="30.0">
          <children>
-            <Button fx:id="startButton" mnemonicParsing="false" onAction="#start" text="Start">
+            <Button mnemonicParsing="false" onAction="#stop" text="Stop">
                <font>
                   <Font size="25.0" />
                </font>
