@@ -1,20 +1,17 @@
 package sample.javafx.property;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class MyClass {
     private DoubleProperty value = new SimpleDoubleProperty();
     
     public final double getValue() {
-        return this.value.get();
+        return this.value.getValue();
     }
     
-    public final void setValue(double value) {
-        this.value.set(value);
-    }
-
-    public DoubleProperty valueProperty() {
+    public final ReadOnlyDoubleProperty valueProperty() {
         return this.value;
     }
 }
