@@ -1,5 +1,6 @@
 package sample.javafx;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
@@ -16,25 +17,20 @@ public class MainController {
     @FXML
     public void start() throws IOException {
         MyTask task = new MyTask();
-        this.label.textProperty().bind(task.textProperty());
+        this.label.textProperty().bind(task.valueProperty());
         
         new Thread(task).start();
     }
     
-    private static class MyTask extends Task<Void> {
-
-        private StringProperty text = new SimpleStringProperty();
-
-        public StringProperty textProperty() {
-            return this.text;
-        }
+    private static class MyTask extends Task<String> {
 
         @Override
-        protected Void call() throws Exception {
+        protected String call() throws Exception {
+            for (int i=0; i<100000000; i++) {
+                this.updateValue("i=" + i);
+            }
             
-            this.text.set("hello");
-            
-            return null;
+            return "finished!!";
         }
     }
 }
