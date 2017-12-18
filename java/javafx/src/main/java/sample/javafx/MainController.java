@@ -1,36 +1,40 @@
 package sample.javafx;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class MainController {
 
-    private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
+    @FXML
+    private Label label;
 
     @FXML
-    public void openOtherWindow() throws IOException {
-        URL fxml = this.getClass().getResource("/other.fxml");
-        FXMLLoader loader = new FXMLLoader(fxml);
-        Pane pane = loader.load();
+    public void start() throws IOException {
+        MyTask task = new MyTask();
+        this.label.textProperty().bind(task.textProperty());
+        
+        new Thread(task).start();
+    }
+    
+    private static class MyTask extends Task<Void> {
 
-        Scene scene = new Scene(pane);
+        private StringProperty text = new SimpleStringProperty();
 
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.initOwner(this.stage);
-        stage.initModality(Modality.WINDOW_MODAL); // ★Modality を設定
+        public StringProperty textProperty() {
+            return this.text;
+        }
 
-        stage.showAndWait();
+        @Override
+        protected Void call() throws Exception {
+            
+            this.text.set("hello");
+            
+            return null;
+        }
     }
 }

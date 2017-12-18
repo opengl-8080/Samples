@@ -20,8 +20,6 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(url);
 
         Parent root = loader.load();
-        MainController controller = loader.getController();
-        controller.setStage(primaryStage);
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("my-style.css");
