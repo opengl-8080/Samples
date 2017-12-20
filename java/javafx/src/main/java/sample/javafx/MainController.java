@@ -8,21 +8,19 @@ import java.io.IOException;
 public class MainController {
 
     @FXML
-    public void throwException() throws IOException {
-        MyTask task = new MyTask();
-        task.setOnFailed(event -> {
-            Throwable exception = task.getException();
-            System.out.println("exception=" + exception);
-        });
+    public void start() throws IOException {
+        Task<Void> task = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                return null;
+            }
+        };
+        
+        task.setOnScheduled(event -> System.out.println("scheduled thread=" + Thread.currentThread().getName()));
+        task.setOnRunning(event -> System.out.println("running thread=" + Thread.currentThread().getName()));
+        task.setOnSucceeded(event -> System.out.println("succeeded thread=" + Thread.currentThread().getName()));
         
         new Thread(task).start();
-    }
-    
-    private static class MyTask extends Task<Void> {
-
-        @Override
-        protected Void call() throws Exception {
-            throw new RuntimeException("test");
-        }
     }
 }

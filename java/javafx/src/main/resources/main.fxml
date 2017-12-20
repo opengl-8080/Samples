@@ -9,7 +9,7 @@
       <fx:include fx:id="embeddedPane" source="embedded.fxml" />
    </fx:define>
    <center>
-      <Button mnemonicParsing="false" onAction="#throwException" text="Throw" BorderPane.alignment="CENTER">
+      <Button mnemonicParsing="false" onAction="#start" text="Throw" BorderPane.alignment="CENTER">
          <font>
             <Font size="20.0" />
          </font></Button>
