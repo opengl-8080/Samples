@@ -13,13 +13,14 @@ public class MainController {
 
             @Override
             protected Void call() throws Exception {
-                return null;
+                throw new RuntimeException("test");
             }
         };
         
-        task.setOnScheduled(event -> System.out.println("scheduled thread=" + Thread.currentThread().getName()));
-        task.setOnRunning(event -> System.out.println("running thread=" + Thread.currentThread().getName()));
-        task.setOnSucceeded(event -> System.out.println("succeeded thread=" + Thread.currentThread().getName()));
+        task.setOnFailed(event -> {
+            Throwable exception = task.exceptionProperty().get();
+            System.out.println("exception=" + exception);
+        });
         
         new Thread(task).start();
     }
