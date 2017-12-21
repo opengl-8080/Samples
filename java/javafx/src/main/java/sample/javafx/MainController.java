@@ -5,10 +5,15 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 public class MainController {
 
     private Service<Void> service = new Service<Void>() {
+        {
+            this.setExecutor(Executors.newFixedThreadPool(3));
+        }
+        
         @Override
         protected Task<Void> createTask() {
             return new Task<Void>() {
