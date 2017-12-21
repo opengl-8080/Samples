@@ -11,12 +11,11 @@ public class MainController {
     private Service<Void> service = new Service<Void>() {
         @Override
         protected Task<Void> createTask() {
-            System.out.println("Service.createTask()");
-            
             return new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    System.out.println("Task.call()");
+                    Thread thread = Thread.currentThread();
+                    System.out.println("thread.name = " + thread.getName() + ", daemon = " + thread.isDaemon());
                     return null;
                 }
             };
@@ -25,7 +24,6 @@ public class MainController {
     
     @FXML
     public void start() throws IOException {
-        System.out.println("restart");
         this.service.restart();
     }
 }
