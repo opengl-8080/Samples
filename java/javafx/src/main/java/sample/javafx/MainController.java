@@ -3,24 +3,26 @@ package sample.javafx;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 
 import java.io.IOException;
-import java.util.concurrent.Executors;
 
 public class MainController {
+    @FXML
+    private ProgressBar progressBar;
 
     private Service<Void> service = new Service<Void>() {
-        {
-            this.setExecutor(Executors.newFixedThreadPool(3));
-        }
         
         @Override
         protected Task<Void> createTask() {
             return new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    Thread thread = Thread.currentThread();
-                    System.out.println("thread.name = " + thread.getName() + ", daemon = " + thread.isDaemon());
+                    int max = 10000000;
+                    for (int i=0; i<max; i++) {
+                        this.updateProgress(i, max);
+                    }
+                    
                     return null;
                 }
             };
@@ -30,5 +32,6 @@ public class MainController {
     @FXML
     public void start() throws IOException {
         this.service.restart();
+        this.progressBar.progressProperty().bind(this.service.progressProperty());
     }
 }
