@@ -1,20 +1,21 @@
 package sample.javafx.property;
 
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 
 public class MyClass {
-    private ReadOnlyDoubleWrapper value = new ReadOnlyDoubleWrapper();
-    
-    public final double getValue() {
-        return this.value.getValue();
+    private ListProperty<String> list = new SimpleListProperty<>();
+
+    public void setList(ObservableList<String> list) {
+        this.list.set(list);
     }
-    
-    public final ReadOnlyDoubleProperty valueProperty() {
-        return this.value.getReadOnlyProperty();
+
+    public ObservableList<String> getList() {
+        return list.get();
     }
-    
-    public void updateValue() {
-        this.value.set(99.9);
+
+    public ListProperty<String> listProperty() {
+        return list;
     }
 }
