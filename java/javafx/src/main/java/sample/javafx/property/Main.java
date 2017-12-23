@@ -7,23 +7,21 @@ import javafx.collections.ObservableList;
 public class Main {
     public static void main(String[] args) {
         ObservableList<String> list
-            = FXCollections.observableArrayList(
-                    "one", "two", "three", "four", "five", "six", "seven");
+            = FXCollections.observableArrayList("aaa", "ccc", "bbb", "eee", "ddd", "fff");
         
         list.addListener((Change<? extends String> change) -> {
             System.out.println("==========================================");
-            System.out.println("list=" + change.getList());
+            System.out.println("new list=" + change.getList());
             while (change.next()) {
-                System.out.println("----------------------------------");
-                System.out.println("from=" + change.getFrom());
-                System.out.println("to=" + change.getTo());
-                System.out.println("removed=" + change.getRemoved());
-                System.out.println("removedSize=" + change.getRemovedSize());
+                System.out.println("permutated=" + change.wasPermutated());
+                for (int oldIndex=change.getFrom(); oldIndex<change.getTo(); oldIndex++) {
+                    int newIndex = change.getPermutation(oldIndex);
+                    System.out.println("old(" + oldIndex + ") -> new(" + newIndex + ")");
+                }
             }
         });
 
-        list.remove("three");
-        list.removeAll("two", "seven");
-        list.retainAll("one", "six");
+        System.out.println("old list=" + list);
+        list.sort(String::compareTo);
     }
 }
