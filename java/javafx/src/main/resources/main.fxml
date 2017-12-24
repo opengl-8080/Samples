@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<VBox style="-fx-background-color: darkblue; -fx-padding: 30px;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<VBox spacing="20.0" style="-fx-background-color: darkblue; -fx-padding: 30px;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <children>
-      <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <children>
+      <BorderPane fx:id="pane" style="-fx-background-color: red; -fx-padding: 10px;">
+         <center>
             <Label fx:id="label" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果あり">
                <font>
                   <Font name="System Bold" size="50.0" />
                </font>
             </Label>
-         </children>
-      </Pane>
-      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果なし">
-         <font>
-            <Font name="System Bold" size="50.0" />
-         </font>
-      </Label>
+         </center>
+      </BorderPane>
+      <BorderPane style="-fx-background-color: red; -fx-padding: 10px;">
+         <center>
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果なし">
+               <font>
+                  <Font name="System Bold" size="50.0" />
+               </font>
+            </Label>
+         </center>
+      </BorderPane>
    </children>
 </VBox>
