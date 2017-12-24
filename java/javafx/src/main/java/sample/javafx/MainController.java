@@ -2,7 +2,7 @@ package sample.javafx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.MotionBlur;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -15,10 +15,9 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MotionBlur motionBlur = new MotionBlur();
-        motionBlur.setAngle(45.0);
-        motionBlur.setRadius(40.0);
+        GaussianBlur gaussianBlur = new GaussianBlur();
+        gaussianBlur.setRadius(10.0);
         
-        this.pane.setEffect(motionBlur);
+        this.pane.setEffect(gaussianBlur);
     }
 }
