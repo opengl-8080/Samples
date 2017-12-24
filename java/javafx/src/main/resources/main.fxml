@@ -8,7 +8,7 @@
 
 <VBox spacing="20.0" style="-fx-background-color: darkblue; -fx-padding: 30px;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <children>
-      <BorderPane fx:id="pane" style="-fx-background-color: red; -fx-padding: 10px;">
+      <BorderPane fx:id="pane" style="-fx-padding: 10px;">
          <center>
             <Label fx:id="label" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果あり">
                <font>
@@ -17,7 +17,7 @@
             </Label>
          </center>
       </BorderPane>
-      <BorderPane style="-fx-background-color: red; -fx-padding: 10px;">
+      <BorderPane style="-fx-padding: 10px;">
          <center>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果なし">
                <font>
