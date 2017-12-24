@@ -2,7 +2,7 @@ package sample.javafx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.Bloom;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -15,7 +15,10 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Bloom bloom = new Bloom();
-        this.pane.setEffect(bloom);
+        BoxBlur boxBlur = new BoxBlur();
+        boxBlur.setWidth(5);
+        boxBlur.setHeight(5);
+        
+        this.pane.setEffect(boxBlur);
     }
 }
