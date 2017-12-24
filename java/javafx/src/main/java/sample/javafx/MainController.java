@@ -1,61 +1,51 @@
 package sample.javafx;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
+import javafx.scene.control.Label;
 
-import java.net.URL;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
-public class MainController implements Initializable {
-    @FXML
-    private TextField textField;
+public class MainController {
     
-    private ObjectProperty<LocalDate> value = new SimpleObjectProperty<>(LocalDate.of(2017, 1, 1));
+    @FXML
+    private Label label;
+    
+    @FXML
+    public void start() {
+        MyTask myTask = new MyTask();
+        this.label.textProperty().bind(myTask.listProperty().asString());
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd");
-        
-        this.textField.textProperty().bindBidirectional(this.value, new StringConverter<LocalDate>() {
-            @Override
-            public String toString(LocalDate date) {
-                if (date == null) {
-                    return "";
-                }
+        Thread thread = new Thread(myTask);
+        thread.setDaemon(true);
+        thread.start();
+    }
+    
+    private static class MyTask extends Task<Void> {
+        private ReadOnlyListWrapper<String> list = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+
+        public final ObservableList<String> getList() {
+            return list.get();
+        }
+
+        public ReadOnlyListProperty<String> listProperty() {
+            return list.getReadOnlyProperty();
+        }
+
+        @Override
+        protected Void call() throws Exception {
+            for (int i=0; i<10; i++) {
+                String value = String.valueOf(i);
+                Platform.runLater(() -> this.list.add(value));
                 
-                try {
-                    return formatter.format(date);
-                } catch (DateTimeException e) {
-                    return "";
-                }
+                TimeUnit.SECONDS.sleep(1);
             }
-
-            @Override
-            public LocalDate fromString(String text) {
-                try {
-                    return LocalDate.parse(text, formatter);
-                } catch (DateTimeParseException e) {
-                    return null;
-                }
-            }
-        });
-    }
-    
-    @FXML
-    public void checkValue() {
-        System.out.println("value=" + value.getValue());
-    }
-    
-    @FXML
-    public void resetValue() {
-        this.value.set(LocalDate.of(2017, 1, 1));
+            return null;
+        }
     }
 }
