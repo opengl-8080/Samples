@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="350.0" spacing="10.0" style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<VBox style="-fx-background-color: darkblue; -fx-padding: 30px;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <children>
-      <Label fx:id="label" text="Label" />
-      <Button mnemonicParsing="false" onAction="#start" text="Reset Value">
+      <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label fx:id="label" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果あり">
+               <font>
+                  <Font name="System Bold" size="50.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-text-fill: yellow;" text="視覚効果なし">
          <font>
-            <Font size="20.0" />
+            <Font name="System Bold" size="50.0" />
          </font>
-      </Button>
+      </Label>
    </children>
 </VBox>
