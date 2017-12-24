@@ -1,25 +1,27 @@
 package sample.javafx.property;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
+import javafx.collections.MapChangeListener.Change;
+import javafx.collections.ObservableMap;
 
 public class Main {
     public static void main(String[] args) {
-        ObservableList<String> list = FXCollections.observableArrayList("one", "two", "three");
-        FilteredList<String> filteredList = list.filtered(e -> e.contains("e"));
-
-        System.out.println("list=" + list);
-        System.out.println("filteredList=" + filteredList);
+        ObservableMap<String, String> map = FXCollections.observableHashMap();
+        map.put("foo", "FOO");
+        map.put("bar", "BAR");
         
-        list.addAll("four", "five");
-
-        System.out.println("list=" + list);
-        System.out.println("filteredList=" + filteredList);
-
-        filteredList.setPredicate(e -> e.contains("f"));
-
-        System.out.println("list=" + list);
-        System.out.println("filteredList=" + filteredList);
+        map.addListener((Change<? extends String, ? extends String> change) -> {
+            System.out.println("==============================");
+            System.out.println("map=" + change.getMap());
+            System.out.println("key=" + change.getKey());
+            System.out.println("added=" + change.wasAdded());
+            System.out.println("valueAdded=" + change.getValueAdded());
+            System.out.println("removed=" + change.wasRemoved());
+            System.out.println("valueRemoved=" + change.getValueRemoved());
+        });
+        
+        map.put("fizz", "FIZZ");
+        map.put("bar", "BARBAR");
+        map.remove("foo");
     }
 }
