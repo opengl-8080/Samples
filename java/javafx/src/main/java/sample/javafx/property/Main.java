@@ -1,17 +1,16 @@
 package sample.javafx.property;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javafx.util.Duration;
 
 public class Main {
     public static void main(String[] args) {
-        Path music = Paths.get("./media/music.m4a");
-        Media media = new Media(music.toUri().toString());
-        MediaPlayer player = new MediaPlayer(media);
+        Duration duration = new Duration(90000.0);
+        System.out.println("duration=" + duration);
+        System.out.println("duration.seconds=" + duration.toSeconds());
+        System.out.println("duration.minutes=" + duration.toMinutes());
 
-        player.play();
+        Duration oneMinute = Duration.seconds(60);
+        System.out.println("oneMinute=" + oneMinute);
+        System.out.println("oneMinute.minutes=" + oneMinute.toMinutes());
     }
 }
