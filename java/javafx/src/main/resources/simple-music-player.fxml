@@ -10,22 +10,21 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.SimpleMusicPlayerController">
    <center>
       <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#start" text="Start">
+            <Button fx:id="playButton" mnemonicParsing="false" onAction="#play" text="Play">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#stop" text="Stop">
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stop" text="Stop">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#pause" text="Pause">
+            <Button fx:id="pauseButton" mnemonicParsing="false" onAction="#pause" text="Pause">
                <font>
                   <Font size="20.0" />
                </font>
@@ -34,11 +33,11 @@
       </HBox>
    </center>
    <bottom>
-      <GridPane>
+      <GridPane maxWidth="1.7976931348623157E308">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
-            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -51,17 +50,36 @@
                </font>
             </Label>
             <Slider fx:id="volumeSlider" blockIncrement="0.05" majorTickUnit="0.25" max="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
-            <Label fx:id="volumeLabel" text="0.00" GridPane.columnIndex="2">
+            <Label fx:id="volumeLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="0.00" GridPane.columnIndex="2">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label text="Seek" GridPane.rowIndex="1">
+            <Label maxWidth="1.7976931348623157E308" text="Seek" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
             <Slider fx:id="seekSlider" blockIncrement="0.05" max="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <Label fx:id="currentTimeLabel" maxHeight="1.7976931348623157E308" text="00:00">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label text="/">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="totalTimeLabel" maxHeight="1.7976931348623157E308" text="00:00">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
          </children>
       </GridPane>
    </bottom>
