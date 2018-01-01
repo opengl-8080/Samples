@@ -13,6 +13,7 @@ public class MainController {
     @FXML
     public void openFileDialog() {
         FileChooser chooser = new FileChooser();
+        chooser.setTitle("ふぁいるせんたく");
         File file = chooser.showOpenDialog(this.stage);
         System.out.println("file=" + file);
     }
