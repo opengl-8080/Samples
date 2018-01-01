@@ -9,15 +9,15 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu text="_File">
+          <Menu text="ファイル (_F)">
             <items>
-                  <MenuItem onAction="#open" text="_Open" />
-              <MenuItem onAction="#close" text="_Close" />
+                  <MenuItem onAction="#open" text="開く (_O)" />
+              <MenuItem onAction="#close" text="閉じる (_C)" />
             </items>
           </Menu>
-            <Menu text="_View">
+            <Menu text="表示 (_V)">
               <items>
-                <MenuItem onAction="#fullScreen" text="Full _Screen" />
+                <MenuItem onAction="#fullScreen" text="全画面表示 (_S)" />
               </items>
             </Menu>
         </menus>
