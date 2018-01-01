@@ -16,13 +16,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        URL url = this.getClass().getResource("/simple-music-player.fxml");
+        URL url = this.getClass().getResource("/main.fxml");
         FXMLLoader loader = new FXMLLoader(url);
 
         Parent root = loader.load();
+        MainController controller = loader.getController();
+        controller.setStage(primaryStage);
         
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("my-style.css");
         primaryStage.setScene(scene);
 
         primaryStage.show();

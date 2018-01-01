@@ -1,19 +1,23 @@
 package sample.javafx;
 
-import javafx.fxml.Initializable;
-import javafx.scene.media.AudioClip;
+import javafx.fxml.FXML;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ResourceBundle;
+import java.io.File;
 
-public class MainController implements Initializable {
+public class MainController {
+    
+    private Stage stage;
+    
+    @FXML
+    public void openFileDialog() {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(this.stage);
+        System.out.println("file=" + file);
+    }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Path music = Paths.get("./media/music2.mp3");
-        AudioClip audioClip = new AudioClip(music.toUri().toString());
-        audioClip.stop();
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
