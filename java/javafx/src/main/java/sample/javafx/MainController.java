@@ -5,7 +5,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.List;
 
 public class MainController {
     
@@ -14,12 +13,8 @@ public class MainController {
     @FXML
     public void openFileDialog() {
         FileChooser chooser = new FileChooser();
-        List<File> files = chooser.showOpenMultipleDialog(this.stage);
-        if (files == null) {
-            System.out.println("files=" + files);
-        } else {
-            files.forEach(System.out::println);
-        }
+        File file = chooser.showSaveDialog(this.stage);
+        System.out.println("file=" + file);
     }
 
     public void setStage(Stage stage) {
