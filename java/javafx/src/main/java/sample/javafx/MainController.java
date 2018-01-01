@@ -1,12 +1,11 @@
 package sample.javafx;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.List;
 
 public class MainController {
     
@@ -15,14 +14,12 @@ public class MainController {
     @FXML
     public void openFileDialog() {
         FileChooser chooser = new FileChooser();
-        
-        ObservableList<ExtensionFilter> extensionFilters = chooser.getExtensionFilters();
-        extensionFilters.add(new ExtensionFilter("何でもあり", "*.*"));
-        extensionFilters.add(new ExtensionFilter("画像だけやで", "*.jpg", "*.jpeg", "*.png", "*.gif"));
-        extensionFilters.add(new ExtensionFilter("まさかの動画", "*.mp4"));
-        
-        File file = chooser.showOpenDialog(this.stage);
-        System.out.println("file=" + file);
+        List<File> files = chooser.showOpenMultipleDialog(this.stage);
+        if (files == null) {
+            System.out.println("files=" + files);
+        } else {
+            files.forEach(System.out::println);
+        }
     }
 
     public void setStage(Stage stage) {
