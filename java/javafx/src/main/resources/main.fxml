@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
@@ -12,15 +12,12 @@
         <menus>
           <Menu mnemonicParsing="false" text="ファイル">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#open" text="開く" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem disable="true" mnemonicParsing="false" onAction="#open" text="開く">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                     </accelerator>
+                  </MenuItem>
                   <MenuItem mnemonicParsing="false" text="閉じる" />
-                  <Menu mnemonicParsing="false" text="サブメニュー">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="ほげ" />
-                        <MenuItem mnemonicParsing="false" text="ふが" />
-                    </items>
-                  </Menu>
             </items>
           </Menu>
         </menus>
