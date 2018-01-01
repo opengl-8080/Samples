@@ -2,33 +2,24 @@
 
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu text="ラジオボタン">
-               <items>
-                  <RadioMenuItem fx:id="hogeRadioMenuItem" mnemonicParsing="false" text="ほげ">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="group1" />
-                     </toggleGroup>
-                  </RadioMenuItem>
-                  <RadioMenuItem fx:id="fugaRadioMenuItem" mnemonicParsing="false" text="ふが" toggleGroup="$group1" />
-                  <RadioMenuItem fx:id="piyoRadioMenuItem" mnemonicParsing="false" text="ぴよ" toggleGroup="$group1" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <RadioMenuItem fx:id="fizzRadioMenuItem" mnemonicParsing="false" text="fizz">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="group2" />
-                     </toggleGroup>
-                  </RadioMenuItem>
-                  <RadioMenuItem fx:id="buzzRadioMenuItem" mnemonicParsing="false" text="buzz" toggleGroup="$group2" />
-               </items>
+          <Menu text="_File">
+            <items>
+                  <MenuItem onAction="#open" text="_Open" />
+              <MenuItem onAction="#close" text="_Close" />
+            </items>
           </Menu>
+            <Menu text="_View">
+              <items>
+                <MenuItem onAction="#fullScreen" text="Full _Screen" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
