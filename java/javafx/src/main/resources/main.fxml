@@ -15,6 +15,12 @@
               <MenuItem mnemonicParsing="false" onAction="#open" text="開く" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="閉じる" />
+                  <Menu mnemonicParsing="false" text="サブメニュー">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="ほげ" />
+                        <MenuItem mnemonicParsing="false" text="ふが" />
+                    </items>
+                  </Menu>
             </items>
           </Menu>
         </menus>
