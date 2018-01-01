@@ -1,7 +1,7 @@
 package sample.javafx;
 
 import javafx.fxml.FXML;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -12,9 +12,9 @@ public class MainController {
     
     @FXML
     public void openFileDialog() {
-        FileChooser chooser = new FileChooser();
-        File file = chooser.showSaveDialog(this.stage);
-        System.out.println("file=" + file);
+        DirectoryChooser chooser = new DirectoryChooser();
+        File directory = chooser.showDialog(this.stage);
+        System.out.println("directory=" + directory);
     }
 
     public void setStage(Stage stage) {
