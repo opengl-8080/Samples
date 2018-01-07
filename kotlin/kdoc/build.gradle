@@ -18,5 +18,6 @@ apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
 
 dokka {
-    outputFormat = 'gfm'
+    outputFormat = 'html'
+    samples = ["samples/method-sample.kt"]
 }
