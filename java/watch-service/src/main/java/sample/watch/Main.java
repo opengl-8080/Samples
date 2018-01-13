@@ -15,11 +15,16 @@ public class Main {
 
     public static void main(String[] args) {
         WatchService watcher;
+        WatchKey fooKey;
+        WatchKey barKey;
         try {
             watcher = FileSystems.getDefault().newWatchService();
 
-            Watchable path = Paths.get("./build");
-            path.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+            Watchable foo = Paths.get("./build/foo");
+            fooKey = foo.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+
+            Watchable bar = Paths.get("./build/bar");
+            barKey = bar.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -40,9 +45,19 @@ public class Main {
                 if (kind == OVERFLOW) {
                     continue;
                 }
-                
+
                 Object context = event.context();
-                System.out.println("kind=" + kind + ", context=" + context);
+
+                String directory;
+                if (watchKey == fooKey) {
+                    directory = "foo";
+                } else if (watchKey == barKey) {
+                    directory = "bar";
+                } else {
+                    directory = "unknown";
+                }
+
+                System.out.println("directory=" + directory + ", kind=" + kind + ", context=" + context);
             }
             
             if (!watchKey.reset()) {
