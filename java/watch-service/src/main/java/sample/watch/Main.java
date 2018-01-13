@@ -36,6 +36,11 @@ public class Main {
 
             for (WatchEvent<?> event : watchKey.pollEvents()) {
                 Kind<?> kind = event.kind();
+                
+                if (kind == OVERFLOW) {
+                    continue;
+                }
+                
                 Object context = event.context();
                 System.out.println("kind=" + kind + ", context=" + context);
             }
