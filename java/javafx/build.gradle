@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'idea'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -19,3 +20,4 @@ jar {
         attributes("Main-Class": "sample.javafx.Main")
     }
 }
+idea.module.outputDir = file('./out/production/classes')

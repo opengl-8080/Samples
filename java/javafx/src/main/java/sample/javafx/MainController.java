@@ -1,21 +1,17 @@
 package sample.javafx;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
-public class MainController {
-    
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainController implements Initializable {
     @FXML
-    public void open() {
-        System.out.println("open");
-    }
-    
-    @FXML
-    public void close() {
-        System.out.println("close");
-    }
-    
-    @FXML
-    public void fullScreen() {
-        System.out.println("full screen");
+    private EmbeddedController embeddedController;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.embeddedController.setMessage("Hello!!");
     }
 }
