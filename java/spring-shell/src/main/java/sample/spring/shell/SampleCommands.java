@@ -10,4 +10,9 @@ public class SampleCommands {
     public void hello() {
         System.out.println("Hello Spring Shell!!");
     }
+
+    @ShellMethod(value = "with parameter")
+    public void hoge(int a, String b, double c) {
+        System.out.println("a=" + a + ", b=" + b + ", c=" + c);
+    }
 }
