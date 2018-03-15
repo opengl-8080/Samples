@@ -6,8 +6,8 @@ import org.springframework.shell.standard.ShellMethod;
 @ShellComponent
 public class SampleCommands {
     
-    @ShellMethod(value="Hello World", key={"hoge", "fuga"})
-    public void hello() {
-        System.out.println("Hello Spring Shell!!");
+    @ShellMethod("Hello World")
+    public void hello(int a, int b, int fooBar) {
+        System.out.println("a=" + a + ", b=" + b + ", fooBar=" + fooBar);
     }
 }
