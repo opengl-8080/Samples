@@ -2,13 +2,15 @@ package sample.spring.shell;
 
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @ShellComponent
 public class SampleCommands {
 
     @ShellMethod("Hello World")
-    public void hello(@ShellOption(defaultValue="true") boolean a, @ShellOption(defaultValue="false") boolean b) {
-        System.out.println("a=" + a + ", b=" + b);
+    public void hello(@Min(0) @Max(100) int a) {
+        System.out.println("a=" + a);
     }
 }
