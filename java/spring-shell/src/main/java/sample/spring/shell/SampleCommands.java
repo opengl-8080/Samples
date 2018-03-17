@@ -17,12 +17,17 @@ public class SampleCommands {
     }
     
     @ShellMethod("Good Bye")
-    @ShellMethodAvailability("checkByeAvailability")
     public void bye() {
         System.out.println("Bye!!");
     }
     
-    public Availability checkByeAvailability() {
+    @ShellMethod("lol")
+    public void lotOfLaugh() {
+        System.out.println("HAHAHAHA!!");
+    }
+    
+    @ShellMethodAvailability({"bye", "lot-of-laugh"})
+    public Availability checkAvailability() {
         return this.greeted
                 ? Availability.available()
                 : Availability.unavailable("you does not greet yet.");
