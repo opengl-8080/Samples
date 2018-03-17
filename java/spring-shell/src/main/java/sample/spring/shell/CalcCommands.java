@@ -4,8 +4,8 @@ import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
-//@ShellComponent
-//@ShellCommandGroup("My Commands")
+@ShellComponent
+@ShellCommandGroup("My Commands")
 public class CalcCommands {
     
     @ShellMethod("a + b")

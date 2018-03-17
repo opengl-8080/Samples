@@ -1,12 +1,14 @@
 package sample.spring.shell;
 
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
+@ShellCommandGroup("My Commands")
 public class GreetingCommands {
 
-    @ShellMethod(value="Hello World", group="Hello")
+    @ShellMethod("Hello World")
     public void hello() {
         System.out.println("Hello!!");
     }
