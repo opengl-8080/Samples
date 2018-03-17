@@ -3,6 +3,7 @@ package sample.spring.shell;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
 public class SampleCommands {
@@ -16,11 +17,12 @@ public class SampleCommands {
     }
     
     @ShellMethod("Good Bye")
+    @ShellMethodAvailability("checkByeAvailability")
     public void bye() {
         System.out.println("Bye!!");
     }
     
-    public Availability byeAvailability() {
+    public Availability checkByeAvailability() {
         return this.greeted
                 ? Availability.available()
                 : Availability.unavailable("you does not greet yet.");
