@@ -4,17 +4,15 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
-public class SampleCommands {
-    
-    private boolean greeted;
+public class GreetingCommands {
 
-    @ShellMethod("Hello World")
+    @ShellMethod(value="Hello World", group="Hello")
     public void hello() {
         System.out.println("Hello!!");
-        this.greeted = true;
     }
-    
-    public boolean isGreeted() {
-        return this.greeted;
+
+    @ShellMethod("Good Bye")
+    public void bye() {
+        System.out.println("Bye!!");
     }
 }
