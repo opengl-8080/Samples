@@ -18,9 +18,7 @@ repositories {
 }
 
 dependencies {
-	compile('org.springframework.shell:spring-shell-starter:2.0.0.RELEASE') {
-		exclude module: 'spring-shell-standard-commands'
-	}
+	compile('org.springframework.shell:spring-shell-starter:2.0.0.RELEASE')
 }
 
 bootJar {
