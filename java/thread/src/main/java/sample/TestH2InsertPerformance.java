@@ -28,10 +28,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  *  multi thread, individual update,     server: 257172ms
  *  multi thread,      batch update,     server: 144632ms
  */
-public class Main {
+public class TestH2InsertPerformance {
     private static final boolean singleThread = false;
     private static final boolean batchUpdate = true;
-    private static final boolean standalone = false;
+    private static final boolean standalone = true;
 
     private static final String INSERT_SQL = "insert into logs values (?, ?, ?, ?, ?)";
     
@@ -81,7 +81,7 @@ public class Main {
         dataSource.setPassword("");
         dataSource.setInitialSize(4);
         dataSource.setMaxTotal(4);
-        Main.dataSource = dataSource;
+        TestH2InsertPerformance.dataSource = dataSource;
     }
     
     private static void initServerDatabase() throws SQLException {
@@ -94,7 +94,7 @@ public class Main {
         dataSource.setPassword("");
         dataSource.setInitialSize(4);
         dataSource.setMaxTotal(4);
-        Main.dataSource = dataSource;
+        TestH2InsertPerformance.dataSource = dataSource;
     }
     
     private static void recreateTable() throws SQLException {
@@ -110,10 +110,6 @@ public class Main {
         }
     }
     
-    /**
-     * standalone:  25482ms
-     * server:     311727ms
-     */
     private static void test_multi_thread() {
         AtomicInteger counter = new AtomicInteger(0);
         List<Callable<Void>> tasks = new ArrayList<>();
@@ -139,10 +135,6 @@ public class Main {
         }
     }
     
-    /**
-     * standalone:  23692ms
-     * server:     542231ms
-     */
     private static void test_single_thread() throws SQLException {
         AtomicInteger counter = new AtomicInteger(0);
         try (Database database = new Database(dataSource.getConnection(), INSERT_SQL)) {
@@ -151,10 +143,6 @@ public class Main {
                 insertLog(database, ap, counter);
             }
         }
-    }
-    
-    interface TestBlock {
-        void execute() throws Exception;
     }
     
     private static void stopWatch(TestBlock runnable) throws Exception {
