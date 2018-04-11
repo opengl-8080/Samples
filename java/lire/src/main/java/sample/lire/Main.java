@@ -26,23 +26,32 @@ import java.text.DecimalFormat;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        deleteIndex();
         updateIndex();
         search();
     }
-    
+
+    private static void deleteIndex() throws IOException {
+        try (IndexWriter writer = LuceneUtils.createIndexWriter("index", false, LuceneUtils.AnalyzerType.WhitespaceAnalyzer);
+        ) {
+            long seqNo = writer.deleteDocuments(new Term(DocumentBuilder.FIELD_NAME_IDENTIFIER, "img/004.jpg"));
+            System.out.println("seqNo=" + seqNo);
+        }
+    }
+
     private static void updateIndex() throws IOException {
         try (DirectoryReader reader = DirectoryReader.open(FSDirectory.open(Paths.get("index")));
              IndexWriter writer = LuceneUtils.createIndexWriter("index", false, LuceneUtils.AnalyzerType.WhitespaceAnalyzer);
-         ) {
+        ) {
             GlobalDocumentBuilder globalDocumentBuilder = new GlobalDocumentBuilder(CEDD.class);
-            
+
             IndexSearcher indexSearcher = new IndexSearcher(reader);
             DecimalFormat format = new DecimalFormat("000");
-            
+
             for (int i=1; i<=47; i++) {
                 String filePath = "img/" + format.format(i) + ".jpg";
                 System.out.println(filePath);
-                
+
                 TopDocs topDocs = indexSearcher.search(new TermQuery(new Term(DocumentBuilder.FIELD_NAME_IDENTIFIER, filePath)), 1);
 
                 if (topDocs.totalHits == 0) {
@@ -56,7 +65,7 @@ public class Main {
             }
         }
     }
-    
+
     public static void search() throws IOException {
         try (DirectoryReader reader = DirectoryReader.open(FSDirectory.open(Paths.get("index")));) {
             GenericFastImageSearcher searcher = new GenericFastImageSearcher(5, CEDD.class);
@@ -81,7 +90,7 @@ public class Main {
     public static void createIndex() throws IOException {
         GlobalDocumentBuilder globalDocumentBuilder = new GlobalDocumentBuilder(CEDD.class);
         DecimalFormat format = new DecimalFormat("000");
-        
+
         try (IndexWriter writer = LuceneUtils.createIndexWriter("index", true, LuceneUtils.AnalyzerType.WhitespaceAnalyzer);) {
             for (int i=1; i<=45; i++) {
                 String filePath = "img/" + format.format(i) + ".jpg";
