@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" style="-fx-background-radius: 15; -fx-border-radius: 10; -fx-border-width: 5; -fx-border-color: black;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
-   <center>
-   </center>
-   <center>
-      <Button mnemonicParsing="false" onAction="#close" text="Close" BorderPane.alignment="CENTER">
+
+<VBox fx:controller="sample.javafx.MainController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" spacing="20.0" style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <CheckBox fx:id="checkbox" selected="true" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Hoge 表示">
          <font>
-            <Font size="18.0" />
+            <Font size="20.0" />
          </font>
-      </Button>
-   </center>
-</BorderPane>
+      </CheckBox>
+      <Label fx:id="hogeLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-padding: 10px; -fx-background-color: pink;" text="Hoge">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-padding: 10px; -fx-background-color: lightgreen;" text="Fuga">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>
