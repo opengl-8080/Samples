@@ -1,0 +1,8 @@
+.label {
+    -fx-font-size: 25pt;
+    -fx-text-fill: yellow;
+    -fx-underline: true;
+    -fx-padding: 10px;
+    -fx-background-color: skyblue;
+    -fx-font-family: consolas;
+}

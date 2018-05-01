@@ -13,9 +13,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/common.fxml"));
-        
-        loader.setController(new FugaController());
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/main.fxml"));
         
         Parent root = loader.load();
         Scene scene = new Scene(root);
