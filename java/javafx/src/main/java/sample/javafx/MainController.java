@@ -13,6 +13,8 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
     @FXML
+    private BorderPane root;
+    @FXML
     private BorderPane borderPane;
     @FXML
     private ImageView imageView;
@@ -20,6 +22,9 @@ public class MainController implements Initializable {
     public void initStage(Stage stage) {
         stage.setWidth(300);
         stage.setHeight(200);
+
+        System.out.println("[root] width=" + root.getWidth() + ", height=" + root.getHeight());
+        System.out.println("[borderPane] width=" + borderPane.getWidth() + ", height=" + borderPane.getHeight());
     }
 
     @Override

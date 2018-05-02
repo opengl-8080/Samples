@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<BorderPane fx:id="root" style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <center>
-      <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+      <BorderPane fx:id="borderPane" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+         <center>
+            <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+         </center>
+      </BorderPane>
    </center>
+   <top>
+      <Label style="-fx-padding: 10px;" text="白川郷" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="HGMinchoB" size="35.0" />
+         </font>
+      </Label>
+   </top>
 </BorderPane>
