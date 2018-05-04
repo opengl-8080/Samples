@@ -2,9 +2,10 @@ package sample.javafx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -13,26 +14,25 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
     @FXML
-    private BorderPane root;
-    @FXML
-    private BorderPane borderPane;
+    private ProgressBar progressBar;
     @FXML
     private ImageView imageView;
-    
-    public void initStage(Stage stage) {
-        stage.setWidth(300);
-        stage.setHeight(200);
 
-        System.out.println("[root] width=" + root.getWidth() + ", height=" + root.getHeight());
-        System.out.println("[borderPane] width=" + borderPane.getWidth() + ", height=" + borderPane.getHeight());
+    public void initStage(Stage stage) {
+        stage.setWidth(500);
+        stage.setHeight(400);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image image = new Image(Paths.get("./image/shirakawago.jpg").toUri().toString());
-        imageView.setImage(image);
+        progressBar.managedProperty().bind(progressBar.visibleProperty());
+        progressBar.visibleProperty().bind(progressBar.progressProperty().lessThan(1));
         
-        imageView.fitWidthProperty().bind(borderPane.widthProperty());
-        imageView.fitHeightProperty().bind(borderPane.heightProperty());
+        imageView.managedProperty().bind(imageView.visibleProperty());
+        imageView.visibleProperty().bind(progressBar.progressProperty().isEqualTo(1));
+        
+        Image image = new Image(Paths.get("./image/shirakawago.jpg").toUri().toString(), true);
+        progressBar.progressProperty().bind(image.progressProperty());
+        imageView.setImage(image);
     }
 }

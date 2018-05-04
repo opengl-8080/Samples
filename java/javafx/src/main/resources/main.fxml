@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root" style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
+<BorderPane style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.javafx.MainController">
    <center>
-      <BorderPane fx:id="borderPane" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
-         <center>
-            <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-         </center>
-      </BorderPane>
+      <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+         <children>
+            <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" progress="0.0" />
+            <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </VBox>
    </center>
-   <top>
-      <Label style="-fx-padding: 10px;" text="白川郷" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="HGMinchoB" size="35.0" />
-         </font>
-      </Label>
-   </top>
 </BorderPane>
