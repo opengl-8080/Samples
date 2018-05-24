@@ -1,0 +1,7 @@
+apply plugin: 'application'
+
+mainClassName = 'foo.Foo'
+
+dependencies {
+    compile project(':bar')
+}
