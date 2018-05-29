@@ -5,10 +5,4 @@ targetCompatibility = 10
 
 compileJava.options.encoding = 'UTF-8'
 
-jar {
-    baseName = "jigsaw-sample"
-    
-    manifest {
-        attributes("Main-Class": "sample.jigsaw.Main")
-    }
-}
+jar.baseName = "jigsaw-sample"
