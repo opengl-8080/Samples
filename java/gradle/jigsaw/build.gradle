@@ -15,8 +15,11 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 }
 
-task show {
-    doLast {
-        compileJava.classpath.each {println(it)}
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+            "--module-path", classpath.asPath
+        ]
+        classpath = files()
     }
 }
