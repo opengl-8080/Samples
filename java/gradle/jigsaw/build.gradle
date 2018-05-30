@@ -6,3 +6,17 @@ targetCompatibility = 10
 compileJava.options.encoding = 'UTF-8'
 
 jar.baseName = "jigsaw-sample"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.commons:commons-lang3:3.7'
+}
+
+task show {
+    doLast {
+        compileJava.classpath.each {println(it)}
+    }
+}
