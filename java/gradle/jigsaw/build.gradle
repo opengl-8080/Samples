@@ -39,4 +39,26 @@ run {
         classpath = files()
     }
 }
+
+
+import java.util.regex.Matcher
+startScripts {
+    doFirst {
+        classpath = files()
+        defaultJvmOpts = [
+            "--module-path", "APP_HOME_LIBS",
+            "--module", mainClassName
+        ]
+    }
+    
+    doLast {
+        File bashFile = new File(outputDir, applicationName)
+        String bashContent = bashFile.text
+        bashFile.text = bashContent.replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('$APP_HOME/lib'))
+
+        File batFile = new File(outputDir, applicationName + ".bat")
+        String batContent = batFile.text
+        batFile.text = batContent.replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('%APP_HOME%/lib'))
+    }
+}
 //*/
