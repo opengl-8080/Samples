@@ -1,9 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = 10
 targetCompatibility = 10
 
 compileJava.options.encoding = 'UTF-8'
+
+mainClassName = "sample.jigsaw.Main"
 
 jar.baseName = "jigsaw-sample"
 
@@ -24,13 +26,4 @@ compileJava {
         classpath = files()
     }
 }
-*/
-
-task jdeps(type: Exec, dependsOn: compileJava) {
-    commandLine(
-        "jdeps",
-        "--module-path", compileJava.classpath.asPath,
-        "-s",
-        compileJava.destinationDir
-    )
-}
+//*/
