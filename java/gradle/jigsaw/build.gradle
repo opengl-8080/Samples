@@ -5,7 +5,9 @@ targetCompatibility = 10
 
 compileJava.options.encoding = 'UTF-8'
 
-mainClassName = "sample.jigsaw.Main"
+ext.moduleName = "sample.jigsaw"
+
+mainClassName = "${moduleName}/sample.jigsaw.Main"
 
 jar.baseName = "jigsaw-sample"
 
@@ -17,11 +19,22 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 }
 
-/*
+//*
 compileJava {
     doFirst {
         options.compilerArgs = [
             "--module-path", classpath.asPath
+        ]
+        classpath = files()
+    }
+}
+
+
+run {
+    doFirst {
+        jvmArgs = [
+            "--module-path", classpath.asPath,
+            "--module", mainClassName
         ]
         classpath = files()
     }
