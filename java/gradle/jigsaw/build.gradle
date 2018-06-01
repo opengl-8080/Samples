@@ -29,13 +29,13 @@ compileJava {
     }
 }
 
-
 run {
     doFirst {
+        main = ""
         jvmArgs = [
-            "--module-path", classpath.asPath,
-            "--module", mainClassName
+            "--module-path", classpath.asPath
         ]
+        allJvmArgs += ["--module", mainClassName]
         classpath = files()
     }
 }

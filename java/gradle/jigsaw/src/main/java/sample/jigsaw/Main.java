@@ -1,10 +1,10 @@
 package sample.jigsaw;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello Jigsaw!! : " + RandomStringUtils.random(10, "0123456789"));
+        System.out.println("args = " + StringUtils.join(args, ","));
     }
 }
