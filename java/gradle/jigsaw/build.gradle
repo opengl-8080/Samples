@@ -31,10 +31,12 @@ compileJava {
 
 run {
     doFirst {
-        main = "--module $mainClassName"
+        main = ""
         jvmArgs = [
             "--module-path", classpath.asPath
         ]
+        args = ["--module", mainClassName]
+        args += ["foo", "bar"]
         classpath = files()
     }
 }
