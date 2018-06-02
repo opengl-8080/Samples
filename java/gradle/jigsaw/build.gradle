@@ -5,9 +5,10 @@ targetCompatibility = 10
 
 compileJava.options.encoding = 'UTF-8'
 
-ext.moduleName = "sample.jigsaw"
-
-mainClassName = "${moduleName}/sample.jigsaw.Main"
+ext {
+    moduleName = "sample.jigsaw"
+    junitModuleName = "org.junit.jupiter.api"
+}
 
 jar.baseName = "jigsaw-sample"
 
@@ -16,10 +17,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.7'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }
 
-//*
 compileJava {
     doFirst {
         options.compilerArgs = [
@@ -29,41 +29,14 @@ compileJava {
     }
 }
 
-run {
+compileTestJava {
     doFirst {
-        main = ""
-        jvmArgs = [
-            "--module-path", classpath.asPath
+        options.compilerArgs = [
+            "--module-path", classpath.asPath,
+            "--add-modules", junitModuleName,
+            "--patch-module", "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+            "--add-reads", "$moduleName=$junitModuleName"
         ]
-        args = ["--module", mainClassName]
-        args += ["foo", "bar"]
         classpath = files()
     }
 }
-
-
-import java.util.regex.Matcher
-startScripts {
-    doFirst {
-        classpath = files()
-        defaultJvmOpts = [
-            "--module-path", "APP_HOME_LIBS",
-            "--module", mainClassName
-        ]
-    }
-    
-    doLast {
-        File bashFile = new File(outputDir, applicationName)
-        String bashContent = bashFile.text
-        bashFile.text = bashContent
-                            .replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('$APP_HOME/lib'))
-                            .replace('-classpath "\\"$CLASSPATH\\"" ' + mainClassName, '')
-
-        File batFile = new File(outputDir, applicationName + ".bat")
-        String batContent = batFile.text
-        batFile.text = batContent
-                            .replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('%APP_HOME%/lib'))
-                            .replace('-classpath "%CLASSPATH%" ' + mainClassName, '')
-    }
-}
-//*/
