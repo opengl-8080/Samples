@@ -1,0 +1,10 @@
+apply plugin: 'java-library'
+
+ext {
+    moduleName = 'sample.jigsaw.bar'
+    testPackageName = 'sample.jigsaw.bar'
+}
+
+dependencies {
+    implementation "org.apache.commons:commons-lang3:3.7"
+}

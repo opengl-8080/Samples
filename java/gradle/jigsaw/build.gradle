@@ -1,57 +1,56 @@
-apply plugin: 'application'
-
-sourceCompatibility = 10
-targetCompatibility = 10
-
-compileJava.options.encoding = 'UTF-8'
-
 ext {
-    moduleName = "sample.jigsaw"
     junitModuleName = "org.junit.jupiter.api"
 }
 
-jar.baseName = "jigsaw-sample"
+subprojects {
+    apply plugin: 'java'
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
-}
-
-compileJava {
-    doFirst {
-        options.compilerArgs = [
-            "--module-path", classpath.asPath
-        ]
-        classpath = files()
-    }
-}
-
-compileTestJava {
-    doFirst {
-        options.compilerArgs = [
-            "--module-path", classpath.asPath,
-            "--add-modules", junitModuleName,
-            "--patch-module", "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
-            "--add-reads", "$moduleName=$junitModuleName"
-        ]
-        classpath = files()
-    }
-}
-
-test {
-    useJUnitPlatform()
+    sourceCompatibility = 10
+    targetCompatibility = 10
     
-    doFirst {
-        jvmArgs = [
-            '--module-path', classpath.asPath,
-            '--add-modules', 'ALL-MODULE-PATH',
-            '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
-            '--add-reads', "$moduleName=$junitModuleName",
-            "--add-opens", "$moduleName/sample.jigsaw=org.junit.platform.commons"
-        ]
-        classpath = files()
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+    
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+    }
+
+    compileJava {
+        doFirst {
+            options.compilerArgs = [
+                "--module-path", classpath.asPath
+            ]
+            classpath = files()
+        }
+    }
+
+    compileTestJava {
+        doFirst {
+            options.compilerArgs = [
+                "--module-path", classpath.asPath,
+                "--add-modules", junitModuleName,
+                "--patch-module", "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+                "--add-reads", "$moduleName=$junitModuleName"
+            ]
+            classpath = files()
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+
+        doFirst {
+            jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--add-modules', 'ALL-MODULE-PATH',
+                '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+                '--add-reads', "$moduleName=$junitModuleName",
+                "--add-opens", "$moduleName/$testPackageName=org.junit.platform.commons"
+            ]
+            classpath = files()
+        }
     }
 }

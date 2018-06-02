@@ -1,0 +1,49 @@
+apply plugin: 'application'
+
+ext {
+    moduleName = 'sample.jigsaw.foo'
+    testPackageName = 'sample.jigsaw.foo'
+}
+
+mainClassName = "${moduleName}/sample.jigsaw.foo.Main"
+
+dependencies {
+    implementation project(":bar")
+}
+
+import java.util.regex.Matcher
+
+run {
+    doFirst {
+        jvmArgs = [
+            "--module-path", classpath.asPath
+        ]
+        main = ""
+        args = ["--module", mainClassName]
+        classpath = files()
+    }
+}
+
+startScripts {
+    doFirst {
+        classpath = files()
+        defaultJvmOpts = [
+            "--module-path", "APP_HOME_LIBS",
+            "--module", mainClassName
+        ]
+    }
+
+    doLast {
+        File bashFile = new File(outputDir, applicationName)
+        String bashContent = bashFile.text
+        bashFile.text = bashContent
+                .replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('$APP_HOME/lib'))
+                .replace('-classpath "\\"$CLASSPATH\\"" ' + mainClassName, '')
+
+        File batFile = new File(outputDir, applicationName + ".bat")
+        String batContent = batFile.text
+        batFile.text = batContent
+                .replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('%APP_HOME%/lib'))
+                .replace('-classpath "%CLASSPATH%" ' + mainClassName, '')
+    }
+}
