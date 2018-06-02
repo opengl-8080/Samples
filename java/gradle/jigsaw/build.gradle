@@ -55,11 +55,15 @@ startScripts {
     doLast {
         File bashFile = new File(outputDir, applicationName)
         String bashContent = bashFile.text
-        bashFile.text = bashContent.replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('$APP_HOME/lib'))
+        bashFile.text = bashContent
+                            .replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('$APP_HOME/lib'))
+                            .replace('-classpath "\\"$CLASSPATH\\"" ' + mainClassName, '')
 
         File batFile = new File(outputDir, applicationName + ".bat")
         String batContent = batFile.text
-        batFile.text = batContent.replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('%APP_HOME%/lib'))
+        batFile.text = batContent
+                            .replaceFirst("APP_HOME_LIBS", Matcher.quoteReplacement('%APP_HOME%/lib'))
+                            .replace('-classpath "%CLASSPATH%" ' + mainClassName, '')
     }
 }
 //*/
