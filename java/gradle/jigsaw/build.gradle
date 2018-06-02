@@ -40,3 +40,18 @@ compileTestJava {
         classpath = files()
     }
 }
+
+test {
+    useJUnitPlatform()
+    
+    doFirst {
+        jvmArgs = [
+            '--module-path', classpath.asPath,
+            '--add-modules', 'ALL-MODULE-PATH',
+            '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+            '--add-reads', "$moduleName=$junitModuleName",
+            "--add-opens", "$moduleName/sample.jigsaw=org.junit.platform.commons"
+        ]
+        classpath = files()
+    }
+}

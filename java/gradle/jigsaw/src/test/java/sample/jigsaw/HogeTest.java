@@ -1,7 +1,6 @@
-package sample.jigsaw.test;
+package sample.jigsaw;
 
 import org.junit.jupiter.api.Test;
-import sample.jigsaw.Hoge;
 
 import static org.junit.jupiter.api.Assertions.*;
 
