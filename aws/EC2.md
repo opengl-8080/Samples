@@ -30,3 +30,29 @@
     - 外部（インターネット）に出ないサブネットを作るなら、 Internet Gateway へのルーティングを定義していないルートテーブルを割り当てればいい
 - IP アドレスについて
     - 「IPv4 パブリック IP」に記述されているのは、インスタンスを再起動するたびに変わるが、一応 SSH での接続にも利用できる
+- Elastic IP
+    - [Elastic IP アドレス - Amazon Elastic Compute Cloud](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html?icmpid=docs_ec2_console)
+    - EC2 のインスタンスに静的な IP アドレスを割り当てるサービス
+    - AWS アカウントに対して払い出される
+        - あるインスタンスに割り当てられているアドレスを、別のアドレスに割り当てなおすことができる
+    - Elastic IP を取得しても、動作しているインスタンスやネットワークインターフェースに割り当てられていない場合は、時間ごとに料金を取られる
+        - 静的 IP を効率よく運用するため
+    - 実行しているインスタンスに割り当てられた１つの Elastic IP には料金は発生しない
+        - 追加で IP を割り当てると、料金が発生する
+        - 疑問
+            - インスタンスを２つ作って、それぞれに Elastic IP を割り当てた場合
+            - Elastic IP だけの料金は無料？
+            - 追加分として有料？
+            - https://aws.amazon.com/jp/ec2/pricing/on-demand/#Elastic_IP_Addresses
+            - ここの書きっぷりを見る限り、インスタンス数に関係なく２つ目以降は料金が取られるっぽい
+    - ２つ目からは、１時間につき $0.005 (0.5円くらい)
+        - 起動していないインスタンスに割当たれている IP も同じ
+- EBS
+    - https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/Storage.html
+    - EC2 で利用できるストレージ
+    - インスタンスにアタッチできる
+    - データを永続化可能
+    - EC2 のインスタンス上で DB を動作するときのストレージとして利用したり
+- EC2 の料金
+    - t2.micro でも料金とられるっぽい
+    - あくまで、最初の 12 ヶ月だけか・・・
