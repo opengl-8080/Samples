@@ -9,10 +9,13 @@
 [最初の IAM 管理者のユーザーおよびグループの作成 - AWS Identity and Access Management](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/getting-started_create-admin-group.html)
 
 - 上の手順通りにつくれば簡単に作成できる
-- 作成したユーザでログインするには、ユーザに割り当てられる 12 桁の一意なIDが必要になる
-- この ID は、ユーザの概要ページの「ユーザの ARN」欄で確認できる
-    - ARN は Amazon Resource Name の略
-    - あらゆる AWS 上のリソースを一意に識別できるらしい
-    - [Amazon リソースネーム (ARN) と AWS サービスの名前空間 - アマゾン ウェブ サービス](https://docs.aws.amazon.com/ja_jp/general/latest/gr/aws-arns-and-namespaces.html)
+- 作成したユーザでログインするには、ユーザに割り当てられる数字 12 桁の一意なIDが必要になる
+- ID はルートアカウントのアカウント情報を見ると確認できる
 - 一旦コンソールをサインアウトしたら、「別のユーザでログイン」を選び、 12 桁の ID を入力して次に進む
 - アカウント名とパスワードを聞かれるので、作成したユーザの名前と設定したパスワードを入力する
+
+## ARN
+- ユーザの概要ページの「ユーザの ARN」欄で確認できる
+- ARN は Amazon Resource Name の略
+- あらゆる AWS 上のリソースを一意に識別できるらしい
+- [Amazon リソースネーム (ARN) と AWS サービスの名前空間 - アマゾン ウェブ サービス](https://docs.aws.amazon.com/ja_jp/general/latest/gr/aws-arns-and-namespaces.html)
