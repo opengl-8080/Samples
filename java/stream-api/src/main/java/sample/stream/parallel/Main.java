@@ -9,15 +9,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Main {
     private static final Path path = Paths.get("numbers.txt");
     
     public static void main(String[] args) {
-        warnUp(Main::forLoop, Main::parallelStream);
-
-        measureTime("for loop", Main::forLoop);
-        measureTime("parallel stream", Main::parallelStream);
+        parallelStream();
+//        warnUp(Main::forLoop, Main::parallelStream);
+//
+//        measureTime("for loop", Main::forLoop);
+//        measureTime("parallel stream", Main::parallelStream);
     }
     
     private static long forLoop() {
@@ -37,7 +39,9 @@ public class Main {
     
     private static long parallelStream() {
         try {
-            return Files.lines(path)
+            Stream<String> stream = Files.lines(path);
+            
+            return stream
                     .parallel()
                     .mapToLong(Long::parseLong)
                     .reduce(0L, (memo, n) -> memo + n);
