@@ -19,33 +19,37 @@ public class ParallelTest {
 
         ForkJoinPool forkJoinPool = new ForkJoinPool(4);
 
-        System.out.println("set print");
         try {
-            forkJoinPool.submit(() -> 
-                set.parallelStream().forEach(n -> {
-                    threadNames.add(Thread.currentThread().getName());
-                    test.print(n);
-                })
-            ).get();
-        } catch (Exception e) {
-            return;
-        }
-        threadNames.forEach(System.out::println);
-        threadNames.clear();
+            System.out.println("set print");
+            try {
+                forkJoinPool.submit(() ->
+                        set.parallelStream().forEach(n -> {
+                            threadNames.add(Thread.currentThread().getName());
+                            test.print(n);
+                        })
+                ).get();
+            } catch (Exception e) {
+                return;
+            }
+            threadNames.forEach(System.out::println);
+            threadNames.clear();
 
-        System.out.println("\n\nlist print");
-        try {
-            forkJoinPool.submit(() -> {
-                list.parallelStream().forEach(n -> {
-                    threadNames.add(Thread.currentThread().getName());
-                    test.print(n);
-                });
-            }).get();
-        } catch (Exception e) {
-            return;
+            System.out.println("\n\nlist print");
+            try {
+                forkJoinPool.submit(() -> {
+                    list.parallelStream().forEach(n -> {
+                        threadNames.add(Thread.currentThread().getName());
+                        test.print(n);
+                    });
+                }).get();
+            } catch (Exception e) {
+                return;
+            }
+            threadNames.forEach(System.out::println);
+            threadNames.clear();
+        } finally {
+            forkJoinPool.shutdown();
         }
-        threadNames.forEach(System.out::println);
-        threadNames.clear();
     }
 
     private void print(int i){
