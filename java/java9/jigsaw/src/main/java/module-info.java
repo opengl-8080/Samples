@@ -1,4 +1,3 @@
 module sample.jigsaw {
-//    requires java.sql;
-//    requires java.xml.bind;
+    requires org.apache.commons.lang3;
 }
