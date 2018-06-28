@@ -40,3 +40,11 @@ Caused by: java.lang.ClassNotFoundException: java.sql.Connection
 - 試しに、コンパイル時は普通に通るようにしておいて、実行時に module-info.class を requires していないものに置き換えて実行すると、実行時のエラーは `NoClassDefFoundError` になる
     - つまり、「パッケージが不可視」的なモジュール解決に関係する類のエラーではない！
     - モジュールグラフ的な解決はすり抜けていて、実行時は別に requires しているパッケージかどうかのチェックはしていないっぽい
+- と思ったけど、実際 `--add-modules` を指定して動かしたら、 IllegalAccessError がスローされた
+
+```
+Exception in thread "main" java.lang.IllegalAccessError: class sample.Main (in module sample) cannot access class java.sql.Connection (in module java.sql) because module sample does not read module java.sql
+        at sample/sample.Main.main(Main.java:7)
+```
+
+- どうも、こうなると単純にクラスがロードされたときにチェックされているわけではなさそう
