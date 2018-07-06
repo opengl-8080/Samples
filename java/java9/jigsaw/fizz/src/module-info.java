@@ -1,3 +1,3 @@
 module fizz {
-    
+    exports fizz;
 }

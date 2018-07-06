@@ -6,3 +6,4 @@ build/
 out/
 classes/
 stdout.txt 
+*.jar
