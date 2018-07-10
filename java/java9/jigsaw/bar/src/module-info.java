@@ -1,5 +1,5 @@
 module bar {
     requires fizz;
-    requires buzz;
+    requires java.sql;
     exports bar;
 }
