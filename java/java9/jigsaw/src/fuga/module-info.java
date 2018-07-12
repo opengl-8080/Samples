@@ -1,0 +1,3 @@
+module fuga {
+    exports fuga;
+}

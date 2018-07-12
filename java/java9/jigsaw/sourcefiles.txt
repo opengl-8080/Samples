@@ -1,2 +1,4 @@
-src\sample\Main.java
-src\module-info.java
+F:\etc\github\opengl-8080\Samples\java\java9\jigsaw\src\fuga\module-info.java
+F:\etc\github\opengl-8080\Samples\java\java9\jigsaw\src\fuga\fuga\Fuga.java
+F:\etc\github\opengl-8080\Samples\java\java9\jigsaw\src\hoge\module-info.java
+F:\etc\github\opengl-8080\Samples\java\java9\jigsaw\src\hoge\hoge\Hoge.java
