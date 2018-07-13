@@ -1,3 +1,0 @@
-module hoge {
-    requires fuga;
-}

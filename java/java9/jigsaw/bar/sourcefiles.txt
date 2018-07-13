@@ -1,2 +1,2 @@
 src\module-info.java
-src\bar\Bar.java
+src\foo\Bar.java

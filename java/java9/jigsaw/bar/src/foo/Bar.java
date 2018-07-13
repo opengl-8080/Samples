@@ -1,4 +1,4 @@
-package bar;
+package foo;
 
 public class Bar {
 }
