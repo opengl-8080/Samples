@@ -1,3 +1,2 @@
 module foo {
-    exports foo;
 }
