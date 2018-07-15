@@ -56,3 +56,36 @@
     - `@Beta`
     - `@Experimental`
     - 以上のアノテーションがついている API は実験的なものなので、使わないほうがいい
+
+# 02 Reactive Streams について
+- Reactive Streams が提供するのはインターフェースのみ
+    - 各言語・各ライブラリが実装を提供する
+- 生産者(Publisher)と消費者(Subscriber)に分かれる
+- Publisher
+    - データを生成する
+- Subscriber
+    - Publisher が生成したデータを購読（受け取って処理）する
+- プロトコル
+    1. Publisher は通知の準備ができたことを Subscriber に伝える
+    2. Subscriber は、受け取るデータ数のリクエストを送る
+        - Subscriber がデータ数をリクエストするまで、 Publisher は待機している
+    3. Publisher はデータを生成し、 Subscriber に送る
+    4. Subscriber はデータを受け取って処理を実行する
+    5. 要求された数だけデータを送り終わったら、 Publisher は再び待機状態になる
+    6. Subscriber は処理を終えたら、次のデータ数のリクエストを送る
+    7. 全てのデータを送信し終えたら、 Publisher は完了を通知する
+    8. 完了通知後は、 Publisher は何も通知を行わなくなる
+    - エラーが発生した場合はエラーを通知する
+- Subscriber がデータ数をリクエストすることで、 Publisher からのデータ数を抑制できる
+    - Publisher のデータ生成速度が速い場合に、 Subscriber が溢れないようにするため
+- インターフェース
+    - `Publisher`
+        - データの生産者
+    - `Subscriber`
+        - データの購読者
+    - `Subscription`
+        - データ数のリクエスト・購読のキャンセルを行う
+        - `Subscriber` の `onSbscribe()` メソッドの引数で受け取る
+    - `Processor`
+        - Publisher と Subscriber 両方の性質を持つ
+- 
