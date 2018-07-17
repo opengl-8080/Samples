@@ -101,3 +101,40 @@
             - 最初にリクエストしたデータ数を処理し終わる前に次のデータ数をリクエストした場合、データ数が加算されていく
             - 加算の結果が `Long.MAX_VALUE` に達した場合も、無制限扱いになってしまうので注意
         - `Subscription` のメソッドは同期された状態で呼ばなければならない
+
+# 03 RxJavaの基本となる仕組み
+## 生産者と消費者
+- RxJava の仕組みは「生産者」と「消費者」に分かれる
+- Reactive Streams の対応有無によって、おおきく２つが用意されている
+    - Reactive Streams の対応あり
+        - 生産者 `Flowable`
+        - 消費者 `Subscriber`
+    - Reactive Streams の対応なし
+        - 生産者 `Observable`
+        - 消費者 `Observer`
+- `Observable` にはバックプレッシャーの機能がない
+    - 通知するデータ数を制御できない
+        - データが作成されるとすぐに通知される
+    - `Disposable` という購読解除だけができるインターフェースを使う
+- `Observable` は Reactive Streams のインターフェースを実装していないが、基本的な使い方は同じ
+
+## オペレータ
+- 通知するデータを加工したり絞り込んだりしたりするメソッドを **オペレータ** と呼ぶ
+- 実装的には、 `Flowable` と `Observable` からメソッドチェーンでつなげていく感じになる
+    - Java 8 の Streams API みたいな感じ
+
+```java
+Flowable<Integer> flowable =
+    Flowable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+            .filter(data -> data % 2 == 0)
+            .map(data -> data * 100);
+
+flowable.subscribe(data -> System.out.println("data=" + data));
+```
+
+- オペレータは関数型プログラミングを意識して使用したほうがいい
+- 各オペレータに渡す処理は純粋関数にする
+    - 副作用を持たせない
+    - 同じ入力に対して同じ結果を返す
+
+## 非同期処理
