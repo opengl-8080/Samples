@@ -153,3 +153,30 @@ flowable.subscribe(data -> System.out.println("data=" + data));
     - 消費者がデータの処理結果を外部に反映するとき
         - 外部が非同期アクセスしても大丈夫なようにする必要はある
         - 他のプログラムが同じデータにアクセスしていないかなど
+
+## Cold と Hot の生産者
+- 生産者には Cold と Hot の２種類が存在する
+- Cold な生産者
+    - １つの購読(Subscribe)に対して１つの消費者だけが結びつく
+- Hot な生産者
+    - １つの購読に対して複数の消費者が紐付ける
+    - 後から消費者を増やすこともできる
+        - すでに流れたデータは無視され、途中からデータを受け取るようになる
+- RxJava で生成した生産者は、最初は Cold
+- Hot にするには、 Cold な生産者の変換メソッドを使用する
+    - 別の方法もあるが後述
+- Hot な生産者を表すインターフェース
+    - `ConnectableFlowable`
+    - `ConnectableObservable`
+
+## ConnectableFlowable/ConnectableObservable
+- `subscribe()` メソッドを実行しても（購読を開始しても）データは流れてこない
+- `connect()` メソッドを呼ぶ必要がある
+- `Flowable`, `Observable` に変換するメソッドもある
+
+### refCount
+- `ConnectableFlowable`/`ConnectableObservable` から新しい `Flowable`/`Observable` を生成する
+- ★ちょっとよくわからん...
+
+### autoConnect
+- 指定された数だけ購読(subscribe)されたら処理を開始する `Flowable`/`Observable`を生成する
