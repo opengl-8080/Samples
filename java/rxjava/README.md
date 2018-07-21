@@ -180,3 +180,18 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 
 ### autoConnect
 - 指定された数だけ購読(subscribe)されたら処理を開始する `Flowable`/`Observable`を生成する
+
+### Flowable/Observable を「Cold」から「Hot」に変換するオペレータ
+- `publish`
+    - Cold な `Flowable`/`Observable` から `ConnectableFlowable`/ `ConnectableObservable` を生成する
+    - 後から購読を開始した場合は、それ以降のデータだけを受け取ることができる
+- `replay`
+    - Cold な `Flowable`/`Observable` から `ConnectableFlowable`/ `ConnectableObservable` を生成する
+    - 後から購読を開始した場合でも、最初のデータから受け取ることができる
+        - データをキャッシュしている
+        - キャッシュする個数や期間は引数で指定できる
+- `share`
+    - `ConnectableFlowable`/`ConnectableObservable` は生成しない
+    - しかし、複数の消費者から購読できるようになる
+
+# 04 マーブルダイアグラム
