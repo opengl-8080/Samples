@@ -202,3 +202,58 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 - 各データは色と形で表現される
 - 左から右へ時間の流れを表現している
 - 上から下が処理の流れを表現している
+
+# 05 サンプルの作成
+- `Flowable.create(FlowableOnSubscribe, BackpressureStrategy)` でデータの通知方法を制御できる `Flowable` を作成できる
+- `FlowableOnSubscribe` は `create(FlowableEmitter)` を唯一持つ関数型インターフェース
+- 引数の `FlowableEmitter` を通じて、 `Subscriber` にデータを通知する
+    - `onNext()` で次のデータを通知する
+    - 購読がキャンセルされているかどうかは `isCancelled()` で確認できる
+        - 購読がキャンセルされた場合は、速やかに処理を終了させる必要がある
+        - キャンセルされたあとで `onNext()` を読んでも、 RxJava 側で通知が行かないように制御はしてくれている
+        - しかし、 `create()` 内の処理が中断されているわけではないので、自発的に処理を中断させないと、無駄な処理を続けてしまうことになる
+    - 通知が正常に完了したら `onComplete()` を呼ぶ
+- `create()` メソッドは `Exception` を `throws` 宣言に持つ
+    - 例外がスローされたら、自動的にエラー終了が `Subscriber` に通知される
+- `onComplete()`, `onError()` の後には、処理を書いてはいけない
+    - もし `onComplete()` のあとに書いた処理が例外をスローしても、そのことは `Subscriber` に通知されない
+- `create()` メソッドの第二引数にはバックプレッシャーの種類を指定する
+    - `BackpressureStrategy` 列挙型に定義された定数を使用する
+    - `BUFFER`
+        - 通知されるまでバッファする
+    - `DROP`
+        - 通知できるようになるまで、新規データは破棄する
+    - `LATEST`
+        - 最新データのみバッファし、古いデータは破棄していく
+    - `ERROR`
+        - バッファサイズまでバッファし、オーバーした場合はエラーにする
+    - `NONE`
+        - 特に何もしない
+        - `onBackpressure()` で具体的な処理を実装する
+- `Subscriber` では４つのメソッドを実装する
+    - `onSubscribe(Subscription)`
+        - 通知の準備が完了したときに呼ばれる
+        - 引数の `Subscription` で、次に受け取るデータ数をリクエストできる
+            - データスをリクエストしないと通知が始まらないので注意
+            - `request()` メソッドを呼ぶのは、 `onSubscribe()` の最後でないといけない
+        - 引数の `Subscription` はその後の処理でも使用するので、インスタンス変数に保存しておく
+        - `Subscription` には `cancel()` メソッドで購読を中止する機能もある
+            - 普通 `onNext()` の中で特定の条件を満たしたときに `cancel()` することになる
+            - しかし、そもそも通知がなく `onNext()` が呼ばれていないと `cancel()` すら実行されない可能性があることに注意
+    - `onNext(T)`
+        - `Flowable` が通知したデータを受け取ったときに呼ばれる
+        - 通知されたデータは引数で受け取れる
+        - メソッドの最後で `Subscription` のデータ数をリクエストするメソッドを再度実行することで、次のデータが通知される
+    - `onComplete()`
+        - 購読が全て正常終了したときに呼ばれる
+    - `onError(Throwable)`
+        - 購読でエラーが発生したときに呼ばれる
+        - 引数には `Flowable` で発生した例外オブジェクトが渡される
+
+## スレッド管理
+- `Flowable` の `observeOn(Scheduler)` を使うと、 `Flowable` と `Subscriber` を別々のスレッドで動作させることができる
+- `Scheduler` はスレッド管理を行うオブジェクト
+- `Flowable` と `Subscriber` を同じスレッドで実行すると、 `Subscriber` の処理が終わるまで `Flowable` は処理を待機することになる
+- ２つを別スレッドに分ければ、 `Subscriber` の処理の終了を待つことなく、 `Flowable` はデータの生成ができる
+    - データの生成が早い場合は、バックプレッシャー機能によって通知が制御される
+    - サンプルでは `BUFFER` を指定しているので、通知はバッファされていく
