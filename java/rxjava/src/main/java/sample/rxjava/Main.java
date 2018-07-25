@@ -1,43 +1,37 @@
 package sample.rxjava;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        Flowable<String> flowable = Flowable.create(emitter -> {
+        Observable<String> observable = Observable.create(emitter -> {
             String[] messages = {"Hello, World!", "こんにちは、世界！"};
             
             for (String message : messages) {
-                if (emitter.isCancelled()) {
+                if (emitter.isDisposed()) {
                     return;
                 }
                 emitter.onNext(message);
             }
 
             emitter.onComplete();
-        }, BackpressureStrategy.BUFFER);
+        });
         
-        flowable.observeOn(Schedulers.computation())
-                .subscribe(new Subscriber<>() {
-                    
-                    private Subscription subscription;
+        observable.observeOn(Schedulers.computation())
+                .subscribe(new Observer<String>() {
                     
                     @Override
-                    public void onSubscribe(Subscription subscription) {
-                        this.subscription = subscription;
-                        this.subscription.request(1L);
+                    public void onSubscribe(Disposable disposable) {
                     }
 
                     @Override
                     public void onNext(String message) {
                         String threadName = Thread.currentThread().getName();
                         System.out.println(threadName + ": " + message);
-                        this.subscription.request(1L);
                     }
 
                     @Override

@@ -257,3 +257,6 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 - ２つを別スレッドに分ければ、 `Subscriber` の処理の終了を待つことなく、 `Flowable` はデータの生成ができる
     - データの生成が早い場合は、バックプレッシャー機能によって通知が制御される
     - サンプルでは `BUFFER` を指定しているので、通知はバッファされていく
+
+## Observable を使った場合
+- 
