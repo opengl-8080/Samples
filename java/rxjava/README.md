@@ -259,4 +259,24 @@ flowable.subscribe(data -> System.out.println("data=" + data));
     - サンプルでは `BUFFER` を指定しているので、通知はバッファされていく
 
 ## Observable を使った場合
-- 
+- バックプレッシャーの機能が無い以外は、 `Flowable` と使い方は同じ
+- `isCancelled()` ではなく `isDisposed()` のように、若干のメソッド名の差はあるが、基本機能は一緒
+
+## Observable と Flowable の使い分け
+- `Flowable` を使うケース
+    - 大量のデータを扱う(数万件)
+    - ネットワーク・データベースの IO を使う
+    - 通知されるデータが非常に多い
+        - バックプレッシャーを利用して限界値を設定し、それを超えたら `MissingBackpressureException` をスローさせてエラーハンドリングをする
+    - 通知されるデータが全て必要というわけではない
+        - DROP を選択するなどの選択肢がある
+- `Observable` を使うケース
+    - GUI イベント
+    - 少量のデータを扱う(数千件)
+    - 同期的な処理
+    - Stream API の代わり
+- `Observable` のほうがオーバーヘッドは少ない
+- 環境や通知するデータ、その使い方などごとに使い分けが必要
+- それぞれの特性をよく理解しておくことが重要
+
+# 06 RxJava の全体像
