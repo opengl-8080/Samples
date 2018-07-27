@@ -280,3 +280,12 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 - それぞれの特性をよく理解しておくことが重要
 
 # 06 RxJava の全体像
+- `Flowable` と `Observable`
+    - データを生産し通知するクラス
+    - `Flowable` にはバックプレッシャー機能がある
+    - `Observable` にはない
+- `Subscriber` と `Observer`
+    - 通知されたデータを処理するクラス
+    - `Subscriber` はバックプレッシャー機能があるので、データ数のリクエストが必要
+        - リクエストは `onSubscribe()` の最後に実行しないと、初期化処理の途中で通知が始まってしまう
+    - `Observer` にはない
