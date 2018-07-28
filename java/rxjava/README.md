@@ -289,3 +289,10 @@ flowable.subscribe(data -> System.out.println("data=" + data));
     - `Subscriber` はバックプレッシャー機能があるので、データ数のリクエストが必要
         - リクエストは `onSubscribe()` の最後に実行しないと、初期化処理の途中で通知が始まってしまう
     - `Observer` にはない
+- `Processor`/`Subject`
+    - `Processor`
+        - `Publisher` と `Subscriber` の両方を継承したインターフェース
+    - `Subject`
+        - `Observable` と `Observer` の両方を継承したインターフェース   
+
+# RxJava とデザインパターン
