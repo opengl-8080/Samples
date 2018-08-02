@@ -1,51 +1,36 @@
 package sample.rxjava;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
-        Observable<String> observable = Observable.create(emitter -> {
-            String[] messages = {"Hello, World!", "こんにちは、世界！"};
-            
-            for (String message : messages) {
-                if (emitter.isDisposed()) {
-                    return;
-                }
-                emitter.onNext(message);
-            }
+    private static volatile int counter;
+    
+    public static void main(String[] args) throws Exception {
+        Flowable<Integer> f1 = Flowable.range(1, 10000)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation());
+        Flowable<Integer> f2 = Flowable.range(1, 10000)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation());
 
-            emitter.onComplete();
-        });
+        Set<String> names = ConcurrentHashMap.newKeySet();
+
+        Flowable.merge(f1, f2)
+                .subscribe(
+                    data -> {
+                        names.add(Thread.currentThread().getName());
+                        counter++;
+                    },
+                    error -> error.printStackTrace(System.err),
+                    () -> System.out.println("counter=" + counter)
+                );
         
-        observable.observeOn(Schedulers.computation())
-                .subscribe(new Observer<String>() {
-                    
-                    @Override
-                    public void onSubscribe(Disposable disposable) {
-                    }
-
-                    @Override
-                    public void onNext(String message) {
-                        String threadName = Thread.currentThread().getName();
-                        System.out.println(threadName + ": " + message);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        String threadName = Thread.currentThread().getName();
-                        System.out.println(threadName + ": 完了しました");
-                    }
-
-                    @Override
-                    public void onError(Throwable error) {
-                        error.printStackTrace(System.err);
-                    }
-                });
-        
-        Thread.sleep(500L);
+        Thread.sleep(1000);
+        System.out.println(names);
     }
 }
