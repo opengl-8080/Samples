@@ -2,49 +2,51 @@ package sample.rxjava;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import org.reactivestreams.Publisher;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.concurrent.Callable;
+import io.reactivex.FlowableSubscriber;
+import org.reactivestreams.Subscription;
 
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        Callable<BufferedReader> resourceSupplier = () -> Files.newBufferedReader(Paths.get("./build.gradle"));
-        Function<BufferedReader, Publisher<String>> sourceSupplier = reader -> {
-            return Flowable.create(emitter -> {
-                try {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        emitter.onNext(line);
-                    }
-                    emitter.onComplete();
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            }, BackpressureStrategy.BUFFER);
-        };
-        Consumer<BufferedReader> resourceDisposer = reader -> {
-            try {
-                System.out.println("close");
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace(System.err);
+        Flowable.<Integer>create(emitter -> {
+            emitter.setCancellable(() -> {
+                System.out.println("canceled!!");
+            });
+            
+            for (int i=0; i<10; i++) {
+                emitter.onNext(i);
             }
-        };
-        
-        Flowable<String> flowable = Flowable.using(resourceSupplier, sourceSupplier, resourceDisposer);
+            
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER)
+        .subscribe(new FlowableSubscriber<>() {
+            private Subscription subscription;
+            
+            @Override
+            public void onSubscribe(Subscription subscription) {
+                subscription.request(1);
+                this.subscription = subscription;
+            }
 
-        flowable.subscribe(
-            (line) -> System.out.println("[subscribe]=" + line),
-            Throwable::printStackTrace,
-            () -> System.out.println("complete")
-        );
+            @Override
+            public void onNext(Integer i) {
+                System.out.println("next=" + i);
+                if (i == 8) {
+                    subscription.cancel();
+                } else {
+                    subscription.request(1);
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace(System.err);
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("complete");
+            }
+        });
     }
 }

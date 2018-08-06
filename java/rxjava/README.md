@@ -454,3 +454,9 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 - 第三引数
     - 第一引数で開いたオブジェクトを閉じる処理を行う
     - 購読解除のタイミングで呼ばれる
+
+## setCancellable
+- FlowableEmitter の setCancellable() メソッドでキャンセル時の処理を登録できる
+- このメソッドは、正常終了/異常終了時、そしてキャンセル時に実行される
+
+# 05 RxJava のバックプレッシャー
