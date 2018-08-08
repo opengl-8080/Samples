@@ -475,4 +475,12 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 - Subscriber の onSubscribe(Subscription) で受け取る Subscription に、データ数をリクエストする request(long) メソッドが用意されている
 
 ## observeOn メソッドとバックプレッシャー
-- 
+- observeOn() を使うと、生産者と消費者の間に新しい Flowable が１つ挟まる
+- この Flowable が、バッファサイズ分だけ request() を送る
+- 最後の消費者で request() を送ると、このバッファされたデータから通知される
+- つまり、バッファサイズを超えて生産者に request() を送ることはできない
+- バッファサイズは、デフォルトは 128 で、 observeOn() の第３引数で指定可能
+    - システムプロパティで変更することも可能
+    - `rx2.buffer-size`
+- どこで request データ数の制御を行っているかを明確にするために、 observeOn() 以外の消費者での request() は Long.MAX_VALUE にして制限無しにしておくのがいい
+- そして、実際の制限は observeOn() のバッファサイズで行うと、どこでデータ数を制御しているかがはっきりする
