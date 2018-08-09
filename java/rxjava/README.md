@@ -484,3 +484,24 @@ flowable.subscribe(data -> System.out.println("data=" + data));
     - `rx2.buffer-size`
 - どこで request データ数の制御を行っているかを明確にするために、 observeOn() 以外の消費者での request() は Long.MAX_VALUE にして制限無しにしておくのがいい
 - そして、実際の制限は observeOn() のバッファサイズで行うと、どこでデータ数を制御しているかがはっきりする
+
+### MissingBackpressureException
+- 通知されるデータ数が多くなりすぎてバッファを溢れたりした場合に、 MissingBackpressureException がスローされる
+- 例外は消費者の onError() に通知される
+- このエラーが発生した場合に再実行するのか完全に処理を終了させるのかは、アプリケーションの特質による
+
+## メソッドによる通知するデータ量の制御
+- バックプレッシャー機能以外にも、データ量を調整する仕組みがある
+- スロットリング(Throttling)
+    - データの通知が一定時間止まるのを待ってから通知を行う制御
+    - ユーザの入力したテキストを処理するときなどに使う
+        - ユーザが入力している最中に都度都度処理をするのではなく、最後まで入力を待ってから確定された入力文字列に対して処理を行ったほうが効率がいい
+- buffer メソッドと window メソッド
+    - 通知されるデータをある程度まとめて、コレクションに詰めて一気に消費者側に通知する
+    - 通知回数が減らせる
+    - buffer
+        - List などのコレクションにまとめる
+    - window
+        - Flowable/Observable にまとめる
+
+# 4 Flowable と Observable のオペレータ
