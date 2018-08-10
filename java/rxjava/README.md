@@ -505,3 +505,39 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - Flowable/Observable にまとめる
 
 # 4 Flowable と Observable のオペレータ
+- オペレータ
+    - Flowable や Observable のようなデータを通知するものを生成するメソッドの総称
+- Flowable/Observable を生成するオペレータ
+    - just
+        - 引数で指定したデータを通知する Flowable/Observable を生成する
+        - 最大１０個指定可能
+    - fromArray/fromIterable
+        - 配列や Iterable から取得したデータを通知する
+    - fromCallable
+        - Callable が返したデータを通知する
+    - range/rangeLong
+        - 開始値と、データ数を指定して通知する
+        - range(10, 3) なら 10, 11, 12 が通知される
+    - interval
+        - 指定した間隔で0から始まる数値を通知する
+        - デフォルトでは Schedulers.computation() で生成された Scheduler 上で動作する
+            - 変更する場合は Scheduler を指定できるメソッドを使用する
+        - 最初の 0 は、インターバルで指定した時間待ってから通知される
+            - 最初の待機時間 (initialDelay) を指定すれば変更可能
+        - ほっとくと無限にデータを通知しつづけるので、 take() メソッドなどで個数を制限する必要がある
+    - timer
+        - 指定時間後に 0 を通知する
+    - defer
+        - 購読されるたびに新しい Flowable/Observable を生成する
+        - 購読されて初めてデータの作成を開始するような場合に使用する
+    - empty
+        - 空の Flowable/Observable を生成する
+        - 完了通知だけする
+        - null を通知する代わりに空の Flowable/Observable を生成するといった使い方がある
+    - error
+        - エラーのみを通知する
+        - 常にエラー通知をして終了
+    - never
+        - 何も通知しない
+        - 完了やエラーも通tいしない
+- 通知するデータを変換するオペレータ
