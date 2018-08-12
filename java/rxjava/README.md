@@ -541,3 +541,24 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - 何も通知しない
         - 完了やエラーも通tいしない
 - 通知するデータを変換するオペレータ
+    - map
+        - データを変換する
+        - Steram の map と同じ
+    - flatMap
+        - データを Flowable/Observable に変換して、それが持つデータを通知する
+        - Stream の flatMap と同じ
+        - 空の Flowable/Observable を返せばそのデータの通知をスキップできる
+        - flatMap(mapper, combiner)
+            - もともと通知されたデータと、 mapper が返した Flowable/Observable が combiner に渡される
+            - combiner が返したデータが通知される
+    - concatMap
+        - flatMap と同じように動く
+        - ただし、マルチスレッドで動かすときの動作が違う
+        - flatMap は mapper がデータを作成すると次々データを通知する
+        - concatMap は、もとのデータの順序と同じ順序で mapper が生成した Flowable/Observable が実行され、データが通知される
+        - つまり、非同期でも順序が保証される
+        - ただし、パフォーマンスは影響を受ける
+    - concatMapEager
+        - concatMap の場合は各 Flowable/Observable の処理が順次実行される
+        - concatMapEager は、各 Flowable/Observable が即座に実行される
+        - 最終的なデータの通知順序は concatMap と同じように調整される
