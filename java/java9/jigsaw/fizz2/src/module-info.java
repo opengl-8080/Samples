@@ -1,3 +1,0 @@
-module fizz {
-    exports fizz;
-}

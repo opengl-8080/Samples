@@ -1,2 +1,0 @@
-src\module-info.java
-src\foo\Foo.java

@@ -1,2 +1,0 @@
-src\hoge\Hoge.java
-src\hoge\Hoge2.java
