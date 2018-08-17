@@ -621,3 +621,8 @@ flowable.subscribe(data -> System.out.println("data=" + data));
             - この場合、戻り値の型は Single になる
         - elementAtOrError なら、インデックスに該当するデータがなければエラー(NoSuchElementException)になる
 - Flowable/Observable を結合するオペレータ
+    - merge
+        - 複数の Flowable が通知するデータを統合して１つのタイムラインにまとめる
+        - Flowable のどれか１つでもエラーを通知した場合は、そこでエラーが通知されてタイムラインは終了する
+        - mergeDelayError を使った場合は、エラーが通知されても他の Flowable の処理が完了するまではエラー通知が待機される
+            - 他の Flowable の通知が完了した後でエラーが通知される
