@@ -1,17 +1,44 @@
 package sample.rxjava;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        Flowable.interval(500, TimeUnit.MILLISECONDS)
-                .take(4, TimeUnit.SECONDS)
-                .doOnComplete(() -> System.out.println("complete!"))
-                .subscribe(System.out::println);
+        Flowable.concatArrayEager(
+            Flowable.create(emitter -> {
+                IntStream.range(0, 5).forEach(i -> {
+                    emitter.onNext(i);
+                    sleep(500);
+                });
+                emitter.onComplete();
+            }, BackpressureStrategy.BUFFER),
+            Flowable.create(emitter -> {
+                IntStream.range(10, 15).forEach(i -> {
+                    emitter.onNext(i);
+                    sleep(10);
+                });
+                emitter.onComplete();
+            }, BackpressureStrategy.BUFFER)
+        ) 
+        .subscribe(i -> {
+            System.out.println(i);
+        });
         
-        Thread.sleep(10000);
+        sleep(5000);
+    }
+    
+    private static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

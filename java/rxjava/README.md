@@ -626,3 +626,11 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - Flowable のどれか１つでもエラーを通知した場合は、そこでエラーが通知されてタイムラインは終了する
         - mergeDelayError を使った場合は、エラーが通知されても他の Flowable の処理が完了するまではエラー通知が待機される
             - 他の Flowable の通知が完了した後でエラーが通知される
+    - concat
+        - 2つの Flowable を結合して１つのタイムラインで通知する
+        - Flowable は１つ目の Flowable が実行されてから、２つ目が実行される
+        - １つ目の Flowable が完了しないと、２つ目の Flowable は実行されない
+    - concatEager
+        - concat とは違って結合する Flowable は同時に実行される
+        - しかし、最終的に通知されるデータはキャッシュされ、個々の Flowable が完了してから通知される
+    - startWith
