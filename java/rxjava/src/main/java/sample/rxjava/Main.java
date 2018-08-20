@@ -1,36 +1,18 @@
 package sample.rxjava;
 
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        Flowable.concatArrayEager(
-            Flowable.create(emitter -> {
-                IntStream.range(0, 5).forEach(i -> {
-                    emitter.onNext(i);
-                    sleep(500);
-                });
-                emitter.onComplete();
-            }, BackpressureStrategy.BUFFER),
-            Flowable.create(emitter -> {
-                IntStream.range(10, 15).forEach(i -> {
-                    emitter.onNext(i);
-                    sleep(10);
-                });
-                emitter.onComplete();
-            }, BackpressureStrategy.BUFFER)
-        ) 
-        .subscribe(i -> {
-            System.out.println(i);
-        });
-        
+        Flowable.zip(Arrays.asList(
+            Flowable.just(1, 2, 3, 4, 5),
+            Flowable.just(10, 20, 30, 40, 50)
+        ), (Object[] a) -> Stream.of(a).mapToInt(n -> (int)n).sum())
+        .subscribe(System.out::println);
         sleep(5000);
     }
     
