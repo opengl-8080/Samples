@@ -8,12 +8,13 @@ import java.util.stream.Stream;
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        Flowable.zip(Arrays.asList(
-            Flowable.just(1, 2, 3, 4, 5),
-            Flowable.just(10, 20, 30, 40, 50)
-        ), (Object[] a) -> Stream.of(a).mapToInt(n -> (int)n).sum())
-        .subscribe(System.out::println);
-        sleep(5000);
+        Flowable.just(1, 2, 3, 4, 5)
+                .doOnNext(i -> {
+                    System.out.println("next = " + i);
+                })
+                .doOnComplete(() -> System.out.println("complete!!"))
+                .contains(3)
+                .subscribe(result -> System.out.println("result=" + result));
     }
     
     private static void sleep(long millis) {
