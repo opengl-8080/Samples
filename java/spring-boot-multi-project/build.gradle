@@ -1,0 +1,24 @@
+buildscript {
+    ext {
+		springBootVersion = '2.0.4.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 10
+    targetCompatibility = 10
+}
