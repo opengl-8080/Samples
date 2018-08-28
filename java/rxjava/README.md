@@ -673,4 +673,13 @@ flowable.subscribe(data -> System.out.println("data=" + data));
             - 初回が初期値
             - 二回目以降は前回関数が return した値
     - scan
-        - 
+        - reduce は最終結果だけを通知するが、 scan は計算途中も通知する
+- ユーティリティ系オペレータ
+    - repeat
+        - 元の Flowable が通知したものと同じデータを繰り返し通知する
+        - 回数を指定しないと無限に通知される
+        - 回数を指定すると、指定した回数通知される
+    - repeatUntil
+        - 引数で boolean を返す関数を渡す
+        - 関数が true を返すまで同じデータを繰り返し通知する
+        - つまり、 false の間は通知をつづける
