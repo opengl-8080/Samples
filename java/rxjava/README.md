@@ -683,3 +683,10 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - 引数で boolean を返す関数を渡す
         - 関数が true を返すまで同じデータを繰り返し通知する
         - つまり、 false の間は通知をつづける
+    - repeatWhen
+        - 引数に関数を渡す
+        - 関数には繰り返しを制御するための Flowable が渡される(handler)
+        - まず最初に、元の Flowable が通知するデータがそのまま消費者に通知される
+        - 以後、 handler がデータを１つ通知するごとに、最初に通知したものと同じ一連のデータが消費者に通知される
+        - handler が完了を通知したら、繰り返しが終了する
+        - ちょっと分かりづらい・・・

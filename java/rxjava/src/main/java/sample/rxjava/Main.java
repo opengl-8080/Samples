@@ -2,19 +2,21 @@ package sample.rxjava;
 
 import io.reactivex.Flowable;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 public class Main {
     
     public static void main(String[] args) throws Exception {
         Flowable.just(1, 2, 3, 4, 5)
-                .doOnNext(i -> {
-                    System.out.println("next = " + i);
+                .repeatWhen(handler -> {
+                    System.out.println("handler.class=" + handler.getClass());
+                    return handler
+                            .doOnNext(data -> System.out.println("handler.next=" + data))
+                            .doOnComplete(() -> System.out.println("handler.complete"))
+                            .doOnSubscribe(data -> System.out.println("handler.subscribe=" + data))
+                            .take(3);
                 })
-                .doOnComplete(() -> System.out.println("complete!!"))
-                .contains(3)
-                .subscribe(result -> System.out.println("result=" + result));
+                .doOnNext(data -> System.out.println("next=" + data))
+                .doOnComplete(() -> System.out.println("complete"))
+                .subscribe(data -> System.out.println("subscribe=" + data));
     }
     
     private static void sleep(long millis) {
