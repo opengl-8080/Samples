@@ -1,6 +1,6 @@
 buildscript {
     ext {
-		springBootVersion = '2.0.4.RELEASE'
+        springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -12,11 +12,18 @@ buildscript {
 
 subprojects {
     apply plugin: "java"
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
+    apply plugin: "io.spring.dependency-management"
 
     repositories {
         mavenCentral()
+    }
+
+    // https://github.com/spring-projects/spring-boot/issues/11594
+    // http://create-something.hatenadiary.jp/entry/2015/05/08/063000
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+        }
     }
 
     sourceCompatibility = 10
