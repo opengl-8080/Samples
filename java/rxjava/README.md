@@ -702,3 +702,21 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - タイムアウトした場合は代替データを通知して完了させることも可能
 
 # Processor と Subject
+- Processor とは
+    - Publisher と Subscriber の両方を継承したインターフェース
+    - 生産者と消費者の間に入り通知の橋渡しとなる
+    - マルチスレッドで使う場合は注意が必要
+        - Reactive Streams のルールで、 onNext() を並行して実行してはいけないことになっている
+        - Processor がマルチスレッドで動くと、 onNext() を同時に実行してしまうことになる
+        - 通知メソッドがどのように呼ばれているかに注意が必要
+            - 通知を同期する SerializedProcessor 用意されている
+            - toSerialized() メソッドで変換する
+            - 当然同期のコストはかかるようになる
+    - FlowableProcessor
+        - Processor を実装した抽象クラス
+        - Publisher の実装クラスである Flowable を継承している
+    - Subject
+        - FlowableProcessor と同じような機能を持つつバックプレッシャー機能がないインターフェース
+        - Observable と Observer を継承している
+- PublishProcessor
+    - 
