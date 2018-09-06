@@ -1,0 +1,15 @@
+subprojects {
+    apply plugin: "java"
+    apply plugin: "eclipse"
+
+    sourceCompatibility = 10
+    targetCompatibility = 10
+
+    compileJava.options.encoding = "UTF-8"
+}
+
+project(":core") {
+    dependencies {
+        compile project(":tool")
+    }
+}
