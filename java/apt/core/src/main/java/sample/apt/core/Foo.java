@@ -4,5 +4,4 @@ import sample.apt.tool.Hoge;
 
 @Hoge
 public class Foo {
-
 }

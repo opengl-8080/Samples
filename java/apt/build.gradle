@@ -6,6 +6,16 @@ subprojects {
     targetCompatibility = 10
 
     compileJava.options.encoding = "UTF-8"
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(":tool") {
+    dependencies {
+        compile "com.squareup:javapoet:1.11.1"
+    }
 }
 
 project(":core") {
