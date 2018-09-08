@@ -719,4 +719,6 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - FlowableProcessor と同じような機能を持つつバックプレッシャー機能がないインターフェース
         - Observable と Observer を継承している
 - PublishProcessor
-    - 
+    - 購読したデータをそのまま通知する
+    - データはキャッシュされないので、既に通知済みのデータは後から購読を開始した消費者には通知されない
+    - ただし、完了やエラーは終了後でも通知される
