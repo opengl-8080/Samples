@@ -722,3 +722,7 @@ flowable.subscribe(data -> System.out.println("data=" + data));
     - 購読したデータをそのまま通知する
     - データはキャッシュされないので、既に通知済みのデータは後から購読を開始した消費者には通知されない
     - ただし、完了やエラーは終了後でも通知される
+- BehaviorProcessor
+    - 最後に通知したデータだけをキャッシュしている Processor
+    - 途中から購読を開始した消費者は、最後にキャッシュされたデータから通知される
+    - 完了とエラーについては PublishProcessor と同じ
