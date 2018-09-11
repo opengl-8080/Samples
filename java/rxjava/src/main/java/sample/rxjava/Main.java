@@ -1,22 +1,23 @@
 package sample.rxjava;
 
-import io.reactivex.Flowable;
+import io.reactivex.processors.UnicastProcessor;
 
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        Flowable.just(1, 2, 3, 4, 5)
-                .repeatWhen(handler -> {
-                    System.out.println("handler.class=" + handler.getClass());
-                    return handler
-                            .doOnNext(data -> System.out.println("handler.next=" + data))
-                            .doOnComplete(() -> System.out.println("handler.complete"))
-                            .doOnSubscribe(data -> System.out.println("handler.subscribe=" + data))
-                            .take(3);
-                })
-                .doOnNext(data -> System.out.println("next=" + data))
-                .doOnComplete(() -> System.out.println("complete"))
-                .subscribe(data -> System.out.println("subscribe=" + data));
+        UnicastProcessor<Integer> processor = UnicastProcessor.create();
+        
+        processor.onNext(1);
+        processor.onNext(2);
+        
+        processor.subscribe(data -> System.out.println("1.data=" + data), e -> System.out.println("1.error=" + e), () -> System.out.println("1.complete"));
+        
+        processor.onNext(3);
+        
+        processor.subscribe(data -> System.out.println("2.data=" + data), e -> System.out.println("2.error=" + e), () -> System.out.println("2.complete"));
+
+        processor.onNext(4);
+        processor.onComplete();
     }
     
     private static void sleep(long millis) {
