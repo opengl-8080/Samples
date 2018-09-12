@@ -3,6 +3,6 @@ package sample.apt.core;
 import sample.apt.tool.Hoge;
 
 @Hoge
-public class Foo {
-    private Bar bar;
+public class Bar {
+
 }
