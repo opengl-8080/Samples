@@ -765,3 +765,17 @@ flowable.subscribe(data -> System.out.println("data=" + data));
 - do, blocking は普通の処理を書くときにも利用できるが、あくまで元はデバッグが目的という点に注意が必要
 
 ## do で始まるメソッド
+- doOnNext
+    - データを通知する際に処理を行う
+- doOnComplete
+    - 完了を通知するときに処理を行う
+- doOnError
+    - エラーを通知するときに処理を行う
+- doOnSubscribe
+    - 購読を開始するときに処理を行う
+- doOnRequest
+    - データ数のリクエストが行われたときに処理を行う
+- doOnCancel
+    - 購読が解除されたときに処理を行う
+
+## blocking で始まるメソッド
