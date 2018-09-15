@@ -12,14 +12,8 @@ subprojects {
     }
 }
 
-project(":tool") {
+project(":foo") {
     dependencies {
-        compile "com.squareup:javapoet:1.11.1"
-    }
-}
-
-project(":core") {
-    dependencies {
-        compile project(":tool")
+        implementation project(":bar")
     }
 }
