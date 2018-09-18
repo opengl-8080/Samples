@@ -803,4 +803,56 @@ flowable.subscribe(data -> System.out.println("data=" + data));
     - 消費者の処理を呼び出し元のスレッドで実行する
     - 完了かエラーが通知されるまで、呼び出し元スレッドは消費者としての処理しかできなくなる
 - TestSubscriber/TestObserver
-    - 
+    - 通知されたデータを検証するための消費者
+    - テストをサポートするメソッドが用意されている
+        - 検証用の assert メソッド
+        - 指定した時間やイベントまで待機する await メソッド
+    - 実際に処理をする Subscriber をラップすることも可能
+    - インスタンスの生成方法
+        - Flowable の test() メソッドを呼ぶ
+            - 生成と同時に生産者を購読した状態になる
+        - 別途生成する
+            1. 直接コンストラクタで生成する
+            2. TestSubscriber/TestObserver の create() メソッド
+                - 生成しただけだと購読はしていない
+                - 他の Subscriber をラップできる
+    - assert メソッド
+        - その時点で通知されているデータに対して検証ができる
+        - assertValues
+            - その時点で通知されているすべてのデータを検証する
+            - 可変長引数でデータを指定できる
+            - 購読が完了しているか、エラー終了しているかは関係無し
+        - assertValueSequence
+            - assertValues のデータを Iterable で指定する版
+        - assertResult
+            - 購読が完了していることと、通知されたすべてのデータを検証する
+        - assertValue
+            - その時点で通知されているデータが１件で、
+            - かつ指定したデータと等しいことを検証する
+        - assertEmpty
+            - 通知されたデータがまだ無いことを検証する
+            - テストが完了していたらテストエラー
+        - assertNoValues
+            - 通知されたデータが無いことを検証する
+            - 購読が完了しているかどうかは関係なし
+        - assertComplete
+            - 通知が完了していることを検証する
+        - assertNotComplete
+            - 通知が完了していないことを検証する
+        - assertError(Predicate)
+            - エラー通知されていること
+            - 通知されたエラーオブジェクトの検証結果が true であることを検証する
+            - エラーオブジェクトは Predicate で指定する
+                - true/false を返す
+        - assertError(Class)
+            - エラー通知されていること
+            - 例外が指定した Class であることを検証する
+        - assertNoErrors
+            - その時点でエラーが通知されていないことを検証する
+        - assertSubscribe
+            - その時点で購読が開始していることを検証する
+        - assertNotSubscribe
+            - その時点で購読が開始されていないことを検証する
+        - assertValueCount
+            - その時点で通知されているデータ数を検証する
+    - await メソッド
