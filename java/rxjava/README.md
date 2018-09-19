@@ -856,3 +856,22 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - assertValueCount
             - その時点で通知されているデータ数を検証する
     - await メソッド
+        - 指定した時間処理を待機したりする
+        - await()
+            - 完了またはエラーが通知されるまで待機する
+            - 戻り値は TestSubscribe
+        - awaitDone(long TimeUnit)
+            - 指定した時間待機し、時間が過ぎた場合は購読を解除する
+            - 完了・エラーが通知されたら何がおこる？
+            - 戻り値は TestSubscribe
+        - await(long, TimeUnit)
+            - 指定した時間が経過するか、完了・エラーが通知されるまで待機する
+            - 指定時間を過ぎたら false を返す
+        - awaitTerminalEvent()
+            - 完了・エラー通知まで待機する
+            - 完了・エラーが通知されれば true を返す
+        - awaitTerminalEvent(long, TimeUnit)
+            - 指定した時間経過するか、完了・エラー通知まで待機する
+            - 完了・エラーが通知された場合は true を返す
+            - 完了・エラーが通知されずに指定時間が経過した場合は false を返す
+- その他のメソッド
