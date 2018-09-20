@@ -875,3 +875,22 @@ flowable.subscribe(data -> System.out.println("data=" + data));
             - 完了・エラーが通知された場合は true を返す
             - 完了・エラーが通知されずに指定時間が経過した場合は false を返す
 - その他のメソッド
+    - values()
+        - 通知されたデータを List で取得する
+    - valueCount()
+        - 通知されたデータの件数を取得する
+    - isTerminated()
+        - 完了もしくはエラーが通知されていれば true を返す
+    - isCancelled()/isDisposed()
+        - 購読が解除されていたら true
+    - lastThread()
+        - 最後に通知を受け取ったスレッドを取得する
+    - errors()
+        - エラー通知された例外オブジェクトを List で取得する
+    - errorCount()
+        - エラー通知された例外の個数を取得する
+    - completions()
+        - 完了が通知された回数を取得する
+        - 戻り値の型が long
+- TestScheduler
+    - 
