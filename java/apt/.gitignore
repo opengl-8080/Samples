@@ -1,10 +1,1 @@
-.idea/
-.gradle/
-.project
-.settings/
-bin/
 build/
-out/
-.classpath
-.apt_generated/
-.factorypath
