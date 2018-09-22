@@ -1,0 +1,4 @@
+<factorypath>
+    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="F:\etc\github\opengl-8080\Samples\java\apt\gradle_ide\bar\build\libs\bar.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
