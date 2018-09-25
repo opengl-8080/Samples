@@ -893,4 +893,20 @@ flowable.subscribe(data -> System.out.println("data=" + data));
         - 完了が通知された回数を取得する
         - 戻り値の型が long
 - TestScheduler
-    - 
+    - 実際に時間を待つのではなく、指定した時間だけ経過したことにする Scheduler
+    - 実際に長い時間待つことなく処理を進められる
+    - interval(), timer() など、 RxJava 内部で時間を処理しているデータに限り利用できる
+    - RxJava の外でかかる時間（ネットワーク通信など）は飛ばすことはできない
+    - 実際に動かしたときにしか発生しない問題もあるかもしれないので、過信は禁物
+    - 主なメソッド
+        - advanceTimeBy(long, TimeUnit)
+            - 指定した時間進める
+            - 現在の時間から、指定した時間進めるイメージか
+        - advanceTimeTo(long, TimeUnit)
+            - 指定した経過時間まで処理を進める
+            - 処理開始を 0 として、指定した経過時間の場所まで進んだことにする、イメージか
+        - now(TimeUnit)
+            - Scheduler を生成してから現在の状態までの経過時間を取得する
+            - 実際の経過時間ではない点に注意
+            - 例えば、 advanceTimeBy(100, TimeUnit.MILLISECOND) を２回呼んだあとであれば、 200ms が返る
+            - TimeScheduler が「経過させたことにした時間」を返す
