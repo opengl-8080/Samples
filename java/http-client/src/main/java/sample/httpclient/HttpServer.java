@@ -2,7 +2,13 @@ package sample.httpclient;
 
 import spark.Request;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
 import static spark.Spark.*;
@@ -20,10 +26,11 @@ public class HttpServer {
         System.out.println("<QUERY PARAMS>");
         request.queryMap().toMap().entrySet().stream().map(e -> "  " + e.getKey() + " : " + Arrays.toString(e.getValue()))
                 .sorted().forEach(System.out::println);
-        System.out.println("<BODY>");
-        System.out.println("--------------------------------");
-        System.out.println(new String(request.bodyAsBytes(), StandardCharsets.UTF_8));
-        System.out.println("--------------------------------");
+        try(InputStream in = new ByteArrayInputStream(request.bodyAsBytes())) {
+            Files.copy(in, Paths.get("./build/body"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.println();
         return "";
