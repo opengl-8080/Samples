@@ -20,11 +20,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        System.out.println(Main.class.getModule());
-        ModuleLayer.boot().modules().stream().map(Module::getName).sorted().forEach(System.out::println);
-        
-        System.getProperties().forEach((key, value) -> System.out.println(key + ": " + value));
+        System.out.println("jdk.module.path=" + System.getProperty("jdk.module.path"));
         URL mainFxml = Main.class.getResource("/main.fxml");
+        System.out.println("mainFxml=" + mainFxml);
         Parent root = FXMLLoader.load(mainFxml);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

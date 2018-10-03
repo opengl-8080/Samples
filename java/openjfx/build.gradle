@@ -31,9 +31,10 @@ dependencies {
 compileJava {
     doFirst {
         options.compilerArgs = [
-            '--module-path', classpath.asPath,
-            '--add-modules', 'javafx.controls'
+            '--module-path', classpath.asPath
         ]
+        
+        classpath = files()
     }
 }
 
@@ -41,7 +42,9 @@ run {
     doFirst {
         jvmArgs = [
             '--module-path', classpath.asPath,
-            '--add-modules', 'javafx.controls'
+            "--module", "sample.openjfx/${mainClassName}"
         ]
+        
+        classpath = files()
     }
 }
