@@ -6,5 +6,5 @@ build/
 out/
 classes/
 stdout.txt 
-*.jar
 sourcefiles.txt
+*.iml
