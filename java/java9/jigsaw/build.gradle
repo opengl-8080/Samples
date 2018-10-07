@@ -1,14 +1,35 @@
-subprojects {
-    apply plugin: "java"
+apply plugin: "application"
+apply plugin: 'idea'
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+sourceCompatibility = 11
+targetCompatibility = 11
 
-    compileJava.options.encoding = "UTF-8"
+compileJava.options.encoding = "UTF-8"
+mainClassName = "foo/foo.Foo"
+
+sourceSets {
+    main {
+        output.resourcesDir = java.outputDir
+    }
 }
 
-project(":foo") {
-    dependencies {
-        compile project(":bar")
+idea.module.outputDir file("out/production/classes")
+
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+            "--module-path", classpath.asPath
+        ]
+        classpath = files()
+    }
+}
+
+run {
+    doFirst {
+        jvmArgs = [
+            "--module-path", classpath.asPath,
+            "--module", mainClassName
+        ]
+        classpath = files()
     }
 }
