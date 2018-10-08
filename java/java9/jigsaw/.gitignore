@@ -8,3 +8,9 @@ classes/
 stdout.txt 
 sourcefiles.txt
 *.iml
+/bin/
+*.ipr
+*.iws
+*.project
+*.classpath
+*.settings/
