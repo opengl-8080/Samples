@@ -16,7 +16,8 @@ public class HelloOpenJFX extends Application {
             "-fx-font-size: 50px;"
           + "-fx-font-weight: bold;"
           + "-fx-alignment: center;"
-          + "-fx-text-fill: linear-gradient(to bottom right, #3f95ea 0%, #52d3aa 100%);"
+          + "-fx-text-fill: white;"
+          + "-fx-background-color: linear-gradient(to bottom right, #3f95ea 0%, #52d3aa 100%);"
         );
         Scene scene = new Scene(label);
         stage.setScene(scene);
