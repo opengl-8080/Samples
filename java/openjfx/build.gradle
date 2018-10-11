@@ -1,37 +1,45 @@
-apply plugin: 'application'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.google.gradle:osdetector-gradle-plugin:1.6.0"
+    }
+}
+
+apply plugin: "application"
+apply plugin: "com.google.osdetector"
+
+if (osdetector.os == "osx") {
+    ext.platform = "mac"
+} else if (osdetector.os == "windows") {
+    ext.platform = "win"
+} else {
+    ext.platform = osdetector.os
+}
 
 sourceCompatibility = 11
 targetCompatibility = 11
 
-compileJava.options.encoding = 'UTF-8'
+compileJava.options.encoding = "UTF-8"
 
-mainClassName = "sample.openjfx.Main"
-
-def currentOS = org.gradle.internal.os.OperatingSystem.current()
-def platform
-if (currentOS.isWindows()) {
-    platform = 'win'
-} else if (currentOS.isLinux()) {
-    platform = 'linux'
-} else if (currentOS.isMacOsX()) {
-    platform = 'mac'
-}
+mainClassName = "sample/sample.openjfx.HelloOpenJFX"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile "org.openjfx:javafx-base:11:${platform}"
-    compile "org.openjfx:javafx-graphics:11:${platform}"
-    compile "org.openjfx:javafx-controls:11:${platform}"
-    compile "org.openjfx:javafx-fxml:11:${platform}"
+    compile "org.openjfx:javafx-base:11:$platform"
+    compile "org.openjfx:javafx-graphics:11:$platform"
+    compile "org.openjfx:javafx-controls:11:$platform"
+    // compile "org.openjfx:javafx-fxml:11:win"
 }
 
 compileJava {
     doFirst {
         options.compilerArgs = [
-            '--module-path', classpath.asPath
+            "--module-path", classpath.asPath
         ]
         
         classpath = files()
@@ -41,8 +49,8 @@ compileJava {
 run {
     doFirst {
         jvmArgs = [
-            '--module-path', classpath.asPath,
-            "--module", "sample.openjfx/${mainClassName}"
+            "--module-path", classpath.asPath,
+            "--module", mainClassName
         ]
         
         classpath = files()

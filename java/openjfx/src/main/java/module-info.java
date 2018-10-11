@@ -1,5 +1,4 @@
-module sample.openjfx {
+module sample {
     exports sample.openjfx;
     requires javafx.controls;
-    requires javafx.fxml;
 }
