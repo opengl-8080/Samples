@@ -1,0 +1,10 @@
+// apply plugin: 'java'
+plugins {
+    id 'java'
+}
+
+task printPlugins {
+    doLast {
+        plugins.each { println it }
+    }
+}
