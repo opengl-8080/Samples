@@ -10,12 +10,16 @@ buildscript {
 apply plugin: "application"
 apply plugin: "com.google.osdetector"
 
-if (osdetector.os == "osx") {
-    ext.platform = "mac"
-} else if (osdetector.os == "windows") {
-    ext.platform = "win"
-} else {
-    ext.platform = osdetector.os
+ext {
+    if (osdetector.os == "osx") {
+        platform = "mac"
+    } else if (osdetector.os == "windows") {
+        platform = "win"
+    } else {
+        platform = osdetector.os
+    }
+
+    moduleName = "sample"
 }
 
 sourceCompatibility = 11
@@ -23,7 +27,7 @@ targetCompatibility = 11
 
 compileJava.options.encoding = "UTF-8"
 
-mainClassName = "sample/sample.openjfx.HelloOpenJFX"
+mainClassName = "${moduleName}/sample.openjfx.HelloOpenJFX"
 
 repositories {
     mavenCentral()
@@ -31,9 +35,12 @@ repositories {
 
 dependencies {
     compile "org.openjfx:javafx-base:11:$platform"
-    compile "org.openjfx:javafx-graphics:11:$platform"
     compile "org.openjfx:javafx-controls:11:$platform"
-    // compile "org.openjfx:javafx-fxml:11:win"
+    compile "org.openjfx:javafx-graphics:11:$platform"
+    compile "org.openjfx:javafx-fxml:11:$platform"
+    compile "org.openjfx:javafx-media:11:$platform"
+    compile "org.openjfx:javafx-swing:11:$platform"
+    compile "org.openjfx:javafx-web:11:$platform"
 }
 
 compileJava {
@@ -55,4 +62,17 @@ run {
         
         classpath = files()
     }
+}
+
+task jlink(type: Exec, dependsOn: jar) {
+    // commandLine = ["cmd", "/c", "echo", "hello"]
+    // /*
+    commandLine = [
+        "cmd", "/c", "jlink",
+        "--launcher", "hello-openjfx=${mainClassName}",
+        "-p", /${jar.archivePath};%JAVA_HOME%\jmods;${configurations.compile.files.join(";")}/,
+        "--add-modules", moduleName,
+        "--output", "${buildDir}/jlink"
+    ]
+    //*/
 }
