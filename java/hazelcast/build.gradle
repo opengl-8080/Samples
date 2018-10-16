@@ -1,0 +1,16 @@
+apply plugin: "application"
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+compileJava.options.encoding = "UTF-8"
+
+mainClassName = "sample.hazelcast.Main"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.hazelcast:hazelcast:3.10.6"
+}
