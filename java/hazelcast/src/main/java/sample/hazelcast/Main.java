@@ -4,6 +4,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
+import com.hazelcast.core.IMap;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,9 @@ public class Main {
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
 
         printPartitionOwners(instance);
+
+        IMap<Object, Object> fuga = instance.getMap("fuga");
+        fuga.put("foo", "bar");
 
         IList<String> list = instance.getList("hoge");
         System.out.println("list=" + List.copyOf(list));
