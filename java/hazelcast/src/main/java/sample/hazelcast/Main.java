@@ -1,11 +1,13 @@
 package sample.hazelcast;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.UrlXmlConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -13,13 +15,15 @@ import java.util.stream.Collectors;
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        Config config = new Config();
+        URL configFileUrl = Main.class.getResource("/my-hazelcast.xml");
+        Config config = new UrlXmlConfig(configFileUrl);
+        config.setConfigurationUrl(configFileUrl);
+        System.out.println(config.getProperty("foo"));
+        
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
 
+        System.out.println("Name=" + instance.getName());
         printPartitionOwners(instance);
-
-        IMap<Object, Object> fuga = instance.getMap("fuga");
-        fuga.put("foo", "bar");
 
         IList<String> list = instance.getList("hoge");
         System.out.println("list=" + List.copyOf(list));

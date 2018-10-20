@@ -99,3 +99,23 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#discovery-m
 
 ## 設定ファイルを理解する
 https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understanding-configuration
+
+- Hazelcast の設定方法には以下の種類が存在する
+    1. 宣言的な方法
+    2. プログラミングによる方法
+    3. Hazelcast のシステムプロパティを使用する方法
+    4. Spring Context に含める方法
+    5. 実行中のクラスで動的に設定を追加する方法(3.9 以上)
+- 宣言的な方法
+    - xml ファイルで設定を定義する
+    - jar の中の `hazelcast-default.xml` がデフォルト値を定義した設定ファイル
+    - `hazelcast-full-example.xml` は、全ての設定値を含むファイル
+        - リファレンスドキュメントとして利用できる
+- 設定ファイルの合成
+    - `<import>` を使うことで、外部の設定ファイルをロードできる
+- 設定ファイルをプログラムから読み込む
+    - 設定ファイルの取得元ごとに `Config` クラスのサブクラスが用意されている
+        - URL を指定して読み込む場合は `UrlXmlConfig`
+        - ローカルファイルを読み込む場合は `FileSystemXmlConfig`
+        - クラスパス上の設定ファイルを読み込む場合は `ClasspathXmlConfig`
+- 
