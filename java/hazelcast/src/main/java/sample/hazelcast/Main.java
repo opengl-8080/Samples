@@ -8,6 +8,7 @@ import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -18,7 +19,9 @@ public class Main {
         URL configFileUrl = Main.class.getResource("/my-hazelcast.xml");
         Config config = new UrlXmlConfig(configFileUrl);
         config.setConfigurationUrl(configFileUrl);
-        System.out.println(config.getProperty("foo"));
+
+        System.out.println("instanceName=" + config.getInstanceName());
+        System.out.println("working-dir-value=" + config.getProperty("working-dir-value"));
         
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
 
