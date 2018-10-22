@@ -1,13 +1,14 @@
 package sample.hazelcast;
 
-import com.hazelcast.config.ClasspathXmlConfig;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 public class Main {
     
     public static void main(String[] args) {
-        ClasspathXmlConfig config = new ClasspathXmlConfig("my-hazelcast.xml");
+        Config config = new Config();
+        config.setProperty("hazelcast.partition.count", "231");
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         
         int size = instance.getPartitionService().getPartitions().size();
