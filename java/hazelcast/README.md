@@ -118,4 +118,11 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
         - URL を指定して読み込む場合は `UrlXmlConfig`
         - ローカルファイルを読み込む場合は `FileSystemXmlConfig`
         - クラスパス上の設定ファイルを読み込む場合は `ClasspathXmlConfig`
-- 
+- 動的な設定の追加
+    - 普通、設定は静的で、一度インスタンスを生成すると変更することはできない
+    - しかし、 3.9 からは一部の設定に限ってインスタンス生成後も設定を追加できるようになった
+    - `Config` クラスで `add*Config()` という名前のメソッドが対象
+    - `HazelcastInstance` の `getConfig()` で取得した `Config` インスタンスを使用するのが前提
+    - 動的に追加する設定は、 `add*Config()` を呼び出す前に全て完了している必要がある
+    - 動的に追加された設定は、クラスタ内の全てのノードに配布される
+    - もしネットワークエラーなどの原因でクラスタ内のノードに配布できなかった場合、
