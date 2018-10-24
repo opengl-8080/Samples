@@ -132,10 +132,16 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
         - 動的に追加した設定と同じ要素が、すでに静的な設定で指定されている場合
         - `ConfigurationException` がスローされる
         - 以前の動的な設定追加ものと同じ要素を、更に動的設定追加しようとした場合も `ConfigurationException` がスローされる
-- 設定の検証
+- 設定ファイルの検索
     - `Config` クラスを使わずに `HazelcastInstance` を生成した場合の挙動
         - `newHazelcastInstance()` を引数なしで使用した場合の話
     - デフォルトでは、次の順序で設定ファイルが検索される
         1. システムプロパティの `hazelcast.config` で指定されたファイル
             - `classpath:` で始めれば、クラスパス内のファイルを参照することも可能
-        2. 
+        2. ワーキングディレクトリの `hazelcast.xml`
+        3. クラスパス内の `hazelcast.xml`
+        4. Hazelcast が内部に持つデフォルト値を設定した `hazelcast.xml`
+- パターンマッチ
+    - ワイルドカード
+        - デフォルトでは、 `*` を使ったワイルドカードの指定がサポートされている
+        - 
