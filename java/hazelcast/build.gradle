@@ -14,3 +14,9 @@ repositories {
 dependencies {
     implementation "com.hazelcast:hazelcast:3.10.6"
 }
+
+run {
+    doFirst {
+        jvmArgs = ["-Dhazelcast.config=classpath:my-hazelcast.xml"]
+    }
+}
