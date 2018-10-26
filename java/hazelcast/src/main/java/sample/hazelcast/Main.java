@@ -3,6 +3,7 @@ package sample.hazelcast;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EntryListenerConfig;
 import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.matcher.RegexConfigPatternMatcher;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -11,31 +12,28 @@ public class Main {
     
     public static void main(String[] args) {
         Config config = new Config();
+        config.setConfigPatternMatcher(new RegexConfigPatternMatcher());
 
-        MapConfig allMapConfig = new MapConfig("*");
-        allMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("AllMap"), false, true));
+        MapConfig allMapConfig = new MapConfig("[0-9]+");
+        allMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("NumberMap"), false, true));
         config.addMapConfig(allMapConfig);
 
-        MapConfig fooAnyMapConfig = new MapConfig("foo*");
-        fooAnyMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("FooAny"), false, true));
+        MapConfig fooAnyMapConfig = new MapConfig("[a-z]+");
+        fooAnyMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("LowerMap"), false, true));
         config.addMapConfig(fooAnyMapConfig);
 
-        MapConfig fooMapConfig = new MapConfig("foo");
-        fooMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("OnlyFoo"), false, true));
+        MapConfig fooMapConfig = new MapConfig("[A-Z]+");
+        fooMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("UpperMap"), false, true));
         config.addMapConfig(fooMapConfig);
-
-        MapConfig barMapConfig = new MapConfig("bar");
-        barMapConfig.addEntryListenerConfig(new EntryListenerConfig(new MyMapListener("OnlyBar"), false, true));
-        config.addMapConfig(barMapConfig);
         
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
-        IMap<Object, Object> fooMap = instance.getMap("foo");
+        IMap<Object, Object> fooMap = instance.getMap("aaa");
         fooMap.put("hoge", "HOGE");
 
-        IMap<Object, Object> barMap = instance.getMap("bar");
+        IMap<Object, Object> barMap = instance.getMap("BBB");
         barMap.put("fuga", "FUGA");
         
-        IMap<Object, Object> fooBarMap = instance.getMap("fooBar");
+        IMap<Object, Object> fooBarMap = instance.getMap("123");
         fooBarMap.put("fizz", "FIZZ");
     }
 }
