@@ -153,3 +153,6 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
         - パターンマッチのルールは任意のものに変更できる
         - 標準実装のなかに正規表現クラスがあるっぽいので、それに差し替えできそう
         
+- 変数
+    - システムプロパティに設定した値は、 `${名前}` という記法で設定ファイルに埋め込むことができる
+    - `XmlConfigBuilder` に `setProperties(Properties)` を設定して `build()` で生成した設定ファイルを使えば、システムプロパティ以外で設定できる
