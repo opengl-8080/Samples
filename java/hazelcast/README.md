@@ -156,3 +156,7 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
 - 変数
     - システムプロパティに設定した値は、 `${名前}` という記法で設定ファイルに埋め込むことができる
     - `XmlConfigBuilder` に `setProperties(Properties)` を設定して `build()` で生成した設定ファイルを使えば、システムプロパティ以外で設定できる
+    - `ClasspathXmlConfig` のコンストラクタは内部で `XmlConfigBuilder` を使っている
+        - 引数に `Properties` を指定できるコンストラクタを使えば、内部で `XmlConfigBuilder` が利用されている
+    - `FileSystemXmlConfig` とかも一緒
+
