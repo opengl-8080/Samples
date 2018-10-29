@@ -159,4 +159,49 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
     - `ClasspathXmlConfig` のコンストラクタは内部で `XmlConfigBuilder` を使っている
         - 引数に `Properties` を指定できるコンストラクタを使えば、内部で `XmlConfigBuilder` が利用されている
     - `FileSystemXmlConfig` とかも一緒
+- 変数置換(Variable Replacers)
+    - 設定ファイルを読み込むときに任意の値に置換する機能
+    - パスワードのような機密情報などを扱うときに利用する
+        - もちろん、それ以外の用途でも利用できる
+    - `ConfigReplacter` インターフェースを実装して作成する
+    - 標準で以下が用意されている
+        - `EncryptionReplacer`
+        - `PropertyReplacer`
+    - `EncryptionReplacer`
+        - 暗号化された変数を置換する
+        - ファイル内の値にできるパスワードのために暗号化/復号化された秘密鍵は、MAC アドレスや実際のユーザデータのような環境固有の値から生成できる
+        - 設定のためのプロパティ
+            - `cipherAlgorithm`
+                - 暗号化/復号化のためのアルゴリズム
+                - デフォルトは AES
+            - `keyLengthBits`
+                - 生成される鍵のビット数
+                - デフォルトは 128
+            - `passwordFile`
+                - 生成される暗号化パスワードの一部として利用するファイルのパス
+                    - ファイルの内容をバイト配列で取得して Base64 でエンコードしたものをパスワードにするっぽい
+                - 設定していない場合は利用されない
+                - デフォルトは null
+            - `passwordNetworkInterface`
+                - パスワードの一部に使用する MAC アドレスを持つネットワークインターフェースの名前
+                - 未設定の場合は利用されない
+                - デフォルトは null
+            - `passwordUserProperties`
+                - `user.home` と `user.name` のシステムプロパティを使用してパスワードを生成するかどうか
+                - デフォルトは true
+            - `passwordFile`, `passwordNetworkInterface`, `passwordUserProperties` は、最低でも１つは設定（null でない or true）されている必要がある
+            - `saltLengthBytes`
+                - ランダムソルトのバイト数
+                - デフォルトは 8 byte
+            - `secretKeyAlgorithm`
+                - 秘密鍵のアルゴリズム
+                    - `SecretKeySpec` のコンストラクタの第二引数で渡す値
+                - デフォルトが AES
+            - `secretKeyFactoryAlgorithm`
+                - パスワードから秘密鍵を生成するときのアルゴリズム
+                    - `SecretKeyFactory.getInstance()` に渡す値
+                - デフォルトは `PBKDF2WithHmacSHA256`
+            - `securityProvider`
+                - 秘密鍵のファクトリと暗号を見つけるための Java Security Provider の名前
+                - デフォルトは null
 
