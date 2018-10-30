@@ -204,4 +204,9 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
             - `securityProvider`
                 - 秘密鍵のファクトリと暗号を見つけるための Java Security Provider の名前
                 - デフォルトは null
+        - `EncryptionReplacer` の `main()` 関数に暗号化したい引数を渡して実行すると、所定のフォーマットで暗号化された文字列が標準出力に出力される
+            - 例：`$ENC{L6xyXa0XvK8=:531:OcTxoUoPYzQc+ZQop8IApA==}`
+        - これを設定ファイルの任意の値に埋め込む
+        - `<config-replacers>` で `com.hazelcast.config.replacer.EncryptionReplacer` を指定して設定ファイルを読み込む
+        - すると、暗号化された値を `Config` から取得したときの値が復号化した状態で取得できる
 

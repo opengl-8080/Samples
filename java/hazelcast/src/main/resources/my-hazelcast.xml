@@ -3,5 +3,11 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-3.10.xsd">
-    <instance-name>${instance.name}</instance-name>
+    <instance-name>MyHazelcast</instance-name>
+    <config-replacers>
+        <replacer class-name="com.hazelcast.config.replacer.EncryptionReplacer" />
+    </config-replacers>
+    <properties>
+        <property name="password">$ENC{L6xyXa0XvK8=:531:OcTxoUoPYzQc+ZQop8IApA==}</property>
+    </properties>
 </hazelcast>
