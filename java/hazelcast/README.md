@@ -167,8 +167,11 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
     - 標準で以下が用意されている
         - `EncryptionReplacer`
         - `PropertyReplacer`
+    - 設定ファイル中に `$<PREFIX>{<VALUE>}` と指定しているときに、 `<PREFIX>` ごとに `Replacer` が適用され、 `<VALUE>` の値をもとに別の値に置換される
     - `EncryptionReplacer`
         - 暗号化された変数を置換する
+        - プレフィックスは `ENC`
+            - `$ENC{....}`
         - ファイル内の値にできるパスワードのために暗号化/復号化された秘密鍵は、MAC アドレスや実際のユーザデータのような環境固有の値から生成できる
         - 設定のためのプロパティ
             - `cipherAlgorithm`
@@ -209,4 +212,18 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
         - これを設定ファイルの任意の値に埋め込む
         - `<config-replacers>` で `com.hazelcast.config.replacer.EncryptionReplacer` を指定して設定ファイルを読み込む
         - すると、暗号化された値を `Config` から取得したときの値が復号化した状態で取得できる
+    - `PropertyReplacer`
+        - `${key}` と指定すると、 `key` という名前のシステムプロパティに置き換える
+        - この `Replacer` は明示的な設定が不要で、デフォルトで動作する
+        - プレフィックスは空文字
+            - `${...}`
+    - カスタムの Replacer
+        - `ConfigReplacer` インターフェースを実装して作成する
+        - `init(Properties)`
+            - 最初に１回だけ呼ばれるメソッド
+            - 引数の `Properties` は、設定ファイルの `<replacer>` 内の `<properties>` で指定している値が渡される
+        - `getPrefix()`
+            - カスタム Replacer のプレフィックスを返す
+        - `getReplacement(String)`
+            - 設定ファイルから取得されたマスク値が引数に渡されるので、置換後の値を返す
 

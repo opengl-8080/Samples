@@ -5,9 +5,15 @@
            http://www.hazelcast.com/schema/config/hazelcast-config-3.10.xsd">
     <instance-name>MyHazelcast</instance-name>
     <config-replacers>
-        <replacer class-name="com.hazelcast.config.replacer.EncryptionReplacer" />
+        <replacer class-name="sample.hazelcast.ToUpperCaseReplacer">
+            <properties>
+                <property name="fizz">FIZZ</property>
+                <property name="buzz">BUZZ</property>
+            </properties>
+        </replacer>
     </config-replacers>
     <properties>
-        <property name="password">$ENC{L6xyXa0XvK8=:531:OcTxoUoPYzQc+ZQop8IApA==}</property>
+        <property name="hoge">$UPPER{hoge}</property>
+        <property name="fuga">$UPPER{fuga}</property>
     </properties>
 </hazelcast>
