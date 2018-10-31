@@ -6,7 +6,6 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
         ClasspathXmlConfig config = new ClasspathXmlConfig("my-hazelcast.xml");
-        System.out.println("hoge=" + config.getProperty("hoge"));
-        System.out.println("fuga=" + config.getProperty("fuga"));
+        System.out.println(config.getNetworkConfig().getJoin().getMulticastConfig().isEnabled());
     }
 }

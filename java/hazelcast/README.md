@@ -227,3 +227,32 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#understandi
         - `getReplacement(String)`
             - 設定ファイルから取得されたマスク値が引数に渡されるので、置換後の値を返す
 
+## 5. クラスタのセットアップ
+https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-clusters
+
+- 発見の仕組み
+    - Hazelcast は自動的にクラスタに参加する仕組みを持つ
+    - クラスタに参加するためのメカニズムは複数存在する
+    - クラスタに参加したあとは、発見のメカニズムに関係なく TCP/IP で通信が行われる
+    - TCP
+        - 設定ファイルに以下を記述する必要がある
+            - 全てのメンバーのホスト名かそのサブセット
+            - メンバーの IP アドレス
+        - クラスタ内の全てのメンバーを記述する必要はないが、新規にクラスタに参加するときには最低１つはアクティブである必要がある
+        - TCP/IP を使用するには、以下のように設定を変更する
+            - `network.join.multicast` の `enabled` 属性に `false` を設定する
+            - `network.join.tcp-ip` の `enabled` 属性を `true` にする
+            - `tcp-ip` の下にクラスタメンバの情報を記述する
+                - `<member>` タグで記述
+                    - ホスト名や IP アドレスを記述できる
+                    - `192.168.1.0-7` のように範囲指定の記述が可能
+                    - `192.168.1.1:5799` のようにポートの指定も可能
+                        - ポートを指定していない場合は、 `5701` から順番にトライする
+                        - おそらく、 `network.port` で指定した情報でトライのポート範囲が決まる
+                - `<members>` タグなら、カンマ区切りで複数記述することも可能
+            - ポートの指定がない場合、
+    - Multicast
+        - デフォルトで true ？
+        - 本番環境での利用は推奨されないらしい
+        - UDP を使うため接続が壊れることがある
+        - 他のメカニズムのほうが確実
