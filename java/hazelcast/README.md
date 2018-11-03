@@ -299,4 +299,15 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
         - つまり、 zone ごとにパーティショングループが作られる
     - SPI
         - `AbstractDiscoveryStrategy` を継承して自力で実装する
+- ログ設定
+    - デフォルトで JDK のロガーをサポート
+    - 一般的なロギングライブラリのアダプターをサポートしている
+    - `hazelcast.logging.type` プロパティで指定できる
+        - JDK (default)
+        - log4j
+        - log4j2
+        - slf4j
+        - none (ログなし)
+    - プロパティでロギングライブラリを指定して、対象の jar を依存関係に入れれば自動的にそのロギングライブラリを使用するようになる
+    - 
 
