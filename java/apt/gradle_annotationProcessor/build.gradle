@@ -10,10 +10,9 @@ project(":main") {
         // １つでも annotationProcessor を使っていると、クラスパスからの検索は動作しなくなるもよう
         // 両方共含んでいる場合も、 implementation と annotationProcessor の２つを設定すれば警告なく動く
         implementation project(":combined")
-//        annotationProcessor project(":combined")
+        annotationProcessor project(":combined")
         implementation project(":separated:core")
-        implementation project(":separated:apt")
-//        annotationProcessor project(":separated:apt")
+        annotationProcessor project(":separated:apt")
     }
 }
 
