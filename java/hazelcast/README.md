@@ -358,3 +358,30 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
     - Member Address Provider SPI
         - AWS 上で Docker を使ってデプロイするようなケースだと、さらに複雑な公開アドレスの設定などが必要になるっぽい？
         - `MemberAddressProvider` インターフェースを実装したクラスを作ることで、プログラムから設定できる
+- 故障検出の設定
+    - 故障検出は、クラスタのメンバが到達不能またはクラッシュしたかを決定する責務を持つ
+    - もっとも重要な問題は、メンバーの応答が単に遅いだけなのか、それとも本当にクラッシュしているのかを区別すること
+    - 有名な FLP Result という論文によると、非同期で連携するシステムについてそれを区別することはできないらしい
+    - この限界への回避策は、信頼できない故障検出を使うこと
+    - 信頼できない故障検出では、メンバーが他のメンバーが故障しているのではないかと疑うことができる
+    - 故障しているかどうかは、生存の基準をもとに行うが、これはある程度の確率で誤った判断をすることがある
+    - Hazelcast は、２つの検出器を持っている
+        - Deadline Failure Detector
+        - Phi Accrual Failure Detector
+    - 3.9.1 からはもう１つ検出器が追加された
+        - Ping Failure Detector
+            - OSI 第３層（ネットワークレイヤ）で故障を検出する
+            - デフォルトは無効になっている
+    - どの検出器を使うかは、 `hazelcast.heartbeat.failuredetector.type` プロパティで指定する
+        - `deadline`
+        - `phi-accrual`
+    - Deadline Failure Detector
+        - heartbeats のタイムアウトで検出する
+        - タイムアウトが発生すると、そのメンバーはクラッシュした疑いがかけられる
+        - ２つの設定値
+            - `hazelcast.heartbeat.interval.seconds`
+                - heartbeats の間隔
+            - `hazelcast.max.no.heartbeat.seconds`
+                - タイムアウト時間
+    - Phi Accrual Failure Detector
+        - 
