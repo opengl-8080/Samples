@@ -12,7 +12,12 @@ project(":main") {
         implementation project(":combined")
         annotationProcessor project(":combined")
         implementation project(":separated:core")
+//        implementation project(":separated:apt")
         annotationProcessor project(":separated:apt")
+    }
+    
+    compileTestJava {
+        options.compilerArgs += ["-proc:none"]
     }
 }
 
