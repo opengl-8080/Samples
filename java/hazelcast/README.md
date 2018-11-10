@@ -384,4 +384,28 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
             - `hazelcast.max.no.heartbeat.seconds`
                 - タイムアウト時間
     - Phi Accrual Failure Detector
-        - 
+        - sliding window 内のハートビートのインターバルの痕跡を残し、サンプリングした時間の平均と分散を測定し、疑いレベル（Phi）を計算する
+            - sliding window
+            - https://ja.wikipedia.org/wiki/%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%A6%E3%82%A3%E3%83%B3%E3%83%89%E3%82%A6
+            - 通信高速化のフロー制御
+            - あらかじめ決められた数の枠を設けておき、枠が空いていれば受信側からの応答を待たずに次々とデータを送信することで、全体的な通信時間を短縮する手法
+        - 最後のハートビートからの時間が長くなれば、 phi も大きくなっていく
+        - `hazelcast.heartbeat.interval.seconds` と `hazelcast.max.no.heartbeat.seconds` は、 Phi Accrual Failure Detector でも利用可能
+            - `hazelcast.max.no.heartbeat.seconds` については、 Deadline よりもさらに小さい値にできる
+            - ネットワークに適応しているらしいけど、意味がわからない
+        - `hazelcast.heartbeat.phiaccrual.failuredetector.threshold`
+            - 疑うかどうかを決める phi の閾値
+            - phi の値がこの閾値を超えた場合、そのメンバーは到達不能になったものとして疑われる
+            - 小さい値を設定した場合、クラッシュしたメンバーを迅速に検出できるようになる
+            - しかし、その分誤検知も発生しやすくなる
+            - 大きい値を設定した場合は、その逆で誤検知は減るが本当にクラッシュしたメンバーの検出が遅れる
+            - `phi = 1` の場合、誤検知率は 10% ほど
+            - `phi = 2` の場合、誤検知率は 1% ほど
+            - `phi = 3` の場合、誤検知率は 0.1% ほど
+            - デフォルトの閾値は `10`
+        - `hazelcast.heartbeat.phiaccrual.failuredetector.sample.size`
+            - 記録するサンプルの数
+            - デフォルトは 200
+        - `hazelcast.heartbeat.phiaccrual.failuredetector.min.std.dev.millis`
+            - phi を計算するときに使用する正規分布の標準偏差の最小値
+            - 小さい値を設定すると、結果が過敏になる
