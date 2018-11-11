@@ -431,4 +431,20 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
 - エンタープライズ版だけの機能
 
 ## 7. Distributed Data Structures
-- 
+### 7.1. Overview of Hazelcast Distributed Objects
+- 分散データ構造には、パーティション戦略により、２つの種類がある
+    - 分散化データ構造（partitioned data structures）
+        - 異なるパーティションに保存される
+        - Map, MultiMap, Cache, Event Journal
+    - 非分散化データ構想（non-partitioned data structures）
+        - 全てのインスタンスで、単一のパーティションに保存される
+        - Queue, Set, List, Ringbuffer, Lock, ISemaphore, IAtomicLong, IAtomicReference, FlakeIdGenerator, ICountdownLatch, Cardinality Estimator, PN Counter
+- また、複製 Map 構造 (Replicated Map structure) というものも提供している
+- 分散オブジェクトのロードと削除
+    - Hazelcast は、分散オブジェクトの get メソッドを大量に用意している
+    - get メソッドを呼び出すと、オブジェクトがロードされる
+    - 分散オブジェクトの設定は、指定がなければデフォルト値が使用される
+    - 多くの分散オブジェクトは、遅延生成される
+        - 最初にアクセスされたときに生成される
+    - オブジェクトを削除するには、各分散オブジェクトが持つ `destroy` メソッドを使用する
+        - 分散オブジェクトの中身がクリアされるだけで、その分散オブジェクトは引き続き利用できる
