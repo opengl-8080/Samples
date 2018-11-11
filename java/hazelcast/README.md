@@ -409,3 +409,26 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
         - `hazelcast.heartbeat.phiaccrual.failuredetector.min.std.dev.millis`
             - phi を計算するときに使用する正規分布の標準偏差の最小値
             - 小さい値を設定すると、結果が過敏になる
+    - Ping Failure Detector
+        - Deadline と Phi の追加設定として利用する
+        - OSI の３層（ネットワーク層）で動作する
+        - ハードウェアや他のローレベルなレイヤでの、より高速で決定的な検出ができる
+        - この検出器は、メンバーが他の検出器によって疑われたあとに、他の検証を行うために設定される
+        - もしくは、並行的にも動作する
+        - ハードウェアやネットワークレベルの問題をより高速に検出する
+        - `InetAddress.isReachable()` がベースになっている
+        - ICMP のエコーを利用している
+        - JVM が生のソケットを作成できる権限を持つ必要がある
+        - もし権限がない場合は、 port 7 番を利用した TCP エコーに切り替わる
+            - このへんの話は、 `isReachable()` の話
+            - https://docs.oracle.com/javase/jp/10/docs/api/java/net/InetAddress.html#isReachable(int)
+        - TCP 接続の代替手段は重くなるので、あまり推奨はされない
+        - ICMP エコーのみを利用するための条件
+            - なんか結構たいへんそう・・・
+
+## 6. Rolling Member Upgrades
+- アップグレードの方法
+- エンタープライズ版だけの機能
+
+## 7. Distributed Data Structures
+- 
