@@ -256,6 +256,8 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
         - 本番環境での利用は推奨されないらしい
         - UDP を使うため接続が壊れることがある
         - 他のメカニズムのほうが確実
+        - `MulticastService` というクラスで `MulticastSocket` を作っている
+        - 
 - クラスタのグループを作る
     - `<group>` タグを使うことで、クラスタのグループを作ることができる
     - グループは名前をつけて分けることができる
