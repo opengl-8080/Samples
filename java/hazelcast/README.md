@@ -466,3 +466,49 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
     - クラスタ内の全てのメンバーは同じ権限と責任を持つ
     - 優遇されるメンバーは１つも存在しない
     - サーバーやマスターのような、外部に依存するようなものはない
+
+### 7.2. Map
+- `IMap extends ConcurrentMap`
+- エントリを分けて、メンバーに均等に割り振る
+- 各メンバーは、およそ「Map のエントリ数 * 2 * 1/n」のエントリーを持つことになる
+    - n はクラスタ内のメンバーの数
+    - ※２を掛けている理由がよくわからん
+- キーがローカルやリモートの JVM 上でロックされる可能性があるが、全てのメソッドは正常に完了して戻ってくる
+    - `ConcurrentMap` の処理は、決して `ConcurrentModificationException` をスローしない
+    - ここでのロックは、多分、 `getLock()` のことを指している気がする
+- 各エントリーのバックアップは、デフォルトでは１つだけ作成される
+    - オーナーのパーティションにあるエントリと、他のどれかのメンバーのバックアップパーティションに１つだけコピーされる
+    - バックアップの数は設定で変更可能
+        - `map.backup-count`
+        - 2 を指定すれば、２つのメンバーにコピーが分配される
+        - 0 を指定すれば、バックアップは作成されない
+        - パフォーマンスが重要であれば、最大は 6 になる（それ以上はパフォーマンスが悪くなるということか？）
+    - バックアップには同期と非同期の２つがある
+        - デフォルトでは、同期的に処理される
+        - 同期の場合、バックアップ処理が完了するまでブロックされる
+        - 当然、ブロッキングのコストは発生する
+    - 非同期のバックアップ
+        - ブロックせずにバックアップが行われる
+        - バックアップは別のタイミングで行われる
+        - 設定は、 `map.async-backup-count`
+            - 数値を設定する
+            - `map.backup-count` の方は `0` にしておく
+
+### 7.3. Queue
+### 7.4. MultiMap
+### 7.5. Set
+### 7.6. List
+### 7.7. Ringbuffer
+### 7.8. Topic
+### 7.9. Reliable Topic
+### 7.10. Lock
+### 7.11. IAtomicLong
+### 7.12. ISemaphore
+### 7.13. IAtomicReference
+### 7.14. ICountDownLatch
+### 7.15. PN Counter
+### 7.16. IdGenerator
+### 7.17. FlakeIdGenerator
+### 7.18. Replicated Map
+### 7.19. Cardinality Estimator Service
+### 7.20. Event Journal
