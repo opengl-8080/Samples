@@ -508,7 +508,17 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
         - バックアップからデータを読み取った場合、オーナーのデータに対するヒットには影響を与えない
             - キャッシュの有効期限的な話だと思う
             - つまり、バックアップからデータを読み取っていも、オーナー側のデータにアクセスしたことにはならないので、キャッシュが時間切れになるかもしれない、ということだと思う
-
+    - Map Eviction
+        - 3.7 からの機能
+        - LRU (Least Recently Used)
+        - LFU (Least Frequently Used)
+        - partition-maximum-size がオーバーしたら eviction が起動する
+            - parition-maximum-size = max-size * member-count / parition-count
+                - max-size : Map に設定する値
+                - Map 内のエントリ数の最大？
+            - parition-maximum-size は、 partition ごとの最大数で、 max-size は Map 全体での最大数か？
+        - max-size を超えると、あふれた１つ削除される
+        - 
 
 ### 7.3. Queue
 ### 7.4. MultiMap
