@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation "com.hazelcast:hazelcast:3.10.6"
+    implementation "com.hazelcast:hazelcast:3.11"
 }
 
 run {
