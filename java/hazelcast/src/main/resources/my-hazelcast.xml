@@ -4,16 +4,11 @@
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-3.10.xsd">
     <instance-name>MyHazelcast</instance-name>
-    <config-replacers>
-        <replacer class-name="sample.hazelcast.ToUpperCaseReplacer">
-            <properties>
-                <property name="fizz">FIZZ</property>
-                <property name="buzz">BUZZ</property>
-            </properties>
-        </replacer>
-    </config-replacers>
+    <map name="sample">
+        <eviction-policy>LRU</eviction-policy>
+        <max-size>3</max-size>
+    </map>
     <properties>
-        <property name="hoge">$UPPER{hoge}</property>
-        <property name="fuga">$UPPER{fuga}</property>
+        <property name="hazelcast.partition.count">5</property>
     </properties>
 </hazelcast>

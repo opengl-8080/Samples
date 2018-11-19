@@ -518,6 +518,34 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
                 - Map 内のエントリ数の最大？
             - parition-maximum-size は、 partition ごとの最大数で、 max-size は Map 全体での最大数か？
         - max-size を超えると、あふれた１つ削除される
+        - デフォルトは `<eviction-policy>` が `NONE` になっているので、コレを指定しないとだめっぽい
+        - `<max-size>` の `policy` 属性に指定できる値
+            - `PER_NODE`
+                - 各 Hazelcast インスタンスごとに持てるエントリの最大数
+                - デフォルトはこれ
+            - `PER_PARTITION`
+                - 各パーティション内に保存できるエントリの最大数
+                - ストレージのサイズが、パーティション数に依存することになる
+                - 普通は使うべきではない
+                - クラスタが小さく、エントリ数が多い場合、 eviction でパフォーマンスが落ちるらしい
+            - `USED_HEAP_SIZE`
+                - 各インスタンスのマップごとに、使用しているヒープサイズの最大サイズ
+                - メガバイト単位
+            - `USED_HEAP_PERCENTAGE`
+                - 全体のヒープサイズに対する使用しているヒープサイズのパーセントで最大サイズを設定する
+                - ヒープサイズが 1000MB で、 10 を指定していた場合は、 10% の 100MB が最大値になる
+            - `FREE_HEAP_SIZE`
+                - 空きヒープサイズの最小値で指定する
+                - 単位はメガバイト
+                - 空きヒープサイズがここで指定したサイズより小さくなったら eviction が実行される
+            - `FREE_HEAP_PERCENTAGE`
+                - 全体のヒープサイズに対して、空きヒープサイズがここで指定したパーセントを下回ったら eviction が行われる
+                - 全体が 1000MB で 10 を指定した場合は、空き容量が 100MB を下回ったときに eviction が実行される
+            - 以下は、ヒープサイズの設定のネイティブメモリ版だと思う
+                - `USED_NATIVE_MEMORY_SIZE`
+                - `USED_NATIVE_MEMORY_PERCENTAGE`
+                - `FREE_NATIVE_MEMORY_SIZE`
+                - `FREE_NATIVE_MEMORY_PERCENTAGE`
     - メモリ内のフォーマット
         - デフォルトはバイナリ(シリアライズ)で保存する
         - ローカルで処理する場合は、オブジェクト形式のほうが効率的な場合もある
