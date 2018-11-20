@@ -1,0 +1,29 @@
+println("one")
+task foo {
+    println("two")
+    doFirst {
+        println("seven")
+    }
+    doFirst {
+        println("six")
+    }
+    println("three")
+    doLast {
+        println("eight")
+    }
+    println("four")
+}
+println("five")
+
+task bar(type: Hoge) {
+    message = "Doya?"
+}
+
+class Hoge extends DefaultTask {
+    String message
+
+    @TaskAction
+    def hoge() {
+        println("Hoge!! message=${this.message}")
+    }
+}
