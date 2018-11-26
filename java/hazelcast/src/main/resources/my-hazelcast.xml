@@ -5,10 +5,8 @@
            http://www.hazelcast.com/schema/config/hazelcast-config-3.10.xsd">
     <instance-name>MyHazelcast</instance-name>
     <map name="sample">
-        <eviction-policy>LRU</eviction-policy>
-        <max-size>3</max-size>
+        <map-store>
+            <class-name>sample.hazelcast.MyMapStore</class-name>
+        </map-store>
     </map>
-    <properties>
-        <property name="hazelcast.partition.count">5</property>
-    </properties>
 </hazelcast>

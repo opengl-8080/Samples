@@ -568,6 +568,13 @@ https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#setting-up-
             - こちらも、バイナリ形式のほうがデシリアライズのみが必要になるので、オブジェクト形式よりは高速
         - オブジェクト形式の場合、ストアされているオブジェクトを取得して状態を変更しても、ストアされているオブジェクトには影響を与えない
             - クローンを返しているため
+    - Map 内のデータを外部の永続化サービスと連動させる仕組みがある
+        - たとえば、 RDB などに保存する
+        - MapStore, MapLoader インターフェースを利用する
+        - MapLoader
+            - get() したときにメモリ上になければ、永続化サービスからデータを取得する
+        - MapStore
+            - load() は、 put したときに永続化サービスにデータを格納する
 
 ### 7.3. Queue
 ### 7.4. MultiMap
