@@ -1,0 +1,3 @@
+
+task hoge(type: sample.HogeCustomTask, constructorArgs: ["Hey!!"])
+
