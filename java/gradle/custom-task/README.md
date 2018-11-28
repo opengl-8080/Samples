@@ -65,6 +65,14 @@ https://docs.gradle.org/current/userguide/more_about_tasks.html
     - `@Inject` でアノテートできるコンストラクタは１つだけ
 - 呼び出し方は、 `task xxx(type: Xxx, constructorArgs: [...])`
 
+## Adding dependencies to a task
+- プロジェクト内のタスクであれば、名前を指定して直接タスクを参照できうｒ
+- 他のプロジェクトのタスクの場合は、プロジェクト名を含めた完全名で参照が可能
+    - `:projectB:taskX`
+- `dependsOn` にクロージャを渡す方法もある
+    - クロージャは、依存するタスクもしくはコレクションを返すように実装する
+    - クロージャはタスクが全て定義されたあとで呼ばれる
 
+## Ordering tasks
 
 

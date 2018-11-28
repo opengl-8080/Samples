@@ -1,3 +1,19 @@
 
-task hoge(type: sample.HogeCustomTask, constructorArgs: ["Hey!!"])
+task foo {
+    dependsOn {
+        println("foo.dependsOn")
+    }
 
+    doFirst {
+        println("foo")
+    }
+
+    dependsOn "bar"
+}
+
+task bar {
+    println("bar")
+    doFirst {
+        println("BAR!!")
+    }
+}
