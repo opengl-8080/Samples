@@ -1,19 +1,20 @@
-
-task foo {
-    dependsOn {
-        println("foo.dependsOn")
-    }
-
+task a {
+    dependsOn "b"
     doFirst {
-        println("foo")
+        println("a")
     }
-
-    dependsOn "bar"
 }
 
-task bar {
-    println("bar")
+task b {
+    dependsOn "c"
     doFirst {
-        println("BAR!!")
+        println("b")
+    }
+}
+
+task c {
+    shouldRunAfter "a"
+    doFirst {
+        println("c")
     }
 }
