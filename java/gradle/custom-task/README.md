@@ -93,5 +93,8 @@ https://docs.gradle.org/current/userguide/more_about_tasks.html
             - この場合、 a は c のあとで実行されるべきと定義されているが、そうするとタスクの関係が循環する
             - この場合は c -> a の順序は無視され、 c -> b -> a の順序で実行される
         - 並列実行している場合に動作が違うらしいがよくわからない
-- 
+
+## Adding a description to a task
+- `description` にタスクの説明を設定できる
+
 

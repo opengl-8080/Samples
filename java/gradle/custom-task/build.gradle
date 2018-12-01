@@ -1,20 +1,5 @@
 task a {
-    dependsOn "b"
-    doFirst {
-        println("a")
-    }
+    description = "Hoge"
 }
 
-task b {
-    dependsOn "c"
-    doFirst {
-        println("b")
-    }
-}
-
-task c {
-    shouldRunAfter "a"
-    doFirst {
-        println("c")
-    }
-}
+task b
