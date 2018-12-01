@@ -1,11 +1,22 @@
-task a {
-    doFirst {
-        println("a")
+tasks.addRule("Pattern: ping<ID>") { String taskName ->
+    println("taskName=${taskName}")
+    if (taskName.startsWith("ping")) {
+        task(taskName) {
+            doLast {
+                println "Pinging: " + (taskName - 'ping')
+            }
+        }
     }
 }
 
-task a(overwrite: true) {
+task pingHoge {
     doFirst {
-        println("b")
+        println("hoge")
     }
+}
+
+task groupPing {
+    println("before groupPing")
+    dependsOn pingServer1, pingServer2, pingHoge, hoge
+    println("after groupPing")
 }
