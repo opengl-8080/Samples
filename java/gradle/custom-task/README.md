@@ -108,6 +108,13 @@ https://docs.gradle.org/current/userguide/more_about_tasks.html
 - あらかじめタスク名を定義できないような柔軟な定義が要求されるタスクに使えるということか
 - `addRules()` に渡される不明なタスク名は、 `dependsOn` などで静的に指定されているタスクも対象となる
 
+### 標準で用意されている rule
+- `clean<TaskName>` というルールが用意されている
+- タスクの出力（outputs）に指定されているファイルやディレクトリを削除するタスクが自動的に定義される
+
+
+
+
 
 
 
