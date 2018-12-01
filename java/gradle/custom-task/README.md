@@ -97,4 +97,8 @@ https://docs.gradle.org/current/userguide/more_about_tasks.html
 ## Adding a description to a task
 - `description` にタスクの説明を設定できる
 
+## Replacing tasks
+- `task xxx(overwrite: true)` でタスクを作成すると、既存の同名のタスクを上書きしてい定義できる
+- `overwrite` を指定していない状態で同名のタスクを定義した場合は、例外がスローされる
+
 

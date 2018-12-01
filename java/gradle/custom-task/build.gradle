@@ -1,5 +1,11 @@
 task a {
-    description = "Hoge"
+    doFirst {
+        println("a")
+    }
 }
 
-task b
+task a(overwrite: true) {
+    doFirst {
+        println("b")
+    }
+}
