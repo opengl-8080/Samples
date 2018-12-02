@@ -1,13 +1,17 @@
-plugins {
-    id "base"
-}
-
 task hoge {
-    def outDir = file("${buildDir}/hoge")
-    outputs.dir outDir
-
+    def out = file("build/hoge.txt")
+    inputs.property("hoge", "hoge")
+    outputs.file out
     doFirst {
-        mkdir outDir
-        file("${outDir}/hoge.txt") << "Hoge!!"
+        println("hoge")
+        out << "hoge"
     }
 }
+
+task fuga {
+    doFirst {
+        println("fuga")
+    }
+}
+
+hoge.finalizedBy fuga

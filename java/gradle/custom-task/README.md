@@ -112,7 +112,12 @@ https://docs.gradle.org/current/userguide/more_about_tasks.html
 - `clean<TaskName>` というルールが用意されている
 - タスクの出力（outputs）に指定されているファイルやディレクトリを削除するタスクが自動的に定義される
 
-
+## Finalizer tasks
+- `<task1>.finalizedBy <task2>` とすると、 `task1` のあとに必ず `task2` が実行されるようになる
+- `task2` は、 `task1` がエラーで失敗しても必ず実行される点に注意
+    - ちょうど、 `try-catch` の `finally` のイメージ
+- 絶対に実行しなければならない処理などを finalizer として指定する
+- ドキュメントでは up-to-date なら実行されないと書いてあるが、実際は実行された
 
 
 
