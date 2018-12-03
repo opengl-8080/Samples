@@ -1,8 +1,14 @@
 package sample.springboot.doma2;
 
+import org.seasar.doma.boot.autoconfigure.DomaConfigBuilder;
+import org.seasar.doma.jdbc.JdbcLogger;
+import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+import java.util.logging.Level;
 
 @SpringBootApplication
 public class Doma2Application {
@@ -23,5 +29,17 @@ public class Doma2Application {
 
 			System.out.println(dao.findAll());
 		}
+	}
+	
+	@Bean
+	public JdbcLogger jdbcLogger() {
+		return new UtilLoggingJdbcLogger(Level.FINE);
+	}
+
+	@Bean
+	public DomaConfigBuilder domaConfigBuilder() {
+		DomaConfigBuilder builder = new DomaConfigBuilder();
+		builder.jdbcLogger(jdbcLogger());
+		return builder;
 	}
 }
