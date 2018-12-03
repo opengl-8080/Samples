@@ -1,58 +1,39 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
-repositories {
-    mavenCentral()
+buildscript {
+	ext {
+		springBootVersion = '2.1.1.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
 }
 
-processResources.destinationDir = compileJava.destinationDir
-compileJava.dependsOn processResources
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
-ext {
-    eclipseAptPrefsFile = '.settings/org.eclipse.jdt.apt.core.prefs'
-    eclipseFactoryPathFile = '.factorypath'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+compileJava.options.encoding = "UTF-8"
+
+repositories {
+	mavenCentral()
 }
 
 dependencies {
-    compile 'org.seasar.doma:doma:2.6.0'
-    compile 'mysql:mysql-connector-java:5.1.38'
-    compile files('lib/ojdbc6.jar')
+	implementation('org.springframework.boot:spring-boot-starter-jdbc')
+	implementation('org.seasar.doma.boot:doma-spring-boot-starter:1.1.1') {
+		exclude group: 'org.seasar.doma', module: 'doma'
+	}
+	implementation('org.seasar.doma:doma:2.19.3')
+	runtimeOnly('com.h2database:h2')
 }
 
-eclipse {
-    project.name = 'doma2-sample'
-
-    classpath.file.withXml {
-        it.asNode().appendNode('classpathentry', [kind: 'src', path: '.apt_generated'])
-    }
-
-    jdt.file.withProperties { properties ->
-        properties.put 'org.eclipse.jdt.core.compiler.processAnnotations', 'enabled'
-    }
-}
-
-eclipseJdt << {
-    file(eclipseAptPrefsFile).write """\
-        |eclipse.preferences.version=1
-        |org.eclipse.jdt.apt.aptEnabled=true
-        |org.eclipse.jdt.apt.genSrcDir=.apt_generated
-        |org.eclipse.jdt.apt.reconcileEnabled=true
-        |""".stripMargin()
-
-    def processorJarPath = configurations
-                        .compile
-                        .find {it.name =~ /doma.*\.jar/}
-                        .absolutePath
-
-    file(eclipseFactoryPathFile).write """\
-        |<factorypath>
-        |    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
-        |    <factorypathentry kind="EXTJAR" id="${file(processorJarPath).absolutePath}" enabled="true" runInBatchMode="false"/>
-        |</factorypath>
-        |""".stripMargin()
-}
-
-cleanEclipse << {
-    file(eclipseAptPrefsFile).delete()
-    file(eclipseFactoryPathFile).delete()
-}
+// JavaクラスとSQLファイルの出力先ディレクトリを同じにする
+processResources.destinationDir = compileJava.destinationDir
+// コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
+compileJava.dependsOn processResources
