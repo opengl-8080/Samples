@@ -1,21 +1,16 @@
 task foo {
-    doFirst {
-        println("foo")
-    }
+    doFirst { println "foo" }
+    finalizedBy "finalizer"
 }
 
 task bar {
-    doFirst {
-        println("bar")
+    doFirst { 
+        println "bar"
+        throw new Exception("test")
     }
+    finalizedBy "finalizer"
 }
 
-task hoge {
-    doFirst {
-        println("hoge")
-    }
+task finalizer {
+    doFirst { println "finalizer" }
 }
-
-foo.dependsOn bar
-hoge.dependsOn foo
-hoge.dependsOn bar
