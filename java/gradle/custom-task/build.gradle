@@ -1,14 +1,12 @@
 task foo {
     doFirst { println "foo" }
+    onlyIf { project.hasProperty("hoge") }
+    dependsOn "bar"
     finalizedBy "finalizer"
 }
 
 task bar {
-    doFirst { 
-        println "bar"
-        throw new Exception("test")
-    }
-    finalizedBy "finalizer"
+    doFirst { println "bar" }
 }
 
 task finalizer {
