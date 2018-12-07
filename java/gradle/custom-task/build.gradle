@@ -1,35 +1,13 @@
-class Hoge extends DefaultTask {
-    @InputDirectory
-    def inputDirectory
-    @OutputDirectory
-    def outputDirectory
-    @Input
-    def inputValue
-
-    @TaskAction
-    def hoge(IncrementalTaskInputs inputs) {
-        println("inputs.incremental = ${inputs.incremental}")
-
-        inputs.outOfDate { change ->
-            println("outOfDate : change=${toText(change)}, file.name=${change.file.name}")
-            new File(outputDirectory, change.file.name).text = change.file.text.toUpperCase()
-        }
-
-        inputs.removed { change ->
-            println("removed : change=${toText(change)}, file.name=${change.file.name}")
-            new File(outputDirectory, change.file.name).delete()
-        }
-    }
-
-    String toText(def change) {
-        return change.added ? "added"
-                : change.modified ? "modified"
-                : "removed"
+task foo {
+    doFirst {
+        println("foo")
     }
 }
 
-task hoge(type: Hoge) {
-    inputValue = "test12"
-    inputDirectory = file("input")
-    outputDirectory = file("output")
+task bar {
+    doFirst {
+        println("bar")
+    }
 }
+
+foo.dependsOn bar
