@@ -10,4 +10,12 @@ task bar {
     }
 }
 
+task hoge {
+    doFirst {
+        println("hoge")
+    }
+}
+
 foo.dependsOn bar
+hoge.dependsOn foo
+hoge.dependsOn bar
