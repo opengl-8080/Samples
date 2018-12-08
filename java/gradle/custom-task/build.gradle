@@ -1,14 +1,11 @@
 task foo {
-    doFirst { println "foo" }
-    onlyIf { project.hasProperty("hoge") }
-    dependsOn "bar"
-    finalizedBy "finalizer"
-}
+    def outputFile = file("foo.txt")
 
-task bar {
-    doFirst { println "bar" }
-}
+    inputs.property "hoge", project.hoge
+    outputs.file outputFile
 
-task finalizer {
-    doFirst { println "finalizer" }
+    doFirst {
+        println "foo"
+        outputFile.text = hoge
+    }
 }
