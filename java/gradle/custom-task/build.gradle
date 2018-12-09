@@ -1,11 +1,8 @@
-task foo {
-    def outputFile = file("foo.txt")
-
-    inputs.property "hoge", project.hoge
-    outputs.file outputFile
-
-    doFirst {
-        println "foo"
-        outputFile.text = hoge
+class FooTask extends DefaultTask {
+    @TaskAction
+    def foo() {
+        println("FOO!!")
     }
 }
+
+task foo(type: FooTask)
