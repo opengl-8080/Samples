@@ -1,4 +1,5 @@
 task foo(type: Copy) {
     from "fromDir"
     into "toDir"
+    rename(/(.*)\.([a-z]+)/, '$1_copy.$2')
 }

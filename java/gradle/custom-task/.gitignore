@@ -5,3 +5,5 @@ build/
 .project
 /input/
 /output/
+fromDir/
+toDir/
