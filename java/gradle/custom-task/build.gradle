@@ -1,8 +1,4 @@
-class FooTask extends DefaultTask {
-    @TaskAction
-    def foo() {
-        println("FOO!!")
-    }
+task foo(type: Copy) {
+    from "fromDir"
+    into "toDir"
 }
-
-task foo(type: FooTask)
