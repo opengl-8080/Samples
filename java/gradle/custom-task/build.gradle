@@ -1,5 +1,3 @@
-task foo(type: Copy) {
-    from "fromDir"
-    into "toDir"
-    rename(/(.*)\.([a-z]+)/, '$1_copy.$2')
+task foo(type: Delete) {
+    delete fileTree(dir: "toDir", include: "**/*.xml")
 }
