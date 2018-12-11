@@ -1,14 +1,6 @@
-import java.nio.file.Path
-
 task foo {
     doFirst {
-        File file1 = file("foo.txt")
-        println(file1)
-
-        File file2 = file(new File("foo.txt"))
-        println(file2)
-
-        File file3 = file(Path.of("foo.txt"))
-        println(file3)
+        FileCollection files = files("foo.txt", "bar.txt")
+        files.each { println it }
     }
 }
