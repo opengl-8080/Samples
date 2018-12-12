@@ -1,6 +1,6 @@
 task foo {
     doFirst {
-        FileCollection files = files("foo.txt", "bar.txt")
-        files.each { println it }
+        FileTree tree = fileTree("fromDir")
+        tree.each { println it }
     }
 }
