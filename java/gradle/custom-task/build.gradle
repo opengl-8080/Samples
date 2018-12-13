@@ -1,6 +1,9 @@
 task foo {
     doFirst {
-        FileTree tree = fileTree("fromDir")
+        FileTree tree = fileTree("fromDir") {
+            println delegate.class
+            include "**/*.xml"
+        }
         tree.each { println it }
     }
 }
