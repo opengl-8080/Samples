@@ -1,11 +1,12 @@
-task foo(type: Zip) {
-    baseName = "baseName"
-    appendix = "appendix"
-    version = "version"
-    classifier = "classifier"
-    extension = "extension"
-
-    from "fromDir"
-    destinationDir = file("toDir")
-    include "**/*.txt"
+task foo {
+    doFirst {
+        project.sync {
+            from "fromDir"
+            into "toDir"
+            include "**/*.txt"
+            preserve {
+                include "hoge.txt"
+            }
+        }
+    }
 }
