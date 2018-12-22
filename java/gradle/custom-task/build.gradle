@@ -1,5 +1,11 @@
-task foo(type: Exec) {
-    workingDir "workDir"
-    environment MESSAGE: "Hello World!!"
-    commandLine "cmd", "/c", "echo", "%MESSAGE%", ">", "hello.txt"
+task foo(type: Zip) {
+    baseName = "baseName"
+    appendix = "appendix"
+    version = "version"
+    classifier = "classifier"
+    extension = "extension"
+
+    from "fromDir"
+    destinationDir = file("toDir")
+    include "**/*.txt"
 }
