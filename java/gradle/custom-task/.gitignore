@@ -9,3 +9,5 @@ fromDir/
 toDir/
 foo.txt
 bar.txt
+targetDir/
+workDir/
