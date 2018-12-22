@@ -1,7 +1,6 @@
 task foo {
     doFirst {
-        exec {
-            commandLine "cmd", "/c", "echo", "Hello World!!"
-        }
+        def zip = zipTree("toDir/foo.zip")
+        zip.each { println it }
     }
 }
