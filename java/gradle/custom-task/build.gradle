@@ -1,12 +1,7 @@
 task foo {
     doFirst {
-        project.sync {
-            from "fromDir"
-            into "toDir"
-            include "**/*.txt"
-            preserve {
-                include "hoge.txt"
-            }
+        exec {
+            commandLine "cmd", "/c", "echo", "Hello World!!"
         }
     }
 }
