@@ -1,6 +1,1 @@
-task foo {
-    doFirst {
-        def zip = zipTree("toDir/foo.zip")
-        zip.each { println it }
-    }
-}
+apply plugin: sample.FooPlugin

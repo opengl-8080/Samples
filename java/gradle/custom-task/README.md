@@ -198,3 +198,54 @@ https://docs.gradle.org/current/userguide/custom_tasks.html#incremental_tasks
 - アクションは、変更を検知したファイルの分だけ呼ばれる
 - したがって、変更のあったファイルだけに絞ってタスクを実行することができる
 
+## Lazy Configuration
+https://docs.gradle.org/current/userguide/lazy_configuration.html
+
+- Gradle は遅延プロパティを提供している
+    - 遅延プロパティは、そのプロパティの値が要求されるまで評価が遅延される
+    - この機能は、プラグインを作るための３つの便利な機能を提供する
+1. 遅延プロパティを利用する側は、プロパティがいつ設定されるかを知る必要がない
+    - もしプロパティが他のプラグインによって設定されるような場合でも、具体的にいつ設定されるかを知る必要はない
+2. タスク間を、そのタスクの入出力だけでつなげることができる
+3. 設定フェーズ中にプロパティを初期化する処理を実行しないようにできる
+    - 必要ない処理を減らせる分、パフォーマンスが良くなる
+- 遅延プロパティのために２つのインターフェースを提供している
+    - Provider
+        - 問い合わせのみ可能で変更できない値を表現する
+        - `get()` メソッドが、現在の実際の値を返す
+        - `map(Transformer)` で、値を変換した新しい `Provider` を生成できる
+    - Property
+        - 読み書き可能な値を表現する
+        - `Provider` のサブインターフェース
+        - `set(T)` で値を更新できる
+        - `ObjectProperty.property(Class)` で生成できる
+- Provider, Property の生成
+    - Provider
+        - ProviderFactory.provider(Callable) で生成可能
+        - ProviderFactory は Project.getProviders() で取得できる
+    - Property
+        - ObjectFactory の property(Class) メソッド
+        - ObjectFactory は Project.getObjects() で取得可能
+- ファイル
+    - FileCollection と FileTree も、遅延型の一種と考えられる
+    - RegularFileProperty, DirectoryProperty が Property のサブタイプとして用意されている
+    - いずれも、 ObjectFactory から生成できる
+    - DirectoryProperty は、そのディレクトリからの相対パスで別の DirectoryProperty や RegularFileProperty を生成できる
+- コレクション
+    - ListProperty, SetProperty が用意されている
+    - いずれも ObjectFactory から生成できる
+    - HasMultipleValues というインターフェースを継承している
+        - このインターフェースには、 add() などのメソッドが用意されている
+        - つまり、 ListProperty のまま内部のコレクションの状態を更新できるようになっている
+        - いちいち get() で中のコレクションを取り出さなくていい
+- プロパティを変更不可にする
+    - 一度設定値が決定したら、以後はバグ回避のためにも無用な変更を避けたくなることがある
+    - finalizeValue() というメソッドが用意されている
+    - このメソッドを実行すると、以後そのプロパティは値を変更できなくなる
+    - 変更しようとするエラーになる
+- タスクに Property 型のフィールドが存在した場合の特別動作
+    - Gradle はタスクのフィールドに Property 型のものが存在した場合、自動的に Setter メソッドを生成する
+    - たとえば、 foo という Property 型のフィールドが存在した場合、 setFoo(Object) というメソッドが生成される
+    - これを利用すると、 foo プロパティに対して代入演算子で値を設定できるようになる
+    - `someTask.foo = "zzz"` という感じ
+        - この代入演算子は、 setFoo() のシンタックスシュガーになっている
